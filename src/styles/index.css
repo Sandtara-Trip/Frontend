@@ -1,3 +1,64 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Garis bawah dengan animasi */
+.menu li a {
+  color: #4B5563 !important; /* Warna teks default */
+  background-color: transparent !important;
+  border-bottom: 2px solid transparent !important; /* Garis bawah transparan */
+  transition: border-bottom 0.3s ease !important; /* Animasi transisi untuk garis bawah */
+}
+
+/* Garis bawah muncul saat hover */
+.menu li a:hover {
+  color: #2EC4B6 !important; /* Warna teks saat hover */
+  /* border-bottom: 2px solid #2EC4B6 !important;  */
+}
+
+/* Garis bawah tetap terlihat saat elemen aktif (misalnya halaman yang sedang aktif) */
+/* .menu li a:active,
+.menu li a.active {
+  color: #2EC4B6 !important; 
+  border-bottom: 2px solid #2EC4B6 !important; 
+} */
+
+/* src/styles/styles.css */
+.btn-primary {
+  background-color: #FF9F1C !important; 
+  color: white !important;
+  font-size: 1rem !important;
+  padding: 10px 20px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.btn-primary:hover {
+  background-color: #FB923C !important; 
+}
+
+.btn-warning{
+  outline: #FB923C !important;
+  border-radius: 20px !important;
+}
+
+#logout {
+  color: #DC2626 !important;
+  border: 1px solid #DC2626 !important;
+}
+
+#logout:hover {
+  background-color: #DC2626 !important;
+  color: white !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+

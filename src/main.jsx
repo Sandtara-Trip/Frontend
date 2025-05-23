@@ -1,10 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import RootLayout from './root/RootLayout';
-import './styles/index.css'; 
+// src/main.jsx
+import { createRoot } from 'react-dom/client';
+import { StrictMode } from 'react';
+import { RouterProvider } from 'react-router-dom';
+import './styles/index.css';
+import { routes } from './root/routes';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RootLayout />
-  </React.StrictMode>
+const root = createRoot(document.getElementById('root'));
+
+root.render(
+  <StrictMode>
+    <RouterProvider router={routes} />
+  </StrictMode>
 );

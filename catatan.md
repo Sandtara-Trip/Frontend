@@ -1,0 +1,1 @@
+postcss 8.4.49 jika terpaksa tailwind tidak konek
