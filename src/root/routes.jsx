@@ -9,6 +9,14 @@ import AuthenticationForm from "../views/pages/user/authenticationForm";
 import VerificationFailed from "../views/pages/user/VerificationFailed";
 import About from "../views/pages/user/About";
 import FaqSection from "../views/pages/user/faq";
+import DetailWisata from "../views/pages/user/detailWisata";
+import DetailHotel from "../views/pages/user/detailHotel";
+import DetailKuliner from "../views/pages/user/detailKuliner";
+import OrderWisata from "../views/pages/user/orderWisata";
+import OrderHotel from "../views/pages/user/orderHotel";
+import ChooseRoom from "../views/pages/user/ChooseRoom";
+import UserProfile from "../views/pages/user/userProfile";
+import WeatherCalendar from "../views/pages/user/weatherCalender";
 
 export const routes = createBrowserRouter([
   {
@@ -46,5 +54,37 @@ export const routes = createBrowserRouter([
   {
     path: "/faq",
     element: <FaqSection />,
+  },
+  {
+    path: "/wisata{id}",
+    element: <DetailWisata />,
+  },
+  {
+    path: "/detail-hotel{id}",
+    element: <DetailHotel />,
+  },
+  {
+    path: "/detail-kuliner{id}",
+    element: <DetailKuliner />,
+  },
+  {
+    path: "/order-wisata{id}",
+    element: <OrderWisata />,
+  },
+  {
+    path: "/order-hotel{id}",
+    element: <OrderHotel />,
+  },
+  {
+    path: "/choose-room",
+    element: <ChooseRoom />,
+  },
+  {
+    path: "/user-profile",
+    element: <UserProfile />,
+  },
+  {
+    path: "/weather-calender",
+    element: <WeatherCalendar />,
   },
 ]);

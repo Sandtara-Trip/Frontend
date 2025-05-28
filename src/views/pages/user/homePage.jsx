@@ -9,12 +9,12 @@ import { itemKuliner } from "../../templates/kuliner";
 import HeroWeather from "../../../components/user/heroWeather";
 import FilterBar from "../../../components/user/FilterBar";
 import { filterOptionsPerCategory } from "../../templates/filter";
-// import { bestDestinationsToday } from "../../templates/bestDestinationToday";
-
 import Section from "../../../components/user/Section";
 import CategoryTabs from "../../../components/user/CategoryTabs";
+import Chatbot from "./chatbot";
 
-const ITEMS_PER_PAGE = 4;
+const ITEMS_DEFAULT = 4;
+const ITEMS_PER_PAGE = 8;
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -88,7 +88,8 @@ const HomePage = () => {
   };
 
   const paginatedData = (data, category) => {
-    if (!showAll[category]) return data.slice(0, ITEMS_PER_PAGE);
+    if (!showAll[category]) return data.slice(0, ITEMS_DEFAULT);
+
     const start = (currentPage[category] - 1) * ITEMS_PER_PAGE;
     return data.slice(start, start + ITEMS_PER_PAGE);
   };
@@ -102,10 +103,11 @@ const HomePage = () => {
     <div>
       {/* NAVBAR */}
       {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
+
       {/* HERO SECTION */}
       <HeroWeather />
 
-      {/* Category tab */}
+      {/* Category Tabs + Filter */}
       <section className="relative z-10 -mt-20 px-4">
         <div className="max-w-7xl mx-auto bg-white/20 backdrop-blur-md rounded-2xl shadow-lg px-6 py-4">
           <CategoryTabs
@@ -113,7 +115,6 @@ const HomePage = () => {
             onChange={setActiveCategory}
           />
 
-          {/* filter */}
           <FilterBar
             filters={filterOptionsPerCategory[activeCategory]}
             selectedFilters={filters[activeCategory]}
@@ -124,17 +125,9 @@ const HomePage = () => {
             onSearchChange={(val) => handleSearchChange(activeCategory, val)}
           />
         </div>
-        {/* Wisata Terbaik Hari Ini */}
-        {/* <section className="py-12 px-4 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-teal mb-6 text-center">
-              Wisata Terbaik Hari Ini
-            </h2>
-            <CardGrid cards={bestDestinationsToday} />
-          </div>
-        </section> */}
       </section>
 
+      {/* Sections per Category */}
       {categoriesToRender.map((category) => {
         const filteredData =
           activeCategory === "Semua"
@@ -157,7 +150,11 @@ const HomePage = () => {
                 category
               );
 
-        const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+        const totalPages = Math.ceil(
+          filteredData.length /
+            (showAll[category] ? ITEMS_PER_PAGE : ITEMS_DEFAULT)
+        );
+
         const dataToShow = paginatedData(filteredData, category);
 
         return (
@@ -174,6 +171,8 @@ const HomePage = () => {
           />
         );
       })}
+
+      <Chatbot/>
 
       <Footer />
     </div>

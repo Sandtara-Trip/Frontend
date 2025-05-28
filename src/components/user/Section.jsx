@@ -1,5 +1,4 @@
 import React from "react";
-import { TbBeach } from "react-icons/tb";
 import Pagination from "./Pagination";
 import { CardGrid } from "./card";
 
@@ -14,27 +13,35 @@ const Section = ({
   onPageChange,
 }) => {
   const imagesByCategory = {
-    Wisata:
-      "",
-    Hotel:
-      "",
-    Kuliner:
-      "",
+    Wisata: "",
+    Hotel: "",
+    Kuliner: "",
   };
 
- const emptyMessages = {
-  Wisata: "Maaf, saat ini belum ada data wisata yang tersedia.",
-  Hotel: "Maaf, data hotel yang Anda cari belum tersedia.",
-  Kuliner: "Maaf, belum ada informasi kuliner yang sesuai saat ini.",
-};
+  const emptyMessages = {
+    Wisata: "Maaf, saat ini belum ada data wisata yang tersedia.",
+    Hotel: "Maaf, data hotel yang Anda cari belum tersedia.",
+    Kuliner: "Maaf, belum ada informasi kuliner yang sesuai saat ini.",
+  };
+
+  const descriptions = {
+    Wisata: "Rekomendasi tempat wisata terbaik di Denpasar sesuai cuaca dan minat Anda.",
+    Hotel: "Temukan pilihan hotel nyaman dan terjangkau untuk perjalanan Anda.",
+    Kuliner: "Nikmati beragam kuliner khas Denpasar yang menggugah selera.",
+  };
 
   return (
     <section className={`py-16 px-4 ${background}`}>
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-10 flex-wrap gap-4">
-          <h2 className="flex text-2xl text-teal font-bold items-center whitespace-nowrap">
-            <TbBeach className="mr-2" /> {title}
-          </h2>
+        <div className="flex justify-between items-start flex-wrap gap-4 mb-10">
+          <div>
+            <h2 className="text-2xl text-black/80 font-bold whitespace-nowrap">
+              {title}
+            </h2>
+            <p className="text-sm text-gray-600 mt-2 max-w-xl">
+              {descriptions[title]}
+            </p>
+          </div>
 
           {data.length > 0 && (
             <button
@@ -49,7 +56,6 @@ const Section = ({
         {data.length > 0 ? (
           <>
             <CardGrid cards={data} layout="vertical" />
-
             {showAll && totalPages > 1 && (
               <Pagination
                 currentPage={currentPage}

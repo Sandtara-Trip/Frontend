@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import "moment/locale/id";
-import { weather } from "../../views/templates/weather";
+import { weatherData } from "../../views/templates/weather";
 import { slides } from "../../views/templates/slides";
 import BackgroundSlider from "./BackgroundSlider";
 import TodayWeather from "./TodayWeather";
@@ -14,10 +14,9 @@ moment.locale("id");
 const HeroWeather = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const data = weather[0];
-  const formattedDate = moment(data.date, "DD-MM-YYYY").format(
-    "dddd, D MMMM YYYY"
-  );
+  const data = weatherData[0];
+ const formattedDate = moment(data.date, "DD-MM-YYYY").locale("id").format("dddd, D MMMM YYYY");
+
 
   // Auto slide 
   useEffect(() => {

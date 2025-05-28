@@ -1,5 +1,3 @@
-
-
 export const destinations = [
   {
     name: "Pantai Sanur",
@@ -20,4 +18,3 @@ export const destinations = [
       "https://www.itrip.id/wp-content/uploads/2020/02/Tempat-Wisata-Denpasar-Bali.jpg",
   },
 ];
-

@@ -13,19 +13,15 @@ export const filterOptionsPerCategory = {
     { name: "rating", label: "Rating", options: ["1", "2", "3", "4", "5"] },
   ],
   Hotel: [
-    {
-      name: "fasilitas",
-      label: "Fasilitas",
-      options: ["Wifi", "Parkir", "Kolam Renang"],
-    },
+    
     { name: "rating", label: "Rating", options: ["1", "2", "3", "4", "5"] },
   ],
   Kuliner: [
-    {
-      name: "jenis",
-      label: "Jenis Kuliner",
-      options: ["Tradisional", "Modern", "Kafe"],
-    },
-    { name: "rating", label: "Rating", options: ["1", "2", "3", "4", "5"] },
+    // {
+    //   name: "jenis",
+    //   label: "Jenis Kuliner",
+    //   options: ["Tradisional", "Modern", "Kafe"],
+    // },
+    // { name: "rating", label: "Rating", options: ["1", "2", "3", "4", "5"] },
   ],
 };

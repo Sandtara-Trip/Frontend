@@ -17,7 +17,7 @@ const TodayWeather = ({ data, formattedDate }) => {
   };
 
   // Mendapatkan icon sesuai cuaca
-  const getWeatherIcon = () => {
+ const getWeatherIcon = () => {
     const desc = data.description.toLowerCase();
 
     if (
@@ -179,10 +179,7 @@ const TodayWeather = ({ data, formattedDate }) => {
           method="dialog"
           className="modal-box max-w-md bg-white text-black rounded-xl"
         >
-          {/* <h3 className="text-lg font-bold mb-4">Detail Cuaca di {data.city}</h3>
-          <p><strong>Temperatur:</strong> {data.temp}</p>
-          <p><strong>Deskripsi:</strong> {data.description}</p>
-          <p><strong>Tanggal:</strong> {formattedDate}</p> */}
+        
           
           <div>
             <h4 className="font-semibold mb-2">Tips Perjalanan:</h4>
@@ -200,3 +197,11 @@ const TodayWeather = ({ data, formattedDate }) => {
 };
 
 export default TodayWeather;
+
+
+
+  {/* <h3 className="text-lg font-bold mb-4">Detail Cuaca di {data.city}</h3>
+          <p><strong>Temperatur:</strong> {data.temp}</p>
+          <p><strong>Deskripsi:</strong> {data.description}</p>
+          <p><strong>Tanggal:</strong> {formattedDate}</p> */}
+

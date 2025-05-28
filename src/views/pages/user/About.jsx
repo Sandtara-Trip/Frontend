@@ -7,12 +7,15 @@ import { motion } from "framer-motion";
 import {
   FaHotel,
   FaMapMarkedAlt,
-  FaDesktop,
-  FaSatellite,
   FaCloudSun,
+  FaMapMarkerAlt,
+  FaUtensils,
+  FaShoppingBasket,
 } from "react-icons/fa";
-import { FaMapMarkerAlt, FaUtensils } from "react-icons/fa";
+import {} from "react-icons/fa";
 import { BiCalendarEvent } from "react-icons/bi";
+import { FiCpu, FiLock, FiUserCheck } from "react-icons/fi";
+import { TbBeach } from "react-icons/tb";
 
 const About = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -152,7 +155,7 @@ const About = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: <FaMapMarkedAlt size={24} className="text-pink-500" />,
+                icon: <TbBeach size={24} className="text-pink-500" />,
                 title: "Rekomendasi Wisata",
                 desc: "Rekomendasi wisata berdasarkan preferensi, cuaca, dan rating.",
                 bgColor: "bg-pink-100",
@@ -197,29 +200,33 @@ const About = () => {
       {/* Kenapa Harus Sandtara */}
       <section className="py-16 bg-base-200">
         <h2 className="text-4xl font-bold text-teal text-center mb-12">
-          Kenapa Harus Sandtara?
+          Apa yang Membuat Kami Berbeda?
         </h2>
         <div className="max-w-3xl mx-auto space-y-4 px-6">
           {[
             {
-              title: "✨ Teknologi Cerdas",
+              icon: <FiCpu />,
+              title: "Teknologi Cerdas",
               content:
-                "Kami memanfaatkan machine learning untuk memberi rekomendasi personal.",
+                "Kami memanfaatkan teknologi machine learning untuk memberikan rekomendasi yang sesuai dengan preferensi dan kebutuhanmu. Mulai dari memilih destinasi, hingga menyarankan waktu terbaik berdasarkan prakiraan cuaca real-time, semuanya dirancang agar perjalananmu makin nyaman dan personal.",
             },
             {
-              title: "💡 Fokus pada Pengalaman",
+              icon: <FiUserCheck />,
+              title: "Fokus pada Pengalaman",
               content:
-                "Liburan terbaik dimulai dari perencanaan yang tepat dan nyaman.",
+                "Bagi kami, liburan bukan hanya soal tujuan, tapi juga bagaimana kamu sampai di sana. Sandtara memprioritaskan kenyamanan dan kemudahan dalam perencanaan perjalananmu. Dari tampilan aplikasi yang intuitif, fitur rekomendasi berbasis minat, hingga kalender cuaca—semuanya dirancang untuk pengalaman liburan yang lebih tenang dan menyenangkan.",
             },
             {
-              title: "🌍 Dukungan UMKM",
+              icon: <FaShoppingBasket />,
+              title: "Mendukung UMKM Lokal",
               content:
-                "Promosikan usaha lokal agar kamu bisa traveling berdampak positif.",
+                "Kami merekomendasikan UMKM lokal seperti warung makan khas, toko oleh-oleh tradisional, hingga jasa transportasi lokal. Dengan begitu, kamu bisa menikmati keunikan Denpasar sekaligus membantu perekonomian masyarakat sekitar. Traveling jadi bukan cuma seru, tapi juga berdampak.",
             },
             {
-              title: "🔒 Keamanan Data",
+              icon: <FiLock />,
+              title: "Keamanan Data",
               content:
-                "Kami menjaga data pengguna dengan sistem keamanan terbaik.",
+                "Kami menjaga keamanan data pribadimu dengan sistem perlindungan terbaik. Data yang kamu berikan digunakan hanya untuk meningkatkan pengalaman pengguna, tanpa disalahgunakan. Privasimu adalah prioritas kami.",
             },
           ].map((item, idx) => (
             <div
@@ -227,9 +234,11 @@ const About = () => {
               tabIndex={0}
               className="collapse collapse-arrow bg-base-100 border border-base-300"
             >
-              <div className="collapse-title font-semibold text-lg">
-                {item.title}
+              <div className="collapse-title font-semibold text-lg flex items-center">
+                <span className="mr-2">{item.icon}</span>
+                <span>{item.title}</span>
               </div>
+
               <div className="collapse-content text-sm text-gray-700">
                 {item.content}
               </div>
