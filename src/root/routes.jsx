@@ -1,50 +1,75 @@
 // src/config/routes.js
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "../views/pages/user/homePage";
 import LoginPage from "../views/pages/user/login";
-import Register from "../views/pages/user/register";
-import ForgotPassword from "../views/pages/user/forgotPassword";
-import ResetPassword from "../views/pages/user/resetPassword";
-import AuthenticationForm from "../views/pages/user/authenticationForm";
-import VerificationFailed from "../views/pages/user/VerificationFailed";
-import About from "../views/pages/user/About";
-import FaqSection from "../views/pages/user/faq";
+import Hotel from "../views/pages/user/hotel";
+import Room from "../views/pages/user/room";
+import Wisata from "../views/pages/user/wisata";
+import Order from "../views/pages/user/order";
+import User from "../views/pages/user/user";
+import TambahHotel from "../views/pages/user/tambahHotel";
+import TambahRoom from "../views/pages/user/tambahRoom";
+import TambahWisata from "../views/pages/user/tambahWisata";
+import TambahUser from "../views/pages/user/tambahUser";
+import EditHotel from "../views/pages/user/editHotel";
+import EditRoom from "../views/pages/user/editRoom";
+import EditWisata from "../views/pages/user/editWisata";
+import EditUser from "../views/pages/user/editUser";
 
 export const routes = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/login",
     element: <LoginPage />,
   },
   {
-    path: "/register",
-    element: <Register />,
+    path: "/hotel",
+    element: <Hotel />,
   },
   {
-    path: "/forgot-password",
-    element: <ForgotPassword />,
+    path: "/room",
+    element: <Room />,
   },
   {
-    path: "/reset-password",
-    element: <ResetPassword />,
+    path: "/wisata",
+    element: <Wisata />,
   },
   {
-    path: "/validation-code",
-    element: <AuthenticationForm />,
+    path: "/order",
+    element: <Order />,
   },
   {
-    path: "/resend",
-    element: <VerificationFailed />,
+    path: "/user",
+    element: <User />,
   },
   {
-    path: "/about",
-    element: <About />,
+    path: "/add-hotel",
+    element: <TambahHotel />,
   },
   {
-    path: "/faq",
-    element: <FaqSection />,
+    path: "/add-room",
+    element: <TambahRoom />,
+  },
+  {
+    path: "/add-wisata",
+    element: <TambahWisata />,
+  },
+  {
+    path: "/add-user",
+    element: <TambahUser />,
+  },
+  {
+    path: "/edit-hotel",
+    element: <EditHotel />,
+  },
+  {
+    path: "/edit-room",
+    element: <EditRoom />,
+  },
+  {
+    path: "/edit-wisata",
+    element: <EditWisata />,
+  },
+  {
+    path: "/edit-user",
+    element: <EditUser />,
   },
 ]);

@@ -1,6 +1,5 @@
 import React from "react";
-import { FiX } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import InputField from "../../../components/user/InputField";
 import PasswordField from "../../../components/user/PasswordField";
 import Button from "../../../components/user/button";
@@ -12,14 +11,6 @@ const LoginPage = () => {
 
   return (
     <div className="flex min-h-screen w-full bg-white relative">
-      {/* Tombol Exit */}
-      <button
-        className="absolute top-4 right-4 text-warm-orange hover:text-gray-700 z-10"
-        onClick={() => presenter.handleExit()}
-      >
-        <FiX size={30} />
-      </button>
-
       {/* Kiri - Info */}
       <div className="hidden md:flex w-1/2 bg-gradient-to-br from-warm-orange to-light-orange flex-col justify-center items-center p-12">
         <h2 className="text-white text-4xl font-bold mb-4 text-center">
@@ -59,25 +50,8 @@ const LoginPage = () => {
               placeholder="Masukkan Kata Sandi Anda"
             />
 
-            <Link
-              to="/forgot-password"
-              className="text-orange-500 text-sm mt-2 block text-right hover:underline"
-            >
-              Lupa Password?
-            </Link>
-
             <Button type="submit">Masuk</Button>
           </form>
-
-          <p className="text-center text-sm text-text-gray mt-4">
-            Belum punya akun Sandtara?{" "}
-            <Link
-              to="/register"
-              className="text-warm-orange font-semibold hover:underline"
-            >
-              Daftar Sekarang
-            </Link>
-          </p>
         </div>
       </div>
     </div>
