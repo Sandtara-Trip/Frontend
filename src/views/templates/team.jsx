@@ -5,12 +5,12 @@ export const teamMembers = [
     img: "https://randomuser.me/api/portraits/men/1.jpg",
   },
   {
-    name: "Nabila Naurotul Ummah",
+    name: "Nabila Naurotul U.",
     role: "UI/UX Designer & Frontend Developer",
     img: "https://randomuser.me/api/portraits/men/2.jpg",
   },
   {
-    name: "Wahyu Rizqi Amalia",
+    name: "Wahyu Rizqi A.",
     role: "UX/UI Designer & Frontend Developer",
     img: "https://randomuser.me/api/portraits/women/3.jpg",
   },
@@ -25,7 +25,7 @@ export const teamMembers = [
     img: "https://randomuser.me/api/portraits/men/3.jpg",
   },
   {
-    name: "Maulana Ridhwan Riziq",
+    name: "Maulana Ridhwan R.",
     role: "Machine Learning Engineer",
     img: "https://randomuser.me/api/portraits/women/4.jpg",
   },

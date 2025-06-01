@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import NavbarAfter from "../../../components/user/navbarAfter";
 import NavbarBefore from "../../../components/user/NavbarBefore";
 import { IoIosPin, IoMdPricetags } from "react-icons/io";
@@ -13,8 +14,11 @@ const DetailHotel = () => {
   const [isLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState("Deskripsi");
 
+  const { id } = useParams(); 
+  const navigate = useNavigate(); 
+
   const handleOrder = () => {
-    alert("Fitur pemesanan akan segera hadir!");
+    navigate(`/choose-room/${id}`);
   };
 
   // Ambil ticket dari contentData

@@ -17,7 +17,7 @@ const TodayWeather = ({ data, formattedDate }) => {
   };
 
   // Mendapatkan icon sesuai cuaca
- const getWeatherIcon = () => {
+  const getWeatherIcon = () => {
     const desc = data.description.toLowerCase();
 
     if (
@@ -167,7 +167,7 @@ const TodayWeather = ({ data, formattedDate }) => {
         </div>
 
         <button
-          className="btn btn-primary mt-6 px-6 py-2 md:py-3 text-sm md:text-base"
+          className="rounded-full bg-warm-orange hover:bg-hover-orange  duration-300 text-white mt-6 px-6 py-1.5 md:py-2 text-sm md:text-base font-semibold shadow-md hover:shadow-lg"
           onClick={openModal}
         >
           Tips Perjalanan
@@ -179,8 +179,6 @@ const TodayWeather = ({ data, formattedDate }) => {
           method="dialog"
           className="modal-box max-w-md bg-white text-black rounded-xl"
         >
-        
-          
           <div>
             <h4 className="font-semibold mb-2">Tips Perjalanan:</h4>
             {getTravelTips()}
@@ -188,7 +186,9 @@ const TodayWeather = ({ data, formattedDate }) => {
 
           <hr className="my-4" />
           <div className="modal-action mt-6">
-            <button className="btn btn-warning btn-outline border-2">Tutup</button>
+            <button className="btn btn-warning btn-outline border-2">
+              Tutup
+            </button>
           </div>
         </form>
       </dialog>
@@ -198,10 +198,9 @@ const TodayWeather = ({ data, formattedDate }) => {
 
 export default TodayWeather;
 
-
-
-  {/* <h3 className="text-lg font-bold mb-4">Detail Cuaca di {data.city}</h3>
+{
+  /* <h3 className="text-lg font-bold mb-4">Detail Cuaca di {data.city}</h3>
           <p><strong>Temperatur:</strong> {data.temp}</p>
           <p><strong>Deskripsi:</strong> {data.description}</p>
-          <p><strong>Tanggal:</strong> {formattedDate}</p> */}
-
+          <p><strong>Tanggal:</strong> {formattedDate}</p> */
+}

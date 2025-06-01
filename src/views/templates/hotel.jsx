@@ -5,9 +5,8 @@ export const itemHotel = [
     title: "Hotel Puri Santrian",
     description:
       "Nikmati kenyamanan menginap di hotel bintang lima di pantai Sanur dengan fasilitas lengkap dan pemandangan yang menakjubkan.",
-    buttonText: "Lihat Detail",
-    onButtonClick: () => alert("Detail Hotel Puri Santrian"),
     rating: 5,
+    lokasi: "Jl. Bali No.2 Denpasar, Indonesia"
   },
   {
     image:
@@ -15,9 +14,9 @@ export const itemHotel = [
     title: "The Trans Resort Bali",
     description:
       "Resor mewah dengan kolam renang outdoor yang luas dan fasilitas spa. Ideal untuk liburan santai bersama keluarga atau pasangan.",
-    buttonText: "Lihat Detail",
+    
     onButtonClick: () => alert("Detail The Trans Resort Bali"),
-    rating: 4,
+    rating: 4.5,
   },
   {
     image:

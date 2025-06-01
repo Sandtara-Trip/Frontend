@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { WiDayCloudy } from "react-icons/wi";
 import { FiLogOut } from "react-icons/fi";
 import { RiUserAddLine, RiQuestionAnswerLine } from "react-icons/ri";
@@ -9,9 +9,12 @@ import LanguageSelector from "./languageSelector";
 
 const NavbarAfter = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [photo, setPhoto] = useState("");
   const menuRef = useRef(null);
   const hamburgerRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -28,6 +31,27 @@ const NavbarAfter = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Ambil user dari localStorage
+  useEffect(() => {
+    const storedName = localStorage.getItem("userName");
+    const storedPhoto = localStorage.getItem("userPhoto");
+
+    if (storedName) setName(storedName);
+    if (storedPhoto) setPhoto(storedPhoto);
+  }, []);
+
+  const handleLogout = () => {
+    // Hapus data user, token, dsb.
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userPhoto");
+    localStorage.removeItem("userId");
+
+    // Redirect ke halaman login
+    navigate("/");
+  };
+
+  const userId = localStorage.getItem("userId");
 
   const isActive = (path) => location.pathname === path;
 
@@ -63,7 +87,10 @@ const NavbarAfter = () => {
           </label>
         </div>
         <img src="img/logo.png" alt="logo" className="w-12 h-12" />
-        <Link to="/" className="text-2xl font-bold text-teal ml-2 hidden sm:block">
+        <Link
+          to="/"
+          className="text-2xl font-bold text-teal ml-2 hidden sm:block"
+        >
           Sandtara <span className="text-warm-orange">Trip</span>
         </Link>
       </div>
@@ -72,22 +99,40 @@ const NavbarAfter = () => {
       <div className="flex-1 hidden lg:flex justify-center">
         <ul className="menu menu-horizontal font-medium text-black gap-2">
           <li className={isActive("/") ? "bg-gray-100 rounded-full" : ""}>
-            <Link to="/" className={`px-4 py-1 ${isActive("/") && "font-semibold"}`}>
+            <Link
+              to="/"
+              className={`px-4 py-1 ${isActive("/") && "font-semibold"}`}
+            >
               <FaHome className="inline mr-1" /> Beranda
             </Link>
           </li>
           <li className={isActive("/about") ? "bg-gray-100 rounded-full" : ""}>
-            <Link to="/about" className={`px-4 py-1 ${isActive("/about") && "font-semibold"}`}>
+            <Link
+              to="/about"
+              className={`px-4 py-1 ${isActive("/about") && "font-semibold"}`}
+            >
               <MdInfoOutline className="inline mr-1" /> Tentang Kami
             </Link>
           </li>
-          <li className={isActive("/cuaca") ? "bg-gray-100 rounded-full" : ""}>
-            <Link to="/cuaca" className={`px-4 py-1 ${isActive("/cuaca") && "font-semibold"}`}>
+          <li
+            className={
+              isActive("/weather-calender") ? "bg-gray-100 rounded-full" : ""
+            }
+          >
+            <Link
+              to="/weather-calender"
+              className={`px-4 py-1 ${
+                isActive("/weather-calender") && "font-semibold"
+              }`}
+            >
               <WiDayCloudy className="inline mr-1 text-xl" /> Cuaca
             </Link>
           </li>
           <li className={isActive("/faq") ? "bg-gray-100 rounded-full" : ""}>
-            <Link to="/faq" className={`px-4 py-1 ${isActive("/faq") && "font-semibold"}`}>
+            <Link
+              to="/faq"
+              className={`px-4 py-1 ${isActive("/faq") && "font-semibold"}`}
+            >
               <RiQuestionAnswerLine className="inline mr-1" /> FAQ
             </Link>
           </li>
@@ -103,8 +148,18 @@ const NavbarAfter = () => {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-10 rounded-full">
-              <img src="https://i.pravatar.cc/150?img=32" alt="profile" />
+            <div className="w-10 h-10 rounded-full bg-light-orange relative overflow-hidden">
+              {photo ? (
+                <img
+                  src={photo}
+                  alt="profile"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">
+                  {name?.charAt(0).toUpperCase() || "?"}
+                </div>
+              )}
             </div>
           </div>
           <ul
@@ -112,65 +167,75 @@ const NavbarAfter = () => {
             className="dropdown-content menu bg-white text-black rounded-box w-52 p-2 shadow z-[10]"
           >
             <li>
-              <Link to="/akun" className="hover:text-teal-500 flex items-center gap-2">
+              <Link
+                to={`/user-profile/${userId}`}
+                state={{ tab: "profile" }}
+                className="hover:text-teal-500 flex items-center gap-2"
+              >
                 <RiUserAddLine /> Informasi Akun
               </Link>
             </li>
             <li>
-              <Link to="/pemesanan" className="hover:text-teal-500 flex items-center gap-2">
+              <Link
+                to={`/user-profile/${userId}`}
+                state={{ tab: "riwayat" }}
+                className="flex items-center gap-2 px-2 py-1 rounded hover:text-teal hover:bg-gray-300 transition-colors"
+              >
                 <MdReceiptLong /> Informasi Pemesanan
               </Link>
+            </li>
+
+            <li className="pt-2">
+              <button
+                id="logout"
+                onClick={handleLogout}
+                className="btn btn-outline btn-error w-full flex items-center gap-2 justify-center rounded-md"
+              >
+                <FiLogOut /> Keluar
+              </button>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* Mobile */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div
           ref={menuRef}
           className="lg:hidden absolute top-16 left-0 w-full bg-white shadow-2xl z-50 cursor-pointer text-black"
         >
           <ul className="flex flex-col py-4 px-4 gap-2">
-            <li className="w-full">
+            <li>
               <Link
                 to="/"
-                className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-md transition"
               >
                 <FaHome /> Beranda
               </Link>
             </li>
-            <li className="w-full">
+            <li>
               <Link
                 to="/about"
-                className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-md transition"
               >
                 <MdInfoOutline /> Tentang Kami
               </Link>
             </li>
-            <li className="w-full">
+            <li>
               <Link
-                to="/cuaca"
-                className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
+                to="/weather-calender"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-md transition"
               >
                 <WiDayCloudy className="text-xl" /> Cuaca
               </Link>
             </li>
-            <li className="w-full">
+            <li>
               <Link
                 to="/faq"
-                className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
+                className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded-md transition"
               >
                 <RiQuestionAnswerLine /> FAQ
               </Link>
-            </li>
-            <li className="pt-2">
-              <button
-                id="logout"
-                className="btn btn-outline btn-error w-full flex items-center gap-2 justify-center rounded-md"
-              >
-                <FiLogOut /> Keluar
-              </button>
             </li>
           </ul>
         </div>

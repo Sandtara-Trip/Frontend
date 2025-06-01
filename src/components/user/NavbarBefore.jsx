@@ -33,15 +33,15 @@ const NavbarBefore = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="navbar fixed top-0 left-0 w-full h-16 z-50 bg-white text-gray-700 shadow-md px-4 flex justify-between items-center">
+    <div className=" navbar fixed top-0 left-0 w-full h-16 z-50 bg-white text-gray-700 shadow-md px-4 flex justify-between items-center ">
       {/* Left - Logo */}
       <div className="flex items-center gap-2">
         <img src="img/logo.png" alt="logo" className="w-12 h-12" />
         <Link
           to="/"
-          className="text-2xl font-bold text-warm-orange ml-2  sm:block"
+          className="text-2xl font-bold text-teal ml-2  sm:block"
         >
-          Sandtara <span className="text-teal">Trip</span>
+          Sandtara <span className="text-warm-orange">Trip</span>
         </Link>
       </div>
 
@@ -68,11 +68,11 @@ const NavbarBefore = () => {
               <MdInfoOutline /> Tentang Kami
             </Link>
           </li>
-          <li className={isActive("/cuaca") ? "bg-gray-200 rounded-full" : ""}>
+          <li className={isActive("/weather-calender") ? "bg-gray-200 rounded-full" : ""}>
             <Link
-              to="/cuaca"
+              to="/weather-calender"
               className={`flex items-center gap-2 px-3 py-1 ${
-                isActive("/cuaca") ? "font-semibold" : "hover:text-teal-500"
+                isActive("/weather-calender") ? "font-semibold" : "hover:text-teal-500"
               }`}
             >
               <WiDayCloudy className="text-xl" /> Cuaca
@@ -165,7 +165,7 @@ const NavbarBefore = () => {
             </li>
             <li className="w-full">
               <Link
-                to="/cuaca"
+                to="/weather-calender"
                 onClick={toggleMenu}
                 className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
               >

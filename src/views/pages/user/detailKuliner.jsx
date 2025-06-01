@@ -51,6 +51,7 @@ const DetailKuliner = () => {
           </div>
 
           <TabContent activeTab={activeTab} contentData={contentData} />
+          
         </div>
       </div>
 

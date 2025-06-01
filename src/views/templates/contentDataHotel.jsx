@@ -54,7 +54,8 @@ export const contentData = {
       name: "I Putu Wira",
       rating: 4,
       date: "2025-05-17",
-      review: "Kamar luas dan sarapan enak, tapi kolam renangnya ramai pas weekend.",
+      review:
+        "Kamar luas dan sarapan enak, tapi kolam renangnya ramai pas weekend.",
       image: null,
       profilePhoto: "https://randomuser.me/api/portraits/men/40.jpg",
     },
@@ -62,7 +63,8 @@ export const contentData = {
       name: "Siti Nurhaliza",
       rating: 4,
       date: "2025-05-12",
-      review: "Lokasi strategis, dekat dengan toko oleh-oleh dan restoran lokal.",
+      review:
+        "Lokasi strategis, dekat dengan toko oleh-oleh dan restoran lokal.",
       image: "https://example.com/hotel-bali-harmoni2.jpg",
       profilePhoto: "https://randomuser.me/api/portraits/women/29.jpg",
     },

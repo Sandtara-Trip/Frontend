@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
-import "moment/locale/id";
+import { useNavigate } from "react-router-dom";
 import { weatherData } from "../../views/templates/weather";
 import { slides } from "../../views/templates/slides";
 import BackgroundSlider from "./BackgroundSlider";
@@ -9,16 +8,68 @@ import CardSlider from "./CardSlider";
 import { destinations } from "../../views/templates/destinations";
 import { HotelSlides } from "../../views/templates/hotelSlides";
 
-moment.locale("id");
+// Fungsi bantu untuk parsing dan formatting
+const parseDate = (ddmmyyyy) => {
+  const [dd, mm, yyyy] = ddmmyyyy.split("/").map(Number);
+  return new Date(yyyy, mm - 1, dd);
+};
 
-const HeroWeather = () => {
+const formatDateToIndonesian = (dateString) => {
+  const date = parseDate(dateString);
+  return date.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+};
+
+const getTodayFormatted = () => {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const yyyy = today.getFullYear();
+  return `${dd}/${mm}/${yyyy}`; // Format sama kayak data
+};
+
+const HeroWeather = ({ onCategoryNavigate }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const data = weatherData[0];
- const formattedDate = moment(data.date, "DD-MM-YYYY").locale("id").format("dddd, D MMMM YYYY");
+  const [isLoggedIn] = useState(true);
 
+  const navigate = useNavigate();
 
-  // Auto slide 
+  const todayDate = getTodayFormatted();
+  const todayData = weatherData.find((item) => item.date === todayDate);
+
+  const formattedDate = todayData
+    ? formatDateToIndonesian(todayData.date)
+    : "Data cuaca hari ini tidak ditemukan";
+
+  const handleButtonClick = (route) => {
+    if (!isLoggedIn) {
+      alert("Silakan login terlebih dahulu untuk mengakses fitur ini.");
+      return;
+    }
+
+    const hash = route.split("#")[1];
+    if (hash && onCategoryNavigate) {
+      const categoryMap = {
+        semua: "Semua",
+        wisata: "Wisata",
+        hotel: "Hotel",
+        kuliner: "Kuliner"
+      };
+      const category = categoryMap[hash.toLowerCase()];
+      if (category) {
+        onCategoryNavigate(category);
+        return;
+      }
+    }
+
+    navigate(route);
+  };
+
   useEffect(() => {
     if (isPaused) return;
 
@@ -33,37 +84,19 @@ const HeroWeather = () => {
   const buttonLabel = slide.buttonText || "Lihat Cuaca Lainnya";
   const buttonColor = slide.buttonColor || "bg-teal hover:bg-light-teal";
 
-  // Render konten kanan 
   const renderRightContent = () => {
-    if (currentSlide === 0) {
-      return null;
-    }
-
+    if (currentSlide === 0) return null;
     if (currentSlide === 1) {
-      return (
-        <div className="hidden md:block">
-          <TodayWeather data={data} formattedDate={formattedDate} />
-        </div>
+      return todayData ? (
+        <TodayWeather data={todayData} formattedDate={formattedDate} />
+      ) : (
+        <p className="text-white">Cuaca hari ini tidak tersedia.</p>
       );
     }
-
     if (currentSlide === 2) {
-      return (
-        <div className="hidden md:block">
-          <CardSlider
-            destinations={destinations}
-            title="Rekomendasi Wisata Hari Ini"
-          />
-        </div>
-      );
+      return <CardSlider destinations={destinations} title="Rekomendasi Wisata Hari Ini" />;
     }
-
-    // hotel
-    return (
-      <div className="hidden md:block">
-        <CardSlider destinations={HotelSlides} title="Rekomendasi Hotel Terbaik" />
-      </div>
-    );
+    return <CardSlider destinations={HotelSlides} title="Rekomendasi Hotel Terbaik" />;
   };
 
   return (
@@ -79,7 +112,6 @@ const HeroWeather = () => {
       />
 
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between max-w-6xl w-full gap-10">
-        {/* Kiri: Info slide */}
         <div className="text-white text-center md:text-left w-full max-w-xl md:translate-y-[-20px]">
           <h1 className="text-3xl md:text-5xl font-extrabold mb-4 drop-shadow-md leading-tight">
             {slide.title}
@@ -88,14 +120,14 @@ const HeroWeather = () => {
           {buttonLabel && (
             <button
               className={`${buttonColor} text-white font-semibold py-3 px-6 rounded-full transition shadow-md`}
+              onClick={() => handleButtonClick(slide.buttonRoute)}
             >
               {buttonLabel}
             </button>
           )}
         </div>
 
-        {/* Kanan: Konten dinamis */}
-        <div className="w-full max-w-sm">{renderRightContent()}</div>
+        <div className="w-full max-w-sm hidden md:block">{renderRightContent()}</div>
       </div>
     </section>
   );

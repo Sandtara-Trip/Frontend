@@ -51,7 +51,7 @@ const ChooseRoom = () => {
   };
 
   const handlePesanSekarang = (id) => {
-    navigate(`/order/hotel?id=${id}`);
+      navigate(`/order-hotel/${id}`);
   };
 
   const closeModal = () => {

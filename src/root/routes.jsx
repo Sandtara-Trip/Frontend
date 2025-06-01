@@ -17,6 +17,8 @@ import OrderHotel from "../views/pages/user/orderHotel";
 import ChooseRoom from "../views/pages/user/ChooseRoom";
 import UserProfile from "../views/pages/user/userProfile";
 import WeatherCalendar from "../views/pages/user/weatherCalender";
+import NotFoundPage from "../views/pages/user/notFound";
+import LoadingScreen from "../components/user/loading";
 
 export const routes = createBrowserRouter([
   {
@@ -56,35 +58,44 @@ export const routes = createBrowserRouter([
     element: <FaqSection />,
   },
   {
-    path: "/wisata{id}",
+    path: "/detail-wisata/:id",
     element: <DetailWisata />,
   },
   {
-    path: "/detail-hotel{id}",
+    path: "/detail-hotel/:id",
     element: <DetailHotel />,
   },
   {
-    path: "/detail-kuliner{id}",
+    path: "/detail-kuliner/:id",
     element: <DetailKuliner />,
   },
   {
-    path: "/order-wisata{id}",
+    path: "/order-wisata/:id",
     element: <OrderWisata />,
   },
   {
-    path: "/order-hotel{id}",
+    path: "/order-hotel/:id",
     element: <OrderHotel />,
   },
   {
-    path: "/choose-room",
+    path: "/choose-room/:id",
     element: <ChooseRoom />,
   },
   {
-    path: "/user-profile",
+    path: "/user-profile/:id",
     element: <UserProfile />,
   },
   {
     path: "/weather-calender",
     element: <WeatherCalendar />,
   },
+  {
+    path: "/not-found",
+    element: <NotFoundPage />,
+  },
+    {
+    path: "/load",
+    element: <LoadingScreen />,
+  },
 ]);
+

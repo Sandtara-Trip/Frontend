@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { IoClose } from "react-icons/io5";
 
 const FilterBar = ({
   filters,
@@ -66,19 +67,8 @@ const FilterBar = ({
                 className="p-2 rounded-full hover:bg-red-100 transition text-gray-400 hover:text-red-500"
                 aria-label="Hapus semua filter"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                {" "}
+                <IoClose />
               </button>
             </div>
           )}
@@ -93,7 +83,7 @@ const FilterBar = ({
             <input
               type="text"
               className="w-full border border-warm-orange focus:ring-2 focus:ring-warm-orange rounded-full py-2 pl-10 pr-10 text-gray-800 placeholder:text-gray-400 focus:outline-none"
-              placeholder="Contoh: Masukkan pencarian..."
+              placeholder="Temukan yang kamu cari..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
             />
@@ -119,19 +109,8 @@ const FilterBar = ({
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500"
                 aria-label="Clear search"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                {" "}
+                <IoClose />
               </button>
             )}
           </div>

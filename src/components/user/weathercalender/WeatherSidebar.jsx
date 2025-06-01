@@ -7,6 +7,19 @@ import {
   WiThunderstorm,
 } from "react-icons/wi";
 
+// Format tanggal
+const formatDateToIndonesian = (dateString) => {
+  if (!dateString) return "";
+  const [dd, mm, yyyy] = dateString.split("/").map(Number);
+  const date = new Date(yyyy, mm - 1, dd);
+  return date.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
+
 const weatherIcons = [
   <WiDaySunny className="text-lg" />,
   <WiDayCloudy className="text-lg" />,
@@ -26,7 +39,7 @@ const WeatherSidebar = ({ weatherData }) => {
     setShowMore((prev) => !prev);
   };
 
-  const fullDayActivities = useMemo(() => {
+  const DayActivities = useMemo(() => {
     const descriptions = [
       "Sarapan di hotel",
       "Jalan-jalan pagi",
@@ -60,16 +73,16 @@ const WeatherSidebar = ({ weatherData }) => {
         time: hour,
         description: descriptions[i % descriptions.length],
         icon: getRandomIcon(),
-        hidden: i >= 4, 
+        hidden: i >= 4,
       };
     });
   }, []);
 
   return (
-    <div className="bg-gradient-to-b from-teal to-light-orange text-white p-6 rounded-2xl shadow-md flex flex-col justify-between">
+    <div className="bg-gradient-to-b from-teal to-light-orange text-white p-6 rounded-2xl shadow-md flex flex-col justify-between mb-6">
       <TodayWeather
         data={weatherData}
-        formattedDate={new Date().toLocaleDateString("id-ID")}
+        formattedDate={formatDateToIndonesian(weatherData?.date || "")}
       />
 
       <hr className="mt-4 border-white/30" />
@@ -79,9 +92,8 @@ const WeatherSidebar = ({ weatherData }) => {
         </h3>
 
         <ul className="space-y-3 text-sm max-h-[240px] overflow-y-auto">
-          {fullDayActivities
-            .filter((activity) => showMore || !activity.hidden)
-            .map((activity, index) => (
+          {DayActivities.filter((activity) => showMore || !activity.hidden).map(
+            (activity, index) => (
               <li key={index} className="flex items-center gap-3">
                 <span className="bg-white/20 text-white text-xs px-3 py-1 rounded-full font-bold shadow">
                   {activity.time}
@@ -90,7 +102,8 @@ const WeatherSidebar = ({ weatherData }) => {
                   {activity.icon} {activity.description}
                 </span>
               </li>
-            ))}
+            )
+          )}
         </ul>
 
         <div className="text-right mt-6">

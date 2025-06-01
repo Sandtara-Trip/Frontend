@@ -126,7 +126,10 @@ const getTravelTips = (desc = "") => {
   );
 };
 
-const WeatherCalendarMain = ({ holidayDates = {}, weatherDescriptions = {} }) => {
+const WeatherCalendarMain = ({
+  holidayDates = {},
+  weatherDescriptions = {},
+}) => {
   const [selectedWeather, setSelectedWeather] = useState(null);
   const dialogRef = useRef();
 
@@ -144,7 +147,8 @@ const WeatherCalendarMain = ({ holidayDates = {}, weatherDescriptions = {} }) =>
         Kalender Cuaca
       </h1>
       <p className="text-gray-600 text-center mb-6">
-        Lihat prakiraan cuaca dan hari libur langsung dalam satu tampilan kalender.
+        Lihat prakiraan cuaca dan hari libur langsung dalam satu tampilan
+        kalender.
       </p>
 
       <FullCalendar
@@ -210,19 +214,21 @@ const WeatherCalendarMain = ({ holidayDates = {}, weatherDescriptions = {} }) =>
 
       {/* Modal Cuaca */}
       <dialog ref={dialogRef} className="modal">
-        <form method="dialog" className="modal-box max-w-md bg-white text-black rounded-xl">
-
+        <form
+          method="dialog"
+          className="modal-box max-w-md bg-white text-black rounded-xl"
+        >
           {selectedWeather?.desc && (
             <>
-             
-              <h3 className="font-bold text-lg mb-2">Cuaca: {selectedWeather.desc.description}</h3>
+              <h3 className="font-bold text-lg mb-2">
+                Cuaca: {selectedWeather.desc.description}
+              </h3>
+
               <p className="mb-1">
-                <span className="font-semibold">Kota:</span> {selectedWeather.desc.city}
+                <span className="font-semibold">Suhu:</span>{" "}
+                {selectedWeather.desc.temp}
               </p>
-              <p className="mb-1">
-                <span className="font-semibold">Suhu:</span> {selectedWeather.desc.temp}
-              </p>
-               <hr></hr>
+              <hr></hr>
               <div>
                 <h4 className="font-semibold mb-2">Tips Perjalanan:</h4>
                 {getTravelTips(selectedWeather.desc.description)}
@@ -231,13 +237,14 @@ const WeatherCalendarMain = ({ holidayDates = {}, weatherDescriptions = {} }) =>
           )}
 
           <div className="modal-action mt-6">
-            <button className="btn btn-warning btn-outline border-2">Tutup</button>
+            <button className="btn btn-warning btn-outline border-2">
+              Tutup
+            </button>
           </div>
         </form>
       </dialog>
     </div>
   );
 };
-
 
 export default WeatherCalendarMain;

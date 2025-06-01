@@ -84,8 +84,8 @@ const TabContent = ({ activeTab, contentData }) => {
 
   useEffect(() => {
     if (activeTab === "Lokasi") {
-      const lat = contentData.LokasiCoords?.lat || -8.6939;
-      const lon = contentData.LokasiCoords?.lng || 115.2611;
+      const lat = contentData?.LokasiCoords?.lat ;
+      const lon = contentData?.LokasiCoords?.lng ;
 
       const timer = setTimeout(() => {
         Map(lat, lon, "lokasi-map");

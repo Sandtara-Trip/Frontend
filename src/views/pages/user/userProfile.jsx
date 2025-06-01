@@ -1,5 +1,5 @@
-// UserProfile.jsx
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import NavbarAfter from "../../../components/user/navbarAfter";
 import Sidebar from "../../../components/user/userProfile/Sidebar";
 import ProfileTab from "../../../components/user/userProfile/ProfileTab";
@@ -13,6 +13,9 @@ const dummyUser = {
 };
 
 const UserProfile = ({ userData = dummyUser }) => {
+  const location = useLocation(); 
+  const tabFromState = location.state?.tab;
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [photo, setPhoto] = useState("");
@@ -26,6 +29,13 @@ const UserProfile = ({ userData = dummyUser }) => {
       setPhoto(userData.photo);
     }
   }, [userData]);
+
+  // Set tab 
+  useEffect(() => {
+    if (tabFromState) {
+      setActiveTab(tabFromState);
+    }
+  }, [tabFromState]);
 
   return (
     <>

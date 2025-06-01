@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import NavbarBefore from "../../../components/user/NavbarBefore";
 import NavbarAfter from "../../../components/user/navbarAfter";
 import Footer from "../../../components/user/footer";
-import { CardGrid } from "../../../components/user/card";
 import { itemWisata } from "../../templates/wisata";
 import { itemHotel } from "../../templates/hotel";
 import { itemKuliner } from "../../templates/kuliner";
@@ -11,7 +10,7 @@ import FilterBar from "../../../components/user/FilterBar";
 import { filterOptionsPerCategory } from "../../templates/filter";
 import Section from "../../../components/user/Section";
 import CategoryTabs from "../../../components/user/CategoryTabs";
-import Chatbot from "./chatbot";
+import ArticleChat from "./ArticleChat";
 
 const ITEMS_DEFAULT = 4;
 const ITEMS_PER_PAGE = 8;
@@ -19,12 +18,7 @@ const ITEMS_PER_PAGE = 8;
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Semua");
-  const [filters, setFilters] = useState({
-    Wisata: {},
-    Hotel: {},
-    Kuliner: {},
-    Semua: {},
-  });
+
   const [searchQuery, setSearchQuery] = useState({
     Wisata: "",
     Hotel: "",
@@ -43,38 +37,25 @@ const HomePage = () => {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("Token");
     setIsLoggedIn(!!token);
   }, []);
-
-  const handleFilterChange = (category, name, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [category]: { ...prev[category], [name]: value },
-    }));
-    setCurrentPage({ Wisata: 1, Hotel: 1, Kuliner: 1 });
-  };
 
   const handleSearchChange = (category, value) => {
     setSearchQuery((prev) => ({ ...prev, [category]: value }));
     setCurrentPage({ Wisata: 1, Hotel: 1, Kuliner: 1 });
   };
 
+  // Filter search
   const filterItems = (items, type, baseCategory) => {
-    const filter = filters[baseCategory];
     const query = searchQuery[baseCategory];
 
     return items.filter((item) => {
-      const matchesJenis = filter.jenis ? filter.jenis === type : true;
-      const matchesRating = filter.rating
-        ? item.rating?.toString() === filter.rating ||
-          item.bintang?.toString() === filter.rating
-        : true;
       const matchesSearch = query
         ? item.title?.toLowerCase().includes(query.toLowerCase()) ||
           item.name?.toLowerCase().includes(query.toLowerCase())
         : true;
-      return matchesJenis && matchesRating && matchesSearch;
+      return matchesSearch;
     });
   };
 
@@ -99,35 +80,46 @@ const HomePage = () => {
       ? ["Wisata", "Hotel", "Kuliner"]
       : [activeCategory];
 
+  const handleHeroNavigate = (category) => {
+    setActiveCategory(category);
+
+    setTimeout(() => {
+      const sectionId =
+        category === "Semua" ? "wisata" : category.toLowerCase();
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+  };
+
+  const handleTabChange = (category) => {
+    setActiveCategory(category);
+  };
+
   return (
     <div>
-      {/* NAVBAR */}
       {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
 
-      {/* HERO SECTION */}
-      <HeroWeather />
+      <HeroWeather onCategoryNavigate={handleHeroNavigate} />
 
-      {/* Category Tabs + Filter */}
       <section className="relative z-10 -mt-20 px-4">
         <div className="max-w-7xl mx-auto bg-white/20 backdrop-blur-md rounded-2xl shadow-lg px-6 py-4">
           <CategoryTabs
             activeCategory={activeCategory}
-            onChange={setActiveCategory}
+            onChange={handleTabChange}
           />
 
           <FilterBar
             filters={filterOptionsPerCategory[activeCategory]}
-            selectedFilters={filters[activeCategory]}
-            onChange={(name, val) =>
-              handleFilterChange(activeCategory, name, val)
-            }
+            selectedFilters={{}} 
+            onChange={() => {}} 
             searchQuery={searchQuery[activeCategory]}
             onSearchChange={(val) => handleSearchChange(activeCategory, val)}
           />
         </div>
       </section>
 
-      {/* Sections per Category */}
       {categoriesToRender.map((category) => {
         const filteredData =
           activeCategory === "Semua"
@@ -161,6 +153,7 @@ const HomePage = () => {
           <Section
             key={category}
             title={category}
+            id={category.toLowerCase()}
             data={dataToShow}
             background="bg-white"
             showAll={showAll[category]}
@@ -172,8 +165,7 @@ const HomePage = () => {
         );
       })}
 
-      <Chatbot/>
-
+      <ArticleChat />
       <Footer />
     </div>
   );
