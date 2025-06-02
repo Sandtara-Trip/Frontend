@@ -21,7 +21,7 @@ const menuItems = [
 const Sidebar = () => {
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => location.pathname.startsWith(path);
 
   return (
     <div className="h-screen w-64 bg-white fixed top-0 left-0 flex flex-col shadow-md">

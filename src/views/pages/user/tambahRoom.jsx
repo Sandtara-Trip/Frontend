@@ -54,7 +54,7 @@ const TambahRoom = () => {
             <Breadcrumb
               items={[
                 { label: "Room", href: "/room" },
-                { label: "Tambah Data Room" },
+                { label: "Tambah Data Kamar" },
               ]}
             />
             {/* Judul Form */}

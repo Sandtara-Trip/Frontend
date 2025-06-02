@@ -5,8 +5,11 @@ import Button from "../../../components/user/button";
 import Search from "../../../components/user/search";
 import Table from "../../../components/user/tabel";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Room = () => {
+  const navigate = useNavigate();
+
   const dataRoom = [
     { id: 1, tipe: "Room A" },
     { id: 2, tipe: "Room B" },
@@ -30,7 +33,11 @@ const Room = () => {
       <td className="p-3">{kamar.tipe}</td>
       <td className="p-3">
         <div className="flex items-center gap-3">
-          <button className="text-green-500 hover:text-green-700" title="Edit">
+          <button
+            className="text-green-500 hover:text-green-700"
+            title="Edit"
+            onClick={() => navigate("/room/edit/:id")}
+          >
             <FaEdit />
           </button>
           <button className="text-red-500 hover:text-red-700" title="Hapus">
@@ -57,7 +64,9 @@ const Room = () => {
 
               {/* Tambah Data & Search */}
               <div className="flex items-center gap-2">
-                <Button>Tambah Kamar</Button>
+                <Button onClick={() => navigate("/room/add")}>
+                  Tambah Kamar
+                </Button>
                 <Search placeholder="Cari Tipe kamar...." />
               </div>
             </div>

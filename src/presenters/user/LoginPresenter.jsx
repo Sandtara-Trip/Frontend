@@ -5,7 +5,7 @@ class LoginPresenter {
 
   handleLogin(event) {
     event.preventDefault();
-    this.navigate("/");
+    this.navigate("/hotel");
   }
 
   handleExit() {

@@ -5,8 +5,11 @@ import Button from "../../../components/user/button";
 import Search from "../../../components/user/search";
 import Table from "../../../components/user/tabel";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Hotel = () => {
+  const navigate = useNavigate();
+
   const dataHotel = [
     { id: 1, nama: "Hotel A", alamat: "Jl. Xxxxx" },
     { id: 2, nama: "Hotel B", alamat: "Jl. Xxxxx" },
@@ -32,7 +35,11 @@ const Hotel = () => {
       <td className="p-3">{hotel.alamat}</td>
       <td className="p-3">
         <div className="flex items-center gap-3">
-          <button className="text-green-500 hover:text-green-700" title="Edit">
+          <button
+            className="text-green-500 hover:text-green-700"
+            title="Edit"
+            onClick={() => navigate("/hotel/edit/:id")}
+          >
             <FaEdit />
           </button>
           <button className="text-red-500 hover:text-red-700" title="Hapus">
@@ -59,7 +66,9 @@ const Hotel = () => {
 
               {/* Tambah Data & Search */}
               <div className="flex items-center gap-2">
-                <Button>Tambah Hotel</Button>
+                <Button onClick={() => navigate("/hotel/add")}>
+                  Tambah Hotel
+                </Button>
                 <Search placeholder="Cari Hotel..." />
               </div>
             </div>

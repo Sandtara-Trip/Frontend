@@ -54,12 +54,12 @@ const EditRoom = () => {
             <Breadcrumb
               items={[
                 { label: "Room", href: "/room" },
-                { label: "Tambah Data Room" },
+                { label: "Edit Data Kamar" },
               ]}
             />
             {/* Judul Form */}
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-              Tambah Data Kamar
+              Edit Data Kamar
             </h2>
 
             <form className="space-y-6">

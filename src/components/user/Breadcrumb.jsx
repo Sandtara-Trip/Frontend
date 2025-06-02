@@ -9,14 +9,11 @@ const Breadcrumb = ({ items = [] }) => {
         {items.map((item, index) => (
           <li key={index} className="flex items-center">
             {item.href ? (
-              <Link
-                href={item.href}
-                className="hover:underline text-orange-500"
-              >
+              <Link to={item.href} className="hover:underline text-black">
                 {item.label}
               </Link>
             ) : (
-              <span className="text-gray-800 font-medium">{item.label}</span>
+              <span className="text-orange-400 font-medium">{item.label}</span>
             )}
             {index < items.length - 1 && (
               <FaChevronRight className="mx-2 text-gray-400 text-xs" />

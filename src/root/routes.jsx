@@ -14,6 +14,7 @@ import EditHotel from "../views/pages/user/editHotel";
 import EditRoom from "../views/pages/user/editRoom";
 import EditWisata from "../views/pages/user/editWisata";
 import EditUser from "../views/pages/user/editUser";
+import MainLayout from "../models/MainLayout";
 
 export const routes = createBrowserRouter([
   {
@@ -21,55 +22,26 @@ export const routes = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: "/hotel",
-    element: <Hotel />,
-  },
-  {
-    path: "/room",
-    element: <Room />,
-  },
-  {
-    path: "/wisata",
-    element: <Wisata />,
-  },
-  {
-    path: "/order",
-    element: <Order />,
-  },
-  {
-    path: "/user",
-    element: <User />,
-  },
-  {
-    path: "/add-hotel",
-    element: <TambahHotel />,
-  },
-  {
-    path: "/add-room",
-    element: <TambahRoom />,
-  },
-  {
-    path: "/add-wisata",
-    element: <TambahWisata />,
-  },
-  {
-    path: "/add-user",
-    element: <TambahUser />,
-  },
-  {
-    path: "/edit-hotel",
-    element: <EditHotel />,
-  },
-  {
-    path: "/edit-room",
-    element: <EditRoom />,
-  },
-  {
-    path: "/edit-wisata",
-    element: <EditWisata />,
-  },
-  {
-    path: "/edit-user",
-    element: <EditUser />,
+    path: "/",
+    element: <MainLayout />,
+    children: [
+      { path: "hotel", element: <Hotel /> },
+      { path: "hotel/add", element: <TambahHotel /> },
+      { path: "hotel/edit/:id", element: <EditHotel /> },
+
+      { path: "room", element: <Room /> },
+      { path: "room/add", element: <TambahRoom /> },
+      { path: "room/edit/:id", element: <EditRoom /> },
+
+      { path: "wisata", element: <Wisata /> },
+      { path: "wisata/add", element: <TambahWisata /> },
+      { path: "wisata/edit/:id", element: <EditWisata /> },
+
+      { path: "order", element: <Order /> },
+
+      { path: "user", element: <User /> },
+      { path: "user/add", element: <TambahUser /> },
+      { path: "user/edit/:id", element: <EditUser /> },
+    ],
   },
 ]);
