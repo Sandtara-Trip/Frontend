@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import InputField from "../../../components/user/InputField";
 import { TbKeyOff } from "react-icons/tb";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
@@ -7,8 +7,13 @@ import Button from "../../../components/user/button";
 import ForgotPasswordPresenter from "../../../presenters/user/ForgotPasswordPresenter";
 
 const ForgotPassword = () => {
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const presenter = new ForgotPasswordPresenter({ navigate });
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
@@ -29,26 +34,28 @@ const ForgotPassword = () => {
           label="Email"
           type="email"
           placeholder="taraddicts@example.com"
+          value={email}
+          onChange={handleEmailChange}
           required
         />
 
         <Button
           type="button"
-          onClick={() => presenter.handleResetPassword()}
+          onClick={() => presenter.handleResetPassword(email)}
           className="mt-6"
         >
           Kirim
         </Button>
 
-        <p className="text-center mt-6 font-normal">
-          <a
-            href="/login"
+        <div className="text-center mt-6 font-normal">
+          <button
+            onClick={() => presenter.goToLogin()}
             className="text-warm-orange hover:underline text-lg flex items-center justify-center"
           >
             <IoArrowBackCircleOutline className="mr-2 text-3xl" /> Kembali ke
             halaman login
-          </a>
-        </p>
+          </button>
+        </div>
       </div>
     </div>
   );

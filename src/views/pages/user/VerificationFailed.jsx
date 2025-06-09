@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { MdOutlineMailLock } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import Button from "../../../components/user/button";
 import InputField from "../../../components/user/InputField";
 import VerificationFailedPresenter from "../../../presenters/user/VerificationFailedPresenter";
 
 const VerificationFailed = () => {
   const [email, setEmail] = useState("");
-  const presenter = new VerificationFailedPresenter({ setEmail });
+  const navigate = useNavigate();
+  const presenter = new VerificationFailedPresenter({ 
+    setEmail,
+    navigate
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-warm-orange to-light-orange">

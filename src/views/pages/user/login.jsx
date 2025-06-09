@@ -1,21 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiX } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 import InputField from "../../../components/user/InputField";
 import PasswordField from "../../../components/user/PasswordField";
 import Button from "../../../components/user/button";
-import LoginPresenter from "../../../presenters/user/LoginPresenter";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const presenter = new LoginPresenter({ navigate });
+  const auth = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+  
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      if (data.token && data.user) {
+        // Login using AuthContext
+        auth.login({
+          token: data.token,
+          name: data.user.name,
+          email: data.user.email,
+          id: data.user.id,
+          role: data.user.role
+        });
+
+        // Redirect based on role
+        if (data.user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError(error.message || 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleExit = () => {
+    navigate('/');
+  };
 
   return (
     <div className="flex min-h-screen w-full bg-white relative">
       {/* Tombol Exit */}
       <button
         className="absolute top-4 right-4 text-warm-orange hover:text-gray-700 z-10"
-        onClick={() => presenter.handleExit()}
+        onClick={handleExit}
       >
         <FiX size={30} />
       </button>
@@ -29,13 +98,13 @@ const LoginPage = () => {
           Temukan destinasi tersembunyi, tempat santai, dan pengalaman menginap
           yang tak terlupakan bersama kami!
         </p>
-        <img src="publ" alt="Maskot" className="w-48 mt-6" />
+        <img src="/img/maskot.png" alt="Maskot" className="w-48 mt-6" />
       </div>
 
       {/* Kanan - Formulir */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-12">
         <div className="w-full max-w-md">
-          <img src="img/logo.png" alt="Logo" className="h-36 w-36 mx-auto" />
+          <img src="/img/logo.png" alt="Logo" className="h-36 w-36 mx-auto" />
 
           <h2 className="text-3xl font-bold text-teal text-center mb-2">
             Halo <span className="text-warm-orange">Taraddicts!</span>
@@ -44,18 +113,28 @@ const LoginPage = () => {
             Masuk dan temukan keindahan tersembunyi di Kota Denpasar
           </p>
 
-          <form
-            className="space-y-4"
-            onSubmit={(e) => presenter.handleLogin(e)}
-          >
+          <form className="space-y-4" onSubmit={handleLogin}>
+            {error && (
+              <div className="p-3 bg-red-100 text-red-700 rounded-lg mb-4">
+                {error}
+              </div>
+            )}
             <InputField
               label="Email"
               type="email"
+              name="email"
+              value={email}
+              onChange={handleEmailChange}
               placeholder="taraddicts@example.com"
             />
 
             <PasswordField
               label="Kata Sandi"
+              name="password"
+              value={password}
+              onChange={handlePasswordChange}
+              showPassword={showPassword}
+              togglePasswordVisibility={togglePasswordVisibility}
               placeholder="Masukkan Kata Sandi Anda"
             />
 
@@ -66,7 +145,9 @@ const LoginPage = () => {
               Lupa Password?
             </Link>
 
-            <Button type="submit">Masuk</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Memproses...' : 'Masuk'}
+            </Button>
           </form>
 
           <p className="text-center text-sm text-text-gray mt-4">

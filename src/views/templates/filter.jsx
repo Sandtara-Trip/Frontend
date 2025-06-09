@@ -1,24 +1,39 @@
 export const filterOptionsPerCategory = {
   Semua: [
-    { name: "jenis", label: "Jenis", options: ["Wisata", "Hotel", "Kuliner"] },
-    { name: "rating", label: "Rating", options: ["1", "2", "3", "4", "5"] },
+    { 
+      name: "jenis", 
+      label: "Jenis", 
+      options: ["Wisata", "Hotel", "Kuliner"] 
+    },
+    { 
+      name: "rating", 
+      label: "Rating Minimal", 
+      options: ["1", "2", "3", "4", "5"] 
+    },
   ],
   Wisata: [
     {
       name: "kategori",
       label: "Kategori Wisata",
-      options: ["Alam", "Budaya", "Keluarga", "Hiburan"],
+      options: ["Alam", "Budaya", "Religi", "Kuliner", "Hiburan"],
     },
-    { name: "cuaca", label: "Cuaca", options: ["Panas", "Hujan"] },
-    { name: "rating", label: "Rating", options: ["1", "2", "3", "4", "5"] },
+    { 
+      name: "cuaca", 
+      label: "Cuaca", 
+      options: ["Panas", "Hujan"] 
+    },
+    { 
+      name: "rating", 
+      label: "Rating Minimal", 
+      options: ["1", "2", "3", "4", "5"] 
+    },
   ],
   Hotel: [
-    {
-      name: "fasilitas",
-      label: "Fasilitas",
-      options: ["Wifi", "Parkir", "Kolam Renang"],
+    { 
+      name: "rating", 
+      label: "Rating Minimal", 
+      options: ["1", "2", "3", "4", "5"] 
     },
-    { name: "rating", label: "Rating", options: ["1", "2", "3", "4", "5"] },
   ],
   Kuliner: [
     {
@@ -26,6 +41,10 @@ export const filterOptionsPerCategory = {
       label: "Jenis Kuliner",
       options: ["Tradisional", "Modern", "Kafe"],
     },
-    { name: "rating", label: "Rating", options: ["1", "2", "3", "4", "5"] },
+    { 
+      name: "rating", 
+      label: "Rating Minimal", 
+      options: ["1", "2", "3", "4", "5"] 
+    },
   ],
 };

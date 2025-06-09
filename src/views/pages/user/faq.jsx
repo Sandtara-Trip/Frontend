@@ -1,25 +1,30 @@
-import React, { useState, useEffect } from "react";
-import NavbarBefore from "../../../components/user/NavbarBefore";
-import NavbarAfter from "../../../components/user/NavbarAfter";
-import Footer from "../../../components/user/footer";
+import React from "react";
+import { MdOutlineManageAccounts, MdPayment } from "react-icons/md";
+import { IoGlobeOutline } from "react-icons/io5";
+import { GiSuitcase } from "react-icons/gi";
+import { FaMapMarkedAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (custom = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: custom * 0.1, duration: 0.4, ease: "easeOut" },
+  }),
+};
 
 const FaqSection = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    setIsLoggedIn(!!token);
-  }, []);
-
   const faqData = [
     {
-      group: "🛡️ Akun dan Keamanan",
+      icon: <MdOutlineManageAccounts className="text-4xl" />,
+      group: "Akun dan Keamanan",
       items: [
         {
           question:
             "Apakah saya harus membuat akun untuk menggunakan website ini?",
           answer:
-           "Tidak wajib. Namun, dengan membuat akun, Anda dapat mengakses seluruh destinasi wisata, hotel, kuliner, dan acara terkini di Denpasar. Selain itu, Anda juga dapat menggunakan berbagai fitur seperti pemesanan tiket dan melihat rekomendasi. Fitur lainnya termasuk informasi cuaca terkini yang membantu Anda merencanakan perjalanan dengan lebih baik, serta akses ke kondisi cuaca harian dan per-jam",
+            "Tidak wajib. Namun, dengan membuat akun, Anda dapat mengakses seluruh destinasi wisata, hotel, kuliner, dan acara terkini di Denpasar. Selain itu, Anda juga dapat menggunakan berbagai fitur seperti pemesanan tiket dan melihat rekomendasi. Fitur lainnya termasuk informasi cuaca terkini yang membantu Anda merencanakan perjalanan dengan lebih baik, serta akses ke kondisi cuaca harian dan per-jam.",
         },
         {
           question: "Bagaimana cara membuat akun?",
@@ -39,12 +44,13 @@ const FaqSection = () => {
         {
           question: "Bagaimana saya bisa menghapus akun saya?",
           answer:
-            "Pengguna bisa menghapus akunnya sendiri di halaman 'Profile' lalu 'Hapus Akun'. ",
+            "Pengguna bisa menghapus akunnya sendiri di halaman 'Profile' lalu 'Hapus Akun'.",
         },
       ],
     },
     {
-      group: "🌐 Tentang Website",
+      icon: <IoGlobeOutline className="text-4xl" />,
+      group: "Tentang Website",
       items: [
         {
           question: "Apa itu Sandtara Trip?",
@@ -64,13 +70,13 @@ const FaqSection = () => {
         },
         {
           question: "Apakah ada aplikasi mobile dari Sandtara Trip?",
-          answer:
-            "Saat ini kami hanya tersedia dalam versi website.",
+          answer: "Saat ini kami hanya tersedia dalam versi website.",
         },
       ],
     },
     {
-      group: "💳 Pemesanan dan Pembayaran",
+      icon: <MdPayment className="text-4xl" />,
+      group: "Pemesanan dan Pembayaran",
       items: [
         {
           question: "Bagaimana cara memesan tiket wisata, hotel, dan acara?",
@@ -91,7 +97,7 @@ const FaqSection = () => {
         {
           question: "Bagaimana cara membatalkan atau mengubah pemesanan?",
           answer:
-            "Jika pesanan tidak dibayar dalam waktu 24 Jam, maka pesanan akan batal otomatis dan tidak akan menganggu orderan yang lain",
+            "Jika pesanan tidak dibayar dalam waktu 24 Jam, maka pesanan akan batal otomatis dan tidak akan menganggu orderan yang lain.",
         },
         {
           question: "Apakah saya akan mendapatkan bukti pembayaran atau tiket?",
@@ -101,12 +107,13 @@ const FaqSection = () => {
       ],
     },
     {
-      group: "🧳 Layanan dan Fasilitas",
+      icon: <GiSuitcase className="text-4xl" />,
+      group: " Layanan dan Fasilitas",
       items: [
         {
           question: "Apakah tersedia transportasi selama wisata?",
           answer:
-            "Kami memiliki fitur rekomendasi yang membantu Anda menemukan penyewaan transportasi terdekat dari hotel atau destinasi wisata yang Anda kunjungi. ",
+            "Kami memiliki fitur rekomendasi yang membantu Anda menemukan penyewaan transportasi terdekat dari hotel atau destinasi wisata yang Anda kunjungi.",
         },
         {
           question:
@@ -117,7 +124,8 @@ const FaqSection = () => {
       ],
     },
     {
-      group: "🗺️ Perjalanan dan Lokasi",
+      icon: <FaMapMarkedAlt className="text-4xl" />,
+      group: " Perjalanan dan Lokasi",
       items: [
         {
           question: "Bagaimana cara menuju ke lokasi wisata?",
@@ -139,39 +147,55 @@ const FaqSection = () => {
   ];
 
   return (
-    <>
-      {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
-
-      <div className="max-w-4xl mx-auto px-4 py-16 pt-24">
-        <h2 className="text-4xl font-bold text-center text-teal mb-10">
-          Pertanyaan Umum (FAQ)
-        </h2>
+    <div className="min-h-screen bg-gray-50 py-16">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="text-center px-4 sm:px-6 max-w-xl mx-auto mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">
+            Pertanyaan Umum
+          </h2>
+          <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+            Kami telah merangkum beberapa pertanyaan untuk membantu Anda
+            memahami layanan Sandtara Trip.
+          </p>
+        </div>
 
         {faqData.map((section, index) => (
-          <div key={index} className="mb-10">
-            <h3 className="text-2xl font-semibold text-teal mb-4">
+          <motion.div
+            key={index}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeUp}
+            custom={index}
+            className="mb-10"
+          >
+            <h3 className="text-2xl font-semibold text-teal mb-4 flex items-center gap-2">
+              {section.icon && <span className="text-xl">{section.icon}</span>}
               {section.group}
             </h3>
             <div className="space-y-4">
               {section.items.map((item, idx) => (
-                <div
+                <motion.div
                   key={idx}
-                  className="collapse collapse-arrow bg-base-100 border border-base-300"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
+                  variants={fadeUp}
+                  custom={idx}
+                  className="collapse collapse-arrow bg-base-100 border border-base-300 rounded-lg"
                 >
                   <input type="radio" name={`faq-group-${index}`} />
-                  <div className="collapse-title font-semibold text-md">
+                  <div className="collapse-title font-semibold text-md cursor-pointer">
                     {item.question}
                   </div>
                   <div className="collapse-content text-sm">{item.answer}</div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-      {/* footer */}
-      <Footer />
-    </>
+    </div>
   );
 };
 

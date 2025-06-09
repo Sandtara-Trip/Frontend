@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import InputField from "../../../components/user/InputField";
 import PasswordField from "../../../components/user/PasswordField";
-import PhotoProfile from "../../../components/user/photoProfile";
 import Button from "../../../components/user/button";
 
 import RegisterPresenter from "../../../presenters/user/RegisterPresenter";
@@ -12,9 +11,12 @@ import RegisterPresenter from "../../../presenters/user/RegisterPresenter";
 const Register = () => {
   const {
     showPassword,
+    formData,
+    error,
+    loading,
     togglePasswordVisibility,
     handleSubmit,
-    handleNavigateValidation,
+    handleInputChange,
     handleExit,
   } = RegisterPresenter();
 
@@ -37,29 +39,40 @@ const Register = () => {
           </p>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <PhotoProfile />
 
             <InputField
               label="Nama Pengguna"
               type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
               placeholder="Masukkan Nama Lengkap"
             />
 
             <InputField
               label="Email"
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               placeholder="taraddicts@example.com"
             />
 
             <PasswordField
               label="Kata Sandi"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               placeholder="Buat Kata Sandi Aman"
               showPassword={showPassword}
               togglePasswordVisibility={togglePasswordVisibility}
             />
 
-            <Button type="button" onClick={handleNavigateValidation}>
-              Daftar
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+            <Button type="submit" disabled={loading}>
+              {loading ? 'Mendaftar...' : 'Daftar'}
             </Button>
           </form>
 

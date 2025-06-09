@@ -5,12 +5,14 @@ import { RiUserAddLine, RiQuestionAnswerLine } from "react-icons/ri";
 import { FaHome } from "react-icons/fa";
 import LanguageSelector from "./languageSelector";
 import { WiDayCloudy } from "react-icons/wi";
+import { useTranslation } from 'react-i18next';
 
 const NavbarBefore = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const hamburgerRef = useRef(null);
   const location = useLocation();
+  const { t } = useTranslation();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -33,175 +35,213 @@ const NavbarBefore = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="navbar fixed top-0 left-0 w-full h-16 z-50 bg-white text-gray-700 shadow-md px-4 flex justify-between items-center">
-      {/* Left - Logo */}
-      <div className="flex items-center gap-2">
-        <img src="img/logo.png" alt="logo" className="w-12 h-12" />
-        <Link
-          to="/"
-          className="text-2xl font-bold text-warm-orange ml-2  sm:block"
-        >
-          Sandtara <span className="text-teal">Trip</span>
-        </Link>
+    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          {/* Logo - Left */}
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center">
+              <img
+                src="/img/logo.png"
+                alt="Logo"
+                className="h-8 w-auto"
+              />
+              <span className="ml-2 text-xl font-bold text-warm-orange">
+                Sandtara Trip
+              </span>
+            </Link>
+          </div>
+
+          {/* Center */}
+          <div className="hidden lg:flex items-center">
+            <ul className="flex space-x-4">
+              <li>
+                <Link
+                  to="/"
+                  className={`flex items-center px-3 py-2 rounded-full text-sm font-medium ${
+                    isActive("/")
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <FaHome className="mr-1" />
+                  {t('nav.home')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  className={`flex items-center px-3 py-2 rounded-full text-sm font-medium ${
+                    isActive("/about")
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <MdInfoOutline className="mr-1" />
+                  {t('nav.about')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/weather-calender"
+                  className={`flex items-center px-3 py-2 rounded-full text-sm font-medium ${
+                    isActive("/weather-calender")
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <WiDayCloudy className="mr-1 text-xl" />
+                  {t('nav.weather')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/faq"
+                  className={`flex items-center px-3 py-2 rounded-full text-sm font-medium ${
+                    isActive("/faq")
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <RiQuestionAnswerLine className="mr-1" />
+                  {t('nav.faq')}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Right */}
+          <div className="flex items-center space-x-4">
+            <LanguageSelector />
+            <div className="hidden lg:flex items-center space-x-2">
+              <Link
+                to="/login"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-warm-orange bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-warm-orange"
+              >
+                <MdLogin className="mr-1" />
+                {t('auth.login')}
+              </Link>
+              <Link
+                to="/register"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-warm-orange hover:bg-light-orange focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-warm-orange"
+              >
+                <RiUserAddLine className="mr-1" />
+                {t('auth.register')}
+              </Link>
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="lg:hidden">
+              <button
+                ref={hamburgerRef}
+                onClick={toggleMenu}
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-warm-orange"
+              >
+                <span className="sr-only">Open main menu</span>
+                <svg
+                  className={`${isMenuOpen ? "hidden" : "block"} h-6 w-6`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+                <svg
+                  className={`${isMenuOpen ? "block" : "hidden"} h-6 w-6`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Middle - Desktop Menu */}
-      <div className="hidden lg:flex flex-1 justify-center">
-        <ul className="menu menu-horizontal px-1 font-medium gap-2">
-          <li className={isActive("/") ? "bg-gray-200 rounded-full" : ""}>
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <div className="lg:hidden" ref={menuRef}>
+          <div className="pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              className={`flex items-center gap-2 px-3 py-1 ${
-                isActive("/") ? "font-semibold" : "hover:text-teal-500"
+              className={`block px-3 py-2 text-base font-medium ${
+                isActive("/")
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
             >
-              <FaHome /> Beranda
+              <FaHome className="inline mr-2" />
+              {t('nav.home')}
             </Link>
-          </li>
-          <li className={isActive("/about") ? "bg-gray-200 rounded-full" : ""}>
             <Link
               to="/about"
-              className={`flex items-center gap-2 px-3 py-1 ${
-                isActive("/about") ? "font-semibold" : "hover:text-teal-500"
+              className={`block px-3 py-2 text-base font-medium ${
+                isActive("/about")
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
             >
-              <MdInfoOutline /> Tentang Kami
+              <MdInfoOutline className="inline mr-2" />
+              {t('nav.about')}
             </Link>
-          </li>
-          <li className={isActive("/cuaca") ? "bg-gray-200 rounded-full" : ""}>
             <Link
-              to="/cuaca"
-              className={`flex items-center gap-2 px-3 py-1 ${
-                isActive("/cuaca") ? "font-semibold" : "hover:text-teal-500"
+              to="/weather-calender"
+              className={`block px-3 py-2 text-base font-medium ${
+                isActive("/weather-calender")
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
             >
-              <WiDayCloudy className="text-xl" /> Cuaca
+              <WiDayCloudy className="inline mr-2" />
+              {t('nav.weather')}
             </Link>
-          </li>
-          <li className={isActive("/faq") ? "bg-gray-200 rounded-full" : ""}>
             <Link
               to="/faq"
-              className={`flex items-center gap-2 px-3 py-1 ${
-                isActive("/faq") ? "font-semibold" : "hover:text-teal-500"
+              className={`block px-3 py-2 text-base font-medium ${
+                isActive("/faq")
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
             >
-              <RiQuestionAnswerLine /> FAQ
+              <RiQuestionAnswerLine className="inline mr-2" />
+              {t('nav.faq')}
             </Link>
-          </li>
-        </ul>
-      </div>
-
-      {/* Right - Desktop Buttons + Mobile Hamburger */}
-      <div className="flex items-center gap-2 lg:gap-4">
-        {/* Desktop */}
-        <div className="hidden lg:flex items-center gap-2">
-          <div className="mr-4">
-            <LanguageSelector />
           </div>
-          <Link
-            to="/login"
-            className="btn btn-outline text-warm-orange flex items-center gap-2"
-          >
-            <MdLogin /> Login
-          </Link>
-          <Link
-            to="/register"
-            className="btn bg-warm-orange text-white flex items-center gap-2"
-          >
-            <RiUserAddLine /> Register
-          </Link>
-        </div>
-
-        {/* Mobile Hamburger */}
-        <div className="lg:hidden flex items-center" ref={hamburgerRef}>
-          <label className="btn btn-circle swap swap-rotate text-teal-500">
-            <input type="checkbox" checked={isMenuOpen} onChange={toggleMenu} />
-            <svg
-              className="swap-off fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 512 512"
-            >
-              <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-            </svg>
-            <svg
-              className="swap-on fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 512 512"
-            >
-              <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-            </svg>
-          </label>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div
-          ref={menuRef}
-          className="lg:hidden absolute top-16 left-0 w-full bg-white shadow-2xl z-50"
-        >
-          <ul className="flex flex-col gap-1 px-4 py-4 w-full">
-            <li className="w-full">
+          <div className="pt-4 pb-3 border-t border-gray-200">
+            <div className="space-y-1">
               <Link
-                to="/"
-                onClick={toggleMenu}
-                className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
+                to="/login"
+                className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               >
-                <FaHome /> Beranda
+                <MdLogin className="inline mr-2" />
+                {t('auth.login')}
               </Link>
-            </li>
-            <li className="w-full">
               <Link
-                to="/about"
-                onClick={toggleMenu}
-                className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
+                to="/register"
+                className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               >
-                <MdInfoOutline /> Tentang Kami
+                <RiUserAddLine className="inline mr-2" />
+                {t('auth.register')}
               </Link>
-            </li>
-            <li className="w-full">
-              <Link
-                to="/cuaca"
-                onClick={toggleMenu}
-                className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
-              >
-                <WiDayCloudy className="text-xl" /> Cuaca
-              </Link>
-            </li>
-            <li className="w-full">
-              <Link
-                to="/faq"
-                onClick={toggleMenu}
-                className="flex items-center gap-2 px-4 py-2 w-full hover:bg-gray-100 rounded-md transition"
-              >
-                <RiQuestionAnswerLine /> FAQ
-              </Link>
-            </li>
-          </ul>
-
-          <div className="flex flex-col items-stretch gap-3 pb-6 px-4">
-            <Link
-              to="/login"
-              className="btn btn-outline text-warm-orange flex items-center justify-center gap-2"
-              onClick={toggleMenu}
-            >
-              <MdLogin /> Login
-            </Link>
-            <Link
-              to="/register"
-              className="btn bg-warm-orange text-white flex items-center justify-center gap-2"
-              onClick={toggleMenu}
-            >
-              <RiUserAddLine /> Register
-            </Link>
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </nav>
   );
 };
 

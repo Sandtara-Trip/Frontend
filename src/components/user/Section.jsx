@@ -1,75 +1,169 @@
 import React from "react";
-import { TbBeach } from "react-icons/tb";
+import { motion } from "framer-motion";
 import Pagination from "./Pagination";
-import { CardGrid } from "./card";
+
+// Import masing-masing card
+import CardWisata from "./CardWisata";
+import CardHotel from "./CardHotel";
+import CardKuliner from "./CardKuliner";
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const Section = ({
+  id,
   title,
   data,
-  background,
-  showAll,
+  background = "bg-white",
+  showAll = false,
   onToggleShowAll,
   currentPage,
   totalPages,
   onPageChange,
 }) => {
   const imagesByCategory = {
-    Wisata:
-      "",
-    Hotel:
-      "",
-    Kuliner:
-      "",
+    Wisata: "",
+    Hotel: "",
+    Kuliner: "",
   };
 
- const emptyMessages = {
-  Wisata: "Maaf, saat ini belum ada data wisata yang tersedia.",
-  Hotel: "Maaf, data hotel yang Anda cari belum tersedia.",
-  Kuliner: "Maaf, belum ada informasi kuliner yang sesuai saat ini.",
-};
+  const emptyMessages = {
+    Wisata: "Maaf, saat ini belum ada data wisata yang tersedia.",
+    Hotel: "Maaf, data hotel yang Anda cari belum tersedia.",
+    Kuliner: "Maaf, belum ada informasi kuliner yang sesuai saat ini.",
+  };
+
+  const descriptions = {
+    Wisata:
+      "Rekomendasi tempat wisata terbaik di Denpasar sesuai cuaca dan minat Anda.",
+    Hotel: "Temukan pilihan hotel nyaman dan terjangkau untuk perjalanan Anda.",
+    Kuliner: "Nikmati beragam kuliner khas Denpasar yang menggugah selera.",
+  };
+
+  // Render card grid sesuai kategori dengan motion div (tanpa shadow tambahan)
+  const renderCardGrid = () => {
+    const GridWrapper = ({ children }) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4">
+        {children}
+      </div>
+    );
+
+    switch (title) {
+      case "Wisata":
+        return (
+          <GridWrapper>
+            {data.map((item, index) => (
+              <motion.div
+                key={`${item.id || index}-${title}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <CardWisata item={item} />
+              </motion.div>
+            ))}
+          </GridWrapper>
+        );
+      case "Hotel":
+        return (
+          <GridWrapper>
+            {data.map((item, index) => (
+              <motion.div
+                key={`${item.id || index}-${title}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <CardHotel item={item} />
+              </motion.div>
+            ))}
+          </GridWrapper>
+        );
+      case "Kuliner":
+        return (
+          <GridWrapper>
+            {data.map((item, index) => (
+              <motion.div
+                key={`${item.id || index}-${title}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <CardKuliner item={item} />
+              </motion.div>
+            ))}
+          </GridWrapper>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
-    <section className={`py-16 px-4 ${background}`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-10 flex-wrap gap-4">
-          <h2 className="flex text-2xl text-teal font-bold items-center whitespace-nowrap">
-            <TbBeach className="mr-2" /> {title}
-          </h2>
+    <motion.section
+      id={id}
+      className={`py-12 ${background}`}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="max-w-7xl mx-auto px-4">
+        <h2 className="text-2xl font-bold mb-8">{title}</h2>
 
-          {data.length > 0 && (
-            <button
-              className="btn btn-outline btn-warning hover:bg-warm-orange hover:text-white whitespace-nowrap"
-              onClick={onToggleShowAll}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {data.map((item, index) => (
+            <motion.div
+              key={`${item.id || index}-${title}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              {showAll ? "Sembunyikan" : "Lihat Semua"}
-            </button>
-          )}
+              {title === "Wisata" ? (
+                <CardWisata item={item} />
+              ) : title === "Hotel" ? (
+                <CardHotel item={item} />
+              ) : (
+                <CardKuliner item={item} />
+              )}
+            </motion.div>
+          ))}
         </div>
 
-        {data.length > 0 ? (
-          <>
-            <CardGrid cards={data} layout="vertical" />
-
-            {showAll && totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={onPageChange}
-              />
+        {data.length > 0 && (
+          <div className="mt-8 flex justify-center items-center gap-4">
+            {totalPages > 1 && (
+              <div className="flex gap-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={`${title}-page-${page}`}
+                    onClick={() => onPageChange(page)}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === page
+                        ? "bg-teal text-white"
+                        : "bg-gray-200 hover:bg-gray-300"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
             )}
-          </>
-        ) : (
-          <div className="flex flex-col items-center justify-center mt-20 gap-4 text-center text-gray-500">
-            <p className="text-lg font-semibold">{emptyMessages[title]}</p>
-            <img
-              src={imagesByCategory[title]}
-              alt={`No ${title} found`}
-              className="w-60 h-40 object-cover rounded-lg shadow-md"
-            />
+
+            {onToggleShowAll && (
+              <button
+                onClick={onToggleShowAll}
+                className="text-teal hover:text-hover-teal font-medium"
+              >
+                {showAll ? "Tampilkan Lebih Sedikit" : "Lihat Semua"}
+              </button>
+            )}
           </div>
         )}
       </div>
-    </section>
+    </motion.section>
   );
 };
 

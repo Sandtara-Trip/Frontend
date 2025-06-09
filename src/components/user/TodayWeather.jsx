@@ -16,15 +16,13 @@ const TodayWeather = ({ data, formattedDate }) => {
     }
   };
 
-  // Mendapatkan icon sesuai cuaca
+  // Get weather icon based on description
   const getWeatherIcon = () => {
+    if (!data?.description) return <WiDayCloudy className="text-6xl md:text-8xl" />;
+    
     const desc = data.description.toLowerCase();
 
-    if (
-      desc.includes("badai") ||
-      desc.includes("petir") ||
-      desc.includes("hujan petir")
-    ) {
+    if (desc.includes("badai") || desc.includes("petir") || desc.includes("hujan petir")) {
       return <WiThunderstorm className="text-6xl md:text-8xl" />;
     }
     if (desc.includes("hujan deras")) {
@@ -46,104 +44,55 @@ const TodayWeather = ({ data, formattedDate }) => {
     return <WiDayCloudy className="text-6xl md:text-8xl" />; // default
   };
 
-  // Tips perjalanan berdasarkan cuaca
+  // Get travel tips based on weather
   const getTravelTips = () => {
+    if (!data?.description) return [];
+
     const desc = data.description.toLowerCase();
+    const tips = [];
 
-    if (
-      desc.includes("badai") ||
-      desc.includes("petir") ||
-      desc.includes("hujan petir")
-    ) {
-      return (
-        <>
-          <p className="mb-2 font-semibold text-red-600">
-            Cuaca ekstrem, hati-hati ya! Utamakan keselamatan dulu.
-          </p>
-          <ul className="list-disc list-inside ml-5 text-sm">
-            <li>Tunda aktivitas luar ruangan jika memungkinkan</li>
-            <li>Tetap di dalam ruangan saat ada petir</li>
-            <li>Pastikan perangkat elektronik terlindungi</li>
-            <li>Gunakan jaket dan sepatu anti air jika terpaksa keluar</li>
-          </ul>
-        </>
+    if (desc.includes("hujan") || desc.includes("badai") || desc.includes("petir")) {
+      tips.push(
+        "Bawalah payung atau jas hujan",
+        "Hindari aktivitas outdoor",
+        "Pilih destinasi indoor seperti museum atau galeri",
+        "Perhatikan peringatan cuaca",
+        "Hindari area rawan banjir"
       );
-    }
-
-    if (desc.includes("hujan deras")) {
-      return (
-        <>
-          <p className="mb-2 font-semibold text-blue-600">
-            Hujan deras? Tetap nyaman jika dipersiapkan dengan baik.
-          </p>
-          <ul className="list-disc list-inside ml-5 text-sm">
-            <li>Gunakan jas hujan tebal dan sepatu atau sandal tahan air</li>
-            <li>Pilih pakaian tebal dan jaket untuk menjaga kehangatan</li>
-            <li>Bawa payung dan pelindung tas</li>
-            <li>
-              Selalu pantau prakiraan cuaca terbaru yang ada di website kami
-            </li>
-          </ul>
-        </>
+    } else if (desc.includes("berawan")) {
+      tips.push(
+        "Suhu relatif nyaman untuk outdoor",
+        "Tetap bawa payung untuk jaga-jaga",
+        "Cocok untuk aktivitas santai di luar",
+        "Ideal untuk fotografi",
+        "Baik untuk hiking atau tracking"
       );
-    }
-
-    if (desc.includes("hujan ringan")) {
-      return (
-        <>
-          <p className="mb-2 font-semibold text-blue-600">
-            Hujan ringan, kamu tetap bisa jalan-jalan!
-          </p>
-          <ul className="list-disc list-inside ml-5 text-sm">
-            <li>Bawa jas hujan atau payung yang mudah dibawa</li>
-            <li>Pakai sepatu atau sandal tahan air yang nyaman</li>
-            <li>Pilih jaket tipis supaya tetap hangat tapi tidak gerah</li>
-          </ul>
-        </>
-      );
-    }
-
-    if (desc.includes("cerah")) {
-      return (
-        <>
-          <p className="mb-2 font-semibold text-warm-orange">
-            Cuaca cerah, waktu yang pas untuk menjelajah!
-          </p>
-          <ul className="list-disc list-inside ml-5 text-sm">
-            <li>Gunakan pakaian ringan dan berwarna terang</li>
-            <li>Topi atau payung untuk melindungi dari sinar matahari</li>
-            <li>Sunblock dan Sunscreen untuk melindungi kulit</li>
-            <li>Bawa air minum yang cukup</li>
-            <li>Kacamata hitam untuk kenyamanan mata</li>
-          </ul>
-        </>
-      );
-    }
-
-    if (desc.includes("berawan")) {
-      return (
-        <>
-          <p className="mb-2 font-semibold text-warm-orange">
-            Cuaca berawan, nyaman untuk beraktivitas!
-          </p>
-          <ul className="list-disc list-inside ml-5 text-sm">
-            <li>Pilih pakaian yang nyaman dan tidak terlalu tebal</li>
-            <li>Siapkan jaket tipis jika angin bertiup</li>
-            <li>Payung lipat bisa jadi penyelamat jika tiba-tiba hujan</li>
-            <li>Gunakan sunblock atau sunscreen untuk melindungi kulit</li>
-            <li>Waktu yang tepat untuk berfoto tanpa silau matahari</li>
-          </ul>
-        </>
+    } else if (desc.includes("cerah")) {
+      tips.push(
+        "Gunakan sunscreen SPF minimal 30",
+        "Bawalah air minum yang cukup",
+        "Kenakan pakaian yang nyaman dan breathable",
+        "Pilih waktu pagi atau sore untuk aktivitas outdoor",
+        "Hindari terlalu lama di bawah sinar matahari langsung"
       );
     }
 
     return (
-      <p className="text-sm text-warm-orange">
-        Pastikan membawa perlengkapan sesuai kebutuhan dan kondisi cuaca saat
-        ini.
-      </p>
+      <ul className="list-disc pl-4 space-y-1 text-sm">
+        {tips.map((tip, index) => (
+          <li key={index}>{tip}</li>
+        ))}
+      </ul>
     );
   };
+
+  if (!data) {
+    return (
+      <div className="w-full max-w-xs md:max-w-sm bg-white bg-opacity-10 backdrop-blur-md text-white rounded-3xl flex flex-col justify-center items-center shadow-2xl p-5 md:p-6 text-center relative mx-auto md:mx-0">
+        <p>Data cuaca tidak tersedia</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -159,31 +108,41 @@ const TodayWeather = ({ data, formattedDate }) => {
         <div className="text-4xl md:text-5xl font-extrabold leading-none">
           {data.temp}
         </div>
+        {data.temperature_range && (
+          <div className="text-sm mt-2 opacity-80">
+            {data.temperature_range}
+          </div>
+        )}
         <div className="flex flex-col items-center mt-6">
           {getWeatherIcon()}
           <div className="text-lg md:text-xl font-medium mt-2">
             {data.description}
           </div>
         </div>
+        <div className="flex gap-4 mt-4 text-sm opacity-80">
+          <div>
+            <span>Curah Hujan: </span>
+            <span>{data.rainChance}</span>
+          </div>
+          <div>
+            <span>Angin: </span>
+            <span>{data.windSpeed}</span>
+          </div>
+        </div>
 
         <button
-          className="btn btn-primary mt-6 px-6 py-2 md:py-3 text-sm md:text-base"
+          className="rounded-full bg-warm-orange hover:bg-hover-orange duration-300 text-white mt-6 px-6 py-1.5 md:py-2 text-sm md:text-base font-semibold shadow-md hover:shadow-lg"
           onClick={openModal}
         >
           Tips Perjalanan
         </button>
       </div>
 
-      <dialog ref={dialogRef} className="modal ">
+      <dialog ref={dialogRef} className="modal">
         <form
           method="dialog"
           className="modal-box max-w-md bg-white text-black rounded-xl"
         >
-          {/* <h3 className="text-lg font-bold mb-4">Detail Cuaca di {data.city}</h3>
-          <p><strong>Temperatur:</strong> {data.temp}</p>
-          <p><strong>Deskripsi:</strong> {data.description}</p>
-          <p><strong>Tanggal:</strong> {formattedDate}</p> */}
-          
           <div>
             <h4 className="font-semibold mb-2">Tips Perjalanan:</h4>
             {getTravelTips()}
@@ -191,7 +150,9 @@ const TodayWeather = ({ data, formattedDate }) => {
 
           <hr className="my-4" />
           <div className="modal-action mt-6">
-            <button className="btn btn-warning btn-outline border-2">Tutup</button>
+            <button className="btn btn-warning btn-outline border-2">
+              Tutup
+            </button>
           </div>
         </form>
       </dialog>
@@ -200,3 +161,10 @@ const TodayWeather = ({ data, formattedDate }) => {
 };
 
 export default TodayWeather;
+
+{
+  /* <h3 className="text-lg font-bold mb-4">Detail Cuaca di {data.city}</h3>
+          <p><strong>Temperatur:</strong> {data.temp}</p>
+          <p><strong>Deskripsi:</strong> {data.description}</p>
+          <p><strong>Tanggal:</strong> {formattedDate}</p> */
+}

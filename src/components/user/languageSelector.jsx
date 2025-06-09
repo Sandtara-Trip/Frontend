@@ -1,15 +1,40 @@
 import { useState, useRef, useEffect } from "react";
 import { FiGlobe } from "react-icons/fi";
+import axios from "axios";
+import { useTranslation } from 'react-i18next';
 
 const LanguageSelector = () => {
-  const [selectedLang, setSelectedLang] = useState("ID");
+  const { i18n } = useTranslation();
+  const [selectedLang, setSelectedLang] = useState(i18n.language || "id");
   const [open, setOpen] = useState(false);
+  const [languages, setLanguages] = useState([
+    { code: "id", name: "Indonesia", nativeName: "Indonesia", flag: "🇮🇩", isDefault: true, isActive: true },
+    { code: "en", name: "English", nativeName: "English", flag: "🇬🇧", isDefault: false, isActive: true }
+  ]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const dropdownRef = useRef(null);
 
-  const options = [
-    { code: "ID", label: "ID" },
-    { code: "EN", label: "EN" },
-  ];
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/lang");
+        if (Array.isArray(response.data)) {
+          setLanguages(response.data);
+          // Set default language if available
+          const defaultLang = response.data.find(lang => lang.isDefault)?.code || "id";
+          handleSelect(defaultLang);
+        }
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching languages:", err);
+        setError(err);
+        setLoading(false);
+      }
+    };
+
+    fetchLanguages();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -24,18 +49,30 @@ const LanguageSelector = () => {
 
   const handleSelect = (code) => {
     setSelectedLang(code);
+    i18n.changeLanguage(code.toLowerCase());
     setOpen(false);
   };
+
+  if (loading) {
+    return (
+      <div className="w-16 h-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-teal-500"></div>
+      </div>
+    );
+  }
+
+  // Find the currently selected language object
+  const currentLang = languages.find(lang => lang.code.toLowerCase() === selectedLang.toLowerCase()) || languages[0];
 
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1 justify-center w-16 h-8 bg-white border border-gray-300 rounded-md text-gray-700 shadow-sm hover:shadow-md transition-all duration-300 text-xs"
+        className="flex items-center gap-1 justify-center w-20 h-8 bg-white border border-gray-300 rounded-md text-gray-700 shadow-sm hover:shadow-md transition-all duration-300 text-xs"
         aria-label="Pilih Bahasa"
       >
         <FiGlobe className="text-teal-500" size={14} />
-        <span className="font-medium">{selectedLang}</span>
+        <span className="font-medium">{currentLang.flag} {currentLang.code.toUpperCase()}</span>
         <svg
           className="ml-1 h-3 w-3"
           xmlns="http://www.w3.org/2000/svg"
@@ -47,16 +84,17 @@ const LanguageSelector = () => {
         </svg>
       </button>
 
-      {open && (
-        <div className="absolute z-50 mt-1 w-16 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+      {open && languages.length > 0 && (
+        <div className="absolute z-50 mt-1 w-32 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="py-1">
-            {options.map((opt) => (
+            {languages.filter(lang => lang.isActive).map((lang) => (
               <button
-                key={opt.code}
-                onClick={() => handleSelect(opt.code)}
-                className="w-full text-center px-2 py-1 text-xs text-gray-700 hover:bg-gray-100 transition"
+                key={lang.code}
+                onClick={() => handleSelect(lang.code)}
+                className="w-full text-left px-3 py-1 text-xs text-gray-700 hover:bg-gray-100 transition flex items-center gap-2"
               >
-                {opt.label}
+                <span>{lang.flag}</span>
+                <span>{lang.name}</span>
               </button>
             ))}
           </div>

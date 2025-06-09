@@ -2,18 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  scroll-behavior: smooth !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 /* Garis bawah dengan animasi */
 .menu li a {
-  color: #4B5563 !important; /* Warna teks default */
+  color: #4b5563 !important; /* abu gelap */
   background-color: transparent !important;
-  border-bottom: 2px solid transparent !important; /* Garis bawah transparan */
-  transition: border-bottom 0.3s ease !important; /* Animasi transisi untuk garis bawah */
+  border-bottom: 2px solid transparent !important;
+  transition: border-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* Garis bawah muncul saat hover */
 .menu li a:hover {
-  color: #2EC4B6 !important; /* Warna teks saat hover */
-  /* border-bottom: 2px solid #2EC4B6 !important;  */
+  color: #2ec4b6 !important;
 }
 
 /* Garis bawah tetap terlihat saat elemen aktif (misalnya halaman yang sedang aktif) */
@@ -25,7 +30,7 @@
 
 /* src/styles/styles.css */
 .btn-primary {
-  background-color: #FF9F1C !important; 
+  background-color: #ff9f1c !important;
   color: white !important;
   font-size: 1rem !important;
   padding: 10px 20px !important;
@@ -36,21 +41,21 @@
 }
 
 .btn-primary:hover {
-  background-color: #FB923C !important; 
+  background-color: #fb923c !important;
 }
 
-.btn-warning{
-  outline: #FB923C !important;
+.btn-warning {
+  outline: #fb923c !important;
   border-radius: 20px !important;
 }
 
 #logout {
-  color: #DC2626 !important;
-  border: 1px solid #DC2626 !important;
+  color: #dc2626 !important;
+  border: 1px solid #dc2626 !important;
 }
 
 #logout:hover {
-  background-color: #DC2626 !important;
+  background-color: #dc2626 !important;
   color: white !important;
 }
 
@@ -62,3 +67,98 @@
   scrollbar-width: none !important;
 }
 
+/* Styling tombol dan toolbar */
+.fc-button {
+  background-color: #2ec4b6 !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem !important;
+  font-size: 0.875rem !important;
+}
+.fc-button:hover {
+  background-color: #0f766e !important;
+}
+.fc-toolbar-title {
+  color: #2ec4b6 !important;
+  font-weight: 700;
+  font-size: 1.5rem !important;
+}
+.fc-daygrid-day-number {
+  color: #2ec4b6 !important;
+  font-weight: 600;
+  font-size: 0.85rem !important;
+}
+.fc-daygrid-day.fc-day-today {
+  background-color: #cbf3f0 !important;
+  color: #2ec4b6 !important;
+  font-weight: 700;
+}
+
+/* Kalender responsive */
+@media (max-width: 640px) {
+  .max-w-3xl {
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .fc {
+    font-size: 0.85rem !important;
+  }
+}
+
+/* Custom utility classes (mirip Tailwind) */
+.text-tealcustom {
+  color: #2ec4b6;
+}
+.text-putih {
+  color: white;
+}
+.bg-lightteal {
+  background-color: #cbf3f0;
+}
+.bg-putih {
+  background-color: white;
+}
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+.shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+.font-sans {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.text-xs {
+  font-size: 0.75rem;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
+.text-center {
+  text-align: center;
+}
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+.p-6 {
+  padding: 1.5rem;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.max-w-3xl {
+  max-width: 48rem;
+}
+.min-h-screen {
+  min-height: 100vh;
+}
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}

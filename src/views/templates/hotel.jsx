@@ -1,26 +1,78 @@
-export const itemHotel = [
-  {
-    image: "https://tse4.mm.bing.net/th?id=OIP.HULBKDub-R8UlgOrYUcNoQHaEK&pid=Api&P=0&h=220",
-    title: "Hotel Puri Santrian",
-    description: "Nikmati kenyamanan menginap di hotel bintang lima di pantai Sanur dengan fasilitas lengkap dan pemandangan yang menakjubkan.",
-    buttonText: "Lihat Detail",
-    onButtonClick: () => alert("Detail Hotel Puri Santrian"),
-    rating: 5,
-  },
-  {
-    image: "https://bali.com/wp-content/uploads/2022/01/The-Trans-Resort-Bali-1200.jpg",
-    title: "The Trans Resort Bali",
-    description: "Resor mewah dengan kolam renang outdoor yang luas dan fasilitas spa. Ideal untuk liburan santai bersama keluarga atau pasangan.",
-    buttonText: "Lihat Detail",
-    onButtonClick: () => alert("Detail The Trans Resort Bali"),
-    rating: 4,
-  },
-  {
-    image: "https://tse2.mm.bing.net/th?id=OIP.Iwzf4zzlCzpriqrtx4sKKAHaE8&pid=Api&P=0&h=220",
-    title: "Harris Hotel Sunset Road",
-    description: "Hotel bergaya modern dengan lokasi strategis di pusat Denpasar, ideal untuk pelancong bisnis dan wisatawan.",
-    buttonText: "Lihat Detail",
-    onButtonClick: () => alert("Detail Harris Hotel Sunset Road"),
-    rating: 4,
-  },
-];
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+// Create a mutable array that will be updated with the hotel data
+export let itemHotel = [];
+
+// Function to fetch and update the hotel data
+const fetchHotels = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/hotels');
+    if (response.data.success) {
+      const transformedHotels = [];
+      
+      // Process each hotel and fetch its ratings
+      for (const hotel of response.data.data) {
+        // Fetch ratings for this hotel
+        let rating = 0;
+        let reviewCount = 0;
+        
+        try {
+          const reviewResponse = await axios.get(`http://localhost:3000/reviews/hotel/${hotel._id}`);
+          if (reviewResponse.data.success) {
+            rating = reviewResponse.data.data.averageRating || 0;
+            reviewCount = reviewResponse.data.data.totalReviews || 0;
+          }
+        } catch (reviewErr) {
+          console.error(`Error fetching reviews for hotel ${hotel._id}:`, reviewErr);
+          rating = 0;
+          reviewCount = 0;
+        }
+
+        // Get room information
+        let minPrice = Infinity;
+        let maxPrice = 0;
+        let rooms = [];
+        
+        try {
+          const roomResponse = await axios.get(`http://localhost:3000/admin/hotel/${hotel._id}/rooms`);
+          if (roomResponse.data.success && roomResponse.data.data.length > 0) {
+            rooms = roomResponse.data.data;
+            rooms.forEach(room => {
+              if (room.price < minPrice) minPrice = room.price;
+              if (room.price > maxPrice) maxPrice = room.price;
+            });
+          }
+        } catch (roomErr) {
+          console.error(`Error fetching rooms for hotel ${hotel._id}:`, roomErr);
+        }
+
+        transformedHotels.push({
+          id: hotel._id,
+          title: hotel.name || hotel.nama,
+          description: hotel.description || hotel.detail || hotel.deskripsi,
+          image: hotel.images && hotel.images.length > 0
+            ? `http://localhost:3000${hotel.images[0]}`
+            : `http://localhost:3000/uploads/default-hotel.jpg`,
+          rating: rating,
+          reviewCount: reviewCount,
+          lokasi: hotel.location 
+            ? `${hotel.location.address}, ${hotel.location.city}, ${hotel.location.province}`
+            : hotel.alamat || "Lokasi tidak tersedia",
+          price: minPrice !== Infinity 
+            ? `Rp ${minPrice.toLocaleString()} - Rp ${maxPrice.toLocaleString()}`
+            : "Harga tidak tersedia",
+          rooms: rooms
+        });
+      }
+      
+      // Update the exported array
+      itemHotel = transformedHotels;
+    }
+  } catch (err) {
+    console.error("Error fetching hotels:", err);
+  }
+};
+
+// Fetch hotels immediately
+fetchHotels();

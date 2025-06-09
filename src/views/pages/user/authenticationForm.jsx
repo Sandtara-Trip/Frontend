@@ -1,18 +1,39 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../../components/user/button";
 import { SiFusionauth } from "react-icons/si";
 import AuthenticationPresenter from "../../../presenters/user/AuthauenticationPresenter";
 
 const AuthenticationForm = () => {
   const [code, setCode] = useState(Array(6).fill(""));
+  const [email, setEmail] = useState("");
   const inputRefs = useRef([]);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get email from registration
+    const registeredEmail = location.state?.email;
+    if (!registeredEmail) {
+      // If no email is provided, redirect back to register
+      navigate('/register');
+      return;
+    }
+    setEmail(registeredEmail);
+  }, [location, navigate]);
   const presenter = new AuthenticationPresenter({
     updateCode: setCode,
     focusNextInput: (index) => inputRefs.current[index]?.focus(),
     focusPreviousInput: (index) => inputRefs.current[index]?.focus(),
     showError: (message) => alert(message),
-    showSuccess: (message) => alert(message),
+    showSuccess: (message) => {
+      alert(message);
+      navigate('/login');
+    },
+    onVerificationSuccess: () => {
+      // After successful verification, redirect to login
+      navigate('/login');
+    }
   });
 
   // Handle input change and auto-focus next input
@@ -27,7 +48,7 @@ const AuthenticationForm = () => {
 
   // Validate and submit the code
   const handleSubmit = () => {
-    presenter.handleSubmit(code);
+    presenter.handleSubmit(code, email);
   };
 
   return (
@@ -44,7 +65,7 @@ const AuthenticationForm = () => {
             Verifikasi Akun Anda
           </h1>
           <p className="mt-2 text-sm text-center text-grey">
-            Periksa email terdaftar Anda untuk menerima kode autentikasi dan
+            Periksa email <span className="font-semibold">{email}</span> untuk menerima kode autentikasi dan
             verifikasi akun Anda sekarang.
           </p>
 
