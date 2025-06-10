@@ -11,17 +11,25 @@ import OrderTicket from "../../../components/user/orderTicket";
 import Footer from "../../../components/user/footer";
 
 const DetailHotel = () => {
-  const [isLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState("Deskripsi");
   const [hotel, setHotel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState({
+    reviews: [],
+    averageRating: 0,
+    totalReviews: 0
+  });
 
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check login status
+    const token = localStorage.getItem('token') || localStorage.getItem('Token');
+    setIsLoggedIn(!!token);
+
     const fetchHotelDetail = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/hotels/${id}`);
@@ -30,12 +38,37 @@ const DetailHotel = () => {
           
           // Fetch reviews after getting hotel details
           try {
-            const reviewsResponse = await axios.get(`http://localhost:3000/reviews/hotel/${id}`);
+            console.log('Fetching reviews for hotel:', id);
+            // Add token to request headers
+            const token = localStorage.getItem('token') || localStorage.getItem('Token');
+            const reviewsResponse = await axios.get(`http://localhost:3000/reviews/hotel/${id}`, {
+              headers: {
+                'Authorization': token ? `Bearer ${token}` : undefined
+              }
+            });
+            console.log('Full reviews response:', reviewsResponse);
+            console.log('Reviews response data:', reviewsResponse.data);
+            
             if (reviewsResponse.data.success) {
-              setReviews(reviewsResponse.data.data);
+              const reviewsData = reviewsResponse.data.data;
+              console.log('Setting reviews data:', reviewsData);
+              if (!reviewsData) {
+                console.error('Reviews data is null or undefined');
+              } else {
+                console.log('Reviews array:', reviewsData.reviews);
+                console.log('Average rating:', reviewsData.averageRating);
+                console.log('Total reviews:', reviewsData.totalReviews);
+                setReviews(reviewsData);
+              }
+            } else {
+              console.error('Reviews response was not successful:', reviewsResponse.data);
             }
           } catch (reviewErr) {
             console.error("Error fetching hotel reviews:", reviewErr);
+            if (reviewErr.response) {
+              console.error('Error response:', reviewErr.response.data);
+              console.error('Error status:', reviewErr.response.status);
+            }
           }
         } else {
           setError("Failed to load hotel details");
@@ -74,7 +107,10 @@ const DetailHotel = () => {
     );
   }
 
+  console.log('Current reviews state:', reviews);
+
   const contentData = {
+    name: hotel.name,
     description: hotel.description || hotel.detail || hotel.deskripsi,
     Fasilitas: hotel.facilities || [],
     Lokasi: `${hotel.location.address}, ${hotel.location.city}, ${hotel.location.province}`,
@@ -84,8 +120,11 @@ const DetailHotel = () => {
     },
     Reviews: reviews.reviews || [],
     averageRating: reviews.averageRating || 0,
-    totalReviews: reviews.totalReviews || 0
+    totalReviews: reviews.totalReviews || 0,
+    Informasi: `Check-in: ${hotel.checkInTime || '14:00'} - Check-out: ${hotel.checkOutTime || '12:00'}`
   };
+
+  console.log('Content data being passed to TabContent:', contentData);
 
   const images = hotel.images.map(img => 
     img.startsWith('http') ? img : `http://localhost:3000${img}`
@@ -136,12 +175,13 @@ const DetailHotel = () => {
           name={hotel.name}
           price={hotel.price}
           badge="TERSEDIA"
-          rating={reviews.averageRating || 0}
-          reviewCount={reviews.totalReviews || 0}
+          rating={reviews.averageRating}
+          reviewCount={reviews.totalReviews}
           onOrder={handleOrder}
           orderLabel="Lihat Kamar"
         />
       </div>
+
     </>
   );
 };

@@ -72,7 +72,6 @@ const HeroWeather = ({ onCategoryNavigate }) => {
         semua: "Semua",
         wisata: "Wisata",
         hotel: "Hotel",
-        kuliner: "Kuliner"
       };
       const category = categoryMap[hash.toLowerCase()];
       if (category) {

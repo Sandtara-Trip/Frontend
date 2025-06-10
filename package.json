@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "proxy": "lcp --proxyUrl https://cuaca-harian-production-816b.up.railway.app"
+    "proxy": "lcp --proxyUrl https://cuaca-harian-production-816b.up.railway.app",
+    "proxy-hourly": "lcp --proxyUrl https://cuaca-jam-production.up.railway.app --port 8081"
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.17",

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { itemHotel } from "../../templates/hotel";
-import { itemKuliner } from "../../templates/kuliner";
 import axios from "axios";
 import HeroWeather from "../../../components/user/heroWeather";
 import FilterBar from "../../../components/user/FilterBar";
@@ -22,27 +21,23 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState({
     Wisata: "",
     Hotel: "",
-    Kuliner: "",
     Semua: "",
   });
 
   const [selectedFilters, setSelectedFilters] = useState({
     Wisata: {},
     Hotel: {},
-    Kuliner: {},
     Semua: {},
   });
 
   const [showAll, setShowAll] = useState({
     Wisata: false,
     Hotel: false,
-    Kuliner: false,
   });
 
   const [currentPage, setCurrentPage] = useState({
     Wisata: 1,
     Hotel: 1,
-    Kuliner: 1,
   });
   
   useEffect(() => {
@@ -174,7 +169,7 @@ const HomePage = () => {
 
   const handleSearchChange = (category, value) => {
     setSearchQuery((prev) => ({ ...prev, [category]: value }));
-    setCurrentPage({ Wisata: 1, Hotel: 1, Kuliner: 1 });
+    setCurrentPage({ Wisata: 1, Hotel: 1 });
   };
 
   const handleFilterChange = (filterName, value) => {
@@ -185,7 +180,7 @@ const HomePage = () => {
         [filterName]: value
       }
     }));
-    setCurrentPage({ Wisata: 1, Hotel: 1, Kuliner: 1 });
+    setCurrentPage({ Wisata: 1, Hotel: 1 });
   };
 
   // Filter search and apply filters
@@ -228,9 +223,6 @@ const HomePage = () => {
                     break;
                   case 'hotel':
                     matchesFilters = matchesFilters && type === "hotel";
-                    break;
-                  case 'kuliner':
-                    matchesFilters = matchesFilters && type === "kuliner";
                     break;
                   default:
                     break;
@@ -275,7 +267,7 @@ const HomePage = () => {
 
   const categoriesToRender =
     activeCategory === "Semua"
-      ? ["Wisata", "Hotel", "Kuliner"]
+      ? ["Wisata", "Hotel"]
       : [activeCategory];
 
   const handleHeroNavigate = (category) => {
@@ -338,9 +330,6 @@ const HomePage = () => {
             break;
           case "Hotel":
             data = filterItems(itemHotel, "hotel", category);
-            break;
-          case "Kuliner":
-            data = filterItems(events.filter(event => event.status === 'active'), "kuliner", category);
             break;
           default:
             data = [];

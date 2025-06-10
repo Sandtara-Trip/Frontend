@@ -36,6 +36,11 @@ export default defineConfig({
         target: 'https://cuaca-harian-production-816b.up.railway.app',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
+      },
+      '/api-hourly': {
+        target: 'https://cuaca-jam-production.up.railway.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api-hourly/, '')
       }
     }
   }

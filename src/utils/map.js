@@ -18,11 +18,11 @@ async function reverseGeocode(lat, lon) {
       `${API_BASE_URL}/api/geocode/reverse?lat=${lat}&lon=${lon}`
     );
     const data = await response.json();
-    return data.address || "Alamat tidak ditemukan";
+    return data.address || `Koordinat: ${lat}, ${lon}`;
   } catch (error) {
     console.error("Reverse geocoding failed:", error);
-    // Jika gagal, kembalikan alamat dari props
-    return "Alamat tidak ditemukan";
+    // Jika gagal, kembalikan koordinat
+    return `Koordinat: ${lat}, ${lon}`;
   }
 }
 
@@ -82,9 +82,8 @@ export default async function Map(lat, lon, mapDivId) {
 
   marker.bindPopup(`
     <b>${alamat}</b><br/>
-    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      alamat
-    )}" target="_blank" rel="noopener noreferrer">
+    <small>Lat: ${lat}, Lng: ${lon}</small><br/>
+    <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lon}" target="_blank" rel="noopener noreferrer">
       Lihat di Google Maps
     </a>
   `);

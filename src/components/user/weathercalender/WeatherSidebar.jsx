@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import TodayWeather from "../TodayWeather";
 import {
   WiDaySunny,
@@ -20,63 +20,61 @@ const formatDateToIndonesian = (dateString) => {
   });
 };
 
-const weatherIcons = [
-  <WiDaySunny className="text-lg" />,
-  <WiDayCloudy className="text-lg" />,
-  <WiRain className="text-lg" />,
-  <WiThunderstorm className="text-lg" />,
-];
+const weatherIcons = {
+  Cerah: <WiDaySunny className="text-lg" />,
+  Berawan: <WiDayCloudy className="text-lg" />,
+  Gerimis: <WiRain className="text-lg" />,
+  Hujan: <WiRain className="text-lg" />,
+  "Hujan Deras": <WiRain className="text-lg" />,
+  "Hujan Petir": <WiThunderstorm className="text-lg" />,
+};
 
-const getRandomIcon = () => {
-  const index = Math.floor(Math.random() * weatherIcons.length);
-  return weatherIcons[index];
+const getWeatherIcon = (weatherLabel) => {
+  return weatherIcons[weatherLabel] || <WiDayCloudy className="text-lg" />;
 };
 
 const WeatherSidebar = ({ weatherData }) => {
   const [showMore, setShowMore] = useState(false);
+  const [hourlyActivities, setHourlyActivities] = useState([]);
+
+  useEffect(() => {
+    const fetchHourlyWeather = async () => {
+      try {
+        const response = await fetch('/api-hourly/predict/hourly');
+        const data = await response.json();
+        
+        if (data.hourly_predictions) {
+          const activities = data.hourly_predictions.map(prediction => {
+            const date = new Date(prediction.time);
+            const hour = date.getHours();
+            return {
+              time: `${hour.toString().padStart(2, '0')}:00`,
+              weather_label: prediction.weather_label || 'Berawan', // fallback jika tidak ada label
+              icon: getWeatherIcon(prediction.weather_label || 'Berawan'),
+              hidden: hour >= 4
+            };
+          });
+          setHourlyActivities(activities);
+        }
+      } catch (error) {
+        console.error('Error fetching hourly weather:', error);
+        // Set default activities in case of error
+        const defaultActivities = Array.from({ length: 24 }, (_, i) => ({
+          time: `${i.toString().padStart(2, '0')}:00`,
+          weather_label: "Berawan",
+          icon: getWeatherIcon("Berawan"),
+          hidden: i >= 4
+        }));
+        setHourlyActivities(defaultActivities);
+      }
+    };
+
+    fetchHourlyWeather();
+  }, []);
 
   const toggleShowMore = () => {
     setShowMore((prev) => !prev);
   };
-
-  const DayActivities = useMemo(() => {
-    const descriptions = [
-      "Sarapan di hotel",
-      "Jalan-jalan pagi",
-      "Bersantai di pantai",
-      "Belanja oleh-oleh",
-      "Kunjungi pura",
-      "Ngopi di cafe",
-      "Kunjungi museum",
-      "Makan siang di warung lokal",
-      "Naik sepeda keliling kota",
-      "Belajar budaya lokal",
-      "Membaca buku di taman",
-      "Istirahat siang",
-      "Ngobrol di lobi hotel",
-      "Menonton pertunjukan tari",
-      "Makan malam di restoran",
-      "Main di pantai saat sunset",
-      "Jalan-jalan malam",
-      "Minum teh di cafe rooftop",
-      "Nonton film di kamar",
-      "Mandi dan bersih-bersih",
-      "Menulis jurnal perjalanan",
-      "Video call sama pacar",
-      "Tidur nyenyak 😴",
-      "Bangun tidur lagi 💤",
-    ];
-
-    return Array.from({ length: 24 }, (_, i) => {
-      const hour = i.toString().padStart(2, "0") + ":00";
-      return {
-        time: hour,
-        description: descriptions[i % descriptions.length],
-        icon: getRandomIcon(),
-        hidden: i >= 4,
-      };
-    });
-  }, []);
 
   // Transform weather data to match TodayWeather component's expected format
   const transformedWeatherData = weatherData ? {
@@ -103,18 +101,18 @@ const WeatherSidebar = ({ weatherData }) => {
         </h3>
 
         <ul className="space-y-3 text-sm max-h-[240px] overflow-y-auto">
-          {DayActivities.filter((activity) => showMore || !activity.hidden).map(
-            (activity, index) => (
+          {hourlyActivities
+            .filter((activity) => showMore || !activity.hidden)
+            .map((activity, index) => (
               <li key={index} className="flex items-center gap-3">
                 <span className="bg-white/20 text-white text-xs px-3 py-1 rounded-full font-bold shadow">
                   {activity.time}
                 </span>
                 <span className="text-white font-medium drop-shadow-sm flex items-center gap-1">
-                  {activity.icon} {activity.description}
+                  {activity.icon} {activity.weather_label}
                 </span>
               </li>
-            )
-          )}
+            ))}
         </ul>
 
         <div className="text-right mt-6">
