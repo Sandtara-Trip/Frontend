@@ -9,6 +9,20 @@ import DetailImageSlider from "../../../components/user/detailImageSlider";
 import TabContent from "../../../components/user/TabContent";
 import OrderTicket from "../../../components/user/orderTicket";
 import Footer from "../../../components/user/footer";
+import { API_BASE_URL } from "../../../config/api";
+
+// Function to calculate distance between two coordinates in kilometers
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+};
 
 const DetailHotel = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,9 +32,10 @@ const DetailHotel = () => {
   const [error, setError] = useState(null);
   const [reviews, setReviews] = useState({
     reviews: [],
-    averageRating: 0,
-    totalReviews: 0
+    totalReviews: 0,
+    averageRating: 0
   });
+  const [nearbyHotels, setNearbyHotels] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -31,52 +46,100 @@ const DetailHotel = () => {
     setIsLoggedIn(!!token);
 
     const fetchHotelDetail = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3000/api/hotels/${id}`);
+        console.log('Fetching hotel details for ID:', id);
+        const response = await axios.get(`${API_BASE_URL}/api/hotels/${id}`);
         if (response.data.success) {
-          setHotel(response.data.data);
+          const hotelData = response.data.data;
+          console.log('Hotel data received:', hotelData);
+          setHotel(hotelData);
           
-          // Fetch reviews after getting hotel details
+          // Fetch reviews for hotel and its rooms
           try {
-            console.log('Fetching reviews for hotel:', id);
-            // Add token to request headers
-            const token = localStorage.getItem('token') || localStorage.getItem('Token');
-            const reviewsResponse = await axios.get(`http://localhost:3000/reviews/hotel/${id}`, {
-              headers: {
-                'Authorization': token ? `Bearer ${token}` : undefined
-              }
-            });
-            console.log('Full reviews response:', reviewsResponse);
-            console.log('Reviews response data:', reviewsResponse.data);
+            const reviewsUrl = `${API_BASE_URL}/reviews/hotel/${id}`;
+            const reviewsResponse = await axios.get(reviewsUrl);
             
             if (reviewsResponse.data.success) {
-              const reviewsData = reviewsResponse.data.data;
-              console.log('Setting reviews data:', reviewsData);
-              if (!reviewsData) {
-                console.error('Reviews data is null or undefined');
-              } else {
-                console.log('Reviews array:', reviewsData.reviews);
-                console.log('Average rating:', reviewsData.averageRating);
-                console.log('Total reviews:', reviewsData.totalReviews);
-                setReviews(reviewsData);
-              }
-            } else {
-              console.error('Reviews response was not successful:', reviewsResponse.data);
+              const { totalReviews, averageRating, reviews: reviewsData } = reviewsResponse.data.data;
+              setReviews({
+                reviews: reviewsData || [],
+                totalReviews: totalReviews || 0,
+                averageRating: averageRating || 0
+              });
             }
           } catch (reviewErr) {
-            console.error("Error fetching hotel reviews:", reviewErr);
-            if (reviewErr.response) {
-              console.error('Error response:', reviewErr.response.data);
-              console.error('Error status:', reviewErr.response.status);
+            console.error("Error fetching reviews:", reviewErr);
+          }
+
+          // Fetch nearby hotels
+          try {
+            const allHotelsResponse = await axios.get(`${API_BASE_URL}/api/hotels`);
+            if (allHotelsResponse.data.success) {
+              console.log('All hotels data:', allHotelsResponse.data.data);
+              
+              // Get all hotels except current one and fetch their reviews
+              const otherHotels = allHotelsResponse.data.data.filter(h => h._id !== id);
+              
+              // Fetch reviews for each hotel
+              const hotelsWithReviews = await Promise.all(
+                otherHotels.slice(0, 5).map(async (hotel) => {
+                  try {
+                    const reviewsResponse = await axios.get(`${API_BASE_URL}/reviews/hotel/${hotel._id}`);
+                    const reviewData = reviewsResponse.data.success ? reviewsResponse.data.data : null;
+                    
+                    // Get the first image from hotel's images array
+                    let imageUrl = '/img/placeholder.jpg';
+                    if (hotel.images && hotel.images.length > 0) {
+                      // If the image is from Cloudinary, use it as is
+                      if (hotel.images[0].includes('cloudinary.com')) {
+                        imageUrl = hotel.images[0];
+                      } else if (hotel.images[0].startsWith('http')) {
+                        // If it's another full URL, use it as is
+                        imageUrl = hotel.images[0];
+                      } else {
+                        // If it's a relative path, construct the full URL
+                        imageUrl = `${API_BASE_URL}${hotel.images[0]}`;
+                      }
+                    }
+                    
+                    return {
+                      name: hotel.name,
+                      address: hotel.location?.address || 'Alamat tidak tersedia',
+                      // price: hotel.price || 'Harga tidak tersedia',
+                      id: hotel._id,
+                      image: imageUrl,
+                      rating: reviewData?.averageRating || 0,
+                      reviewCount: reviewData?.totalReviews || 0
+                    };
+                  } catch (err) {
+                    console.error(`Error fetching reviews for hotel ${hotel._id}:`, err);
+                    return {
+                      name: hotel.name,
+                      address: hotel.location?.address || 'Alamat tidak tersedia',
+                      // price: hotel.price || 'Harga tidak tersedia',
+                      id: hotel._id,
+                      image: '/img/placeholder.jpg',
+                      rating: 0,
+                      reviewCount: 0
+                    };
+                  }
+                })
+              );
+              
+              console.log('Hotels with reviews:', hotelsWithReviews);
+              setNearbyHotels(hotelsWithReviews);
             }
+          } catch (nearbyErr) {
+            console.error("Error fetching nearby hotels:", nearbyErr);
           }
         } else {
-          setError("Failed to load hotel details");
+          setError("Failed to fetch hotel details");
         }
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching hotel details:", err);
-        setError("Failed to load hotel details");
+        setError("Error connecting to the server");
+      } finally {
         setLoading(false);
       }
     };
@@ -118,16 +181,19 @@ const DetailHotel = () => {
       lat: hotel.location.coordinates[1],
       lng: hotel.location.coordinates[0]
     },
-    Reviews: reviews.reviews || [],
-    averageRating: reviews.averageRating || 0,
-    totalReviews: reviews.totalReviews || 0,
-    Informasi: `Check-in: ${hotel.checkInTime || '14:00'} - Check-out: ${hotel.checkOutTime || '12:00'}`
+    Reviews: reviews?.reviews || [],
+    averageRating: reviews?.averageRating || 0,
+    totalReviews: reviews?.totalReviews || 0,
+    Informasi: `Check-in: ${hotel.checkInTime || '14:00'} - Check-out: ${hotel.checkOutTime || '12:00'}`,
+    nearby: {
+      hotels: nearbyHotels,
+      food: [], // You can add nearby restaurants here if needed
+      transport: [] // You can add nearby transport here if needed
+    }
   };
 
-  console.log('Content data being passed to TabContent:', contentData);
-
   const images = hotel.images.map(img => 
-    img.startsWith('http') ? img : `http://localhost:3000${img}`
+    img.startsWith('http') ? img : `${API_BASE_URL}${img}`
   );
 
   return (
@@ -175,13 +241,12 @@ const DetailHotel = () => {
           name={hotel.name}
           price={hotel.price}
           badge="TERSEDIA"
-          rating={reviews.averageRating}
-          reviewCount={reviews.totalReviews}
+          rating={reviews?.averageRating || 0}
+          reviewCount={reviews?.totalReviews || 0}
           onOrder={handleOrder}
           orderLabel="Lihat Kamar"
         />
       </div>
-
     </>
   );
 };

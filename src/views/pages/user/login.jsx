@@ -5,6 +5,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import InputField from "../../../components/user/InputField";
 import PasswordField from "../../../components/user/PasswordField";
 import Button from "../../../components/user/button";
+import { API_BASE_URL } from '../../../config/api';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const LoginPage = () => {
     setError("");
     
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

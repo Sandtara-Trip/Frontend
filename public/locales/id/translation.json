@@ -1,1 +1,85 @@
- 
+{
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang Kami",
+    "weather": "Cuaca",
+    "faq": "FAQ"
+  },
+  "auth": {
+    "login": "Masuk",
+    "register": "Daftar",
+    "logout": "Keluar"
+  },
+  "common": {
+    "selectLanguage": "Pilih Bahasa",
+    "loading": "Memuat...",
+    "viewDetail": "Lihat Detail",
+    "address": "Alamat",
+    "price": "Harga",
+    "reviews": "ulasan",
+    "type": "Tipe",
+    "distance": "Jarak",
+    "contact": "Kontak",
+    "route": "Rute"
+  },
+  "categories": {
+    "wisata": "Wisata",
+    "hotel": "Hotel",
+    "kuliner": "Kuliner"
+  },
+  "faq": {
+    "account": {
+      "title": "Akun dan Keamanan",
+      "q1": "Apakah saya harus membuat akun untuk menggunakan website ini?",
+      "a1": "Tidak wajib. Namun, dengan membuat akun, Anda dapat mengakses seluruh destinasi wisata, hotel, kuliner, dan acara terkini di Denpasar. Selain itu, Anda juga dapat menggunakan berbagai fitur seperti pemesanan tiket dan melihat rekomendasi. Fitur lainnya termasuk informasi cuaca terkini yang membantu Anda merencanakan perjalanan dengan lebih baik, serta akses ke kondisi cuaca harian dan per-jam.",
+      "q2": "Bagaimana cara membuat akun?",
+      "a2": "Klik tombol 'Register' di pojok kanan atas, lalu isi formulir pendaftaran dengan data diri Anda.",
+      "q3": "Bagaimana jika saya lupa kata sandi?",
+      "a3": "Gunakan fitur 'Lupa Kata Sandi' pada halaman login dan ikuti langkah-langkah pemulihan melalui email.",
+      "q4": "Apakah data pribadi saya aman?",
+      "a4": "Ya, kami melindungi data Anda dan tidak membagikannya kepada pihak ketiga tanpa izin.",
+      "q5": "Bagaimana saya bisa menghapus akun saya?",
+      "a5": "Pengguna bisa menghapus akunnya sendiri di halaman 'Profile' lalu 'Hapus Akun'."
+    },
+    "website": {
+      "title": "Tentang Website",
+      "q1": "Apa itu Sandtara Trip?",
+      "a1": "Sandtara Trip adalah platform digital yang menyediakan informasi, pemesanan, dan layanan wisata secara online.",
+      "q2": "Apakah website ini resmi dan terpercaya?",
+      "a2": "Ya, kami bekerja sama dengan mitra resmi dan menyediakan sistem pembayaran yang aman dan terverifikasi.",
+      "q3": "Apakah saya bisa mengakses website ini dari perangkat mobile?",
+      "a3": "Tentu, website kami dirancang responsif dan bisa diakses melalui komputer, tablet, maupun smartphone.",
+      "q4": "Apakah ada aplikasi mobile dari Sandtara Trip?",
+      "a4": "Saat ini kami hanya tersedia dalam versi website."
+    },
+    "payment": {
+      "title": "Pemesanan dan Pembayaran",
+      "q1": "Bagaimana cara memesan tiket wisata, hotel, dan acara?",
+      "a1": "Pilih destinasi wisata, hotel, maupun acara lalu isi data pemesan, lalu lakukan pembayaran sesuai instruksi.",
+      "q2": "Metode pembayaran apa saja yang tersedia?",
+      "a2": "Kami menerima pembayaran melalui transfer bank, kartu kredit/debit, e-wallet, dan virtual account.",
+      "q3": "Apakah harga yang ditampilkan sudah termasuk pajak dan biaya lainnya?",
+      "a3": "Ya, harga yang tertera sudah termasuk semua biaya dan merupakan harga tetap.",
+      "q4": "Bagaimana cara membatalkan atau mengubah pemesanan?",
+      "a4": "Jika pesanan tidak dibayar dalam waktu 24 Jam, maka pesanan akan batal otomatis dan tidak akan menganggu orderan yang lain.",
+      "q5": "Apakah saya akan mendapatkan bukti pembayaran atau tiket?",
+      "a5": "Ya, setelah pembayaran berhasil, e-ticket dan bukti transaksi akan dikirim ke email Anda."
+    },
+    "facilities": {
+      "title": "Layanan dan Fasilitas",
+      "q1": "Apakah tersedia transportasi selama wisata?",
+      "a1": "Kami memiliki fitur rekomendasi yang membantu Anda menemukan penyewaan transportasi terdekat dari hotel atau destinasi wisata yang Anda kunjungi.",
+      "q2": "Apakah ada fasilitas tambahan seperti tempat parkir, toilet umum, dan mushola?",
+      "a2": "Kebanyakan destinasi menyediakan fasilitas dasar tersebut. Detail bisa dilihat di halaman wisata masing-masing."
+    },
+    "location": {
+      "title": "Perjalanan dan Lokasi",
+      "q1": "Bagaimana cara menuju ke lokasi wisata?",
+      "a1": "Petunjuk lokasi dan alamat lengkap akan tersedia di halaman detail destinasi.",
+      "q2": "Apakah lokasi wisata buka setiap hari?",
+      "a2": "Jam operasional tergantung masing-masing tempat. Informasi akan dicantumkan di deskripsi wisata.",
+      "q3": "Apa yang harus saya bawa saat berkunjung?",
+      "a3": "Bawa kartu identitas, e-ticket, dan perlengkapan pribadi yang dibutuhkan sesuai jenis wisata."
+    }
+  }
+} 

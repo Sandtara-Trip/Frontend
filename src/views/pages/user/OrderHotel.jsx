@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from '../../../config/api';
 import PaymentCard from "../../../components/user/payment/paymentCard";
 import InputTanggal from "../../../components/user/payment/InputTanggal";
 import MetodePembayaranSelect from "../../../components/user/payment/MetodePembayaranSelect";
@@ -27,7 +28,7 @@ const OrderHotel = () => {
     const fetchRoomDetails = async () => {
       try {
         // First get the hotel ID from the URL
-        const hotelResponse = await axios.get('http://localhost:3000/hotels');
+        const hotelResponse = await axios.get(`${API_BASE_URL}/hotels`);
         if (!hotelResponse.data.success) {
           throw new Error("Failed to fetch hotel data");
         }
@@ -38,7 +39,7 @@ const OrderHotel = () => {
 
         for (const hotel of hotelResponse.data.data) {
           // Get rooms for this hotel
-          const roomsResponse = await axios.get(`http://localhost:3000/admin/hotel/${hotel._id}/rooms`);
+          const roomsResponse = await axios.get(`${API_BASE_URL}/admin/hotel/${hotel._id}/rooms`);
           if (roomsResponse.data.success) {
             const room = roomsResponse.data.data.find(r => r._id === roomId);
             if (room) {
@@ -59,7 +60,7 @@ const OrderHotel = () => {
           image: foundRoom.images[0] ? 
             (foundRoom.images[0].startsWith('http') 
               ? foundRoom.images[0] 
-              : `http://localhost:3000${foundRoom.images[0]}`) : 
+              : `${API_BASE_URL}${foundRoom.images[0]}`) : 
             'https://placehold.co/600x400?text=No+Image',
           description: foundRoom.description || "No description available",
           roomType: foundRoom.type,
@@ -131,7 +132,7 @@ const OrderHotel = () => {
         console.log('Sending order data:', orderData);
 
         const response = await axios.post(
-          "http://localhost:3000/order/hotel",
+          `${API_BASE_URL}/order/hotel`,
           orderData,
           {
             headers: {

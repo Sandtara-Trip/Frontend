@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from '../../../config/api';
 
 // Components
 import DetailImageSlider from "../../../components/user/detailImageSlider";
@@ -9,9 +10,6 @@ import TabContent from "../../../components/user/TabContent";
 import OrderTicket from "../../../components/user/orderTicket";
 import Footer from "../../../components/user/footer";
 import { IoIosPin, IoMdPricetags } from "react-icons/io";
-
-// API base URL
-const API_BASE_URL = "http://localhost:3000";
 
 const DetailWisata = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavbarAfter from '../../../components/user/NavbarAfter';
-
-const API_BASE_URL = 'http://localhost:3000';
+import { API_BASE_URL } from '../../../config/api';
 
 const PaymentPending = ({ queryParams }) => {
   const navigate = useNavigate();

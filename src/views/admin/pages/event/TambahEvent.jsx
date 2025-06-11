@@ -15,37 +15,17 @@ const TambahEvent = () => {
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    detail: "",
-    price: "",
-    startDate: "",
-    endDate: "",
-    capacity: "",
-    location: {
-      address: "",
-      city: "",
-      province: ""
-    },
-    images: null,
-    status: "active"
+    description: "",
+    status: "active",
+    images: null
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name.startsWith('location.')) {
-      const locationField = name.split('.')[1];
-      setFormData(prev => ({
-        ...prev,
-        location: {
-          ...prev.location,
-          [locationField]: value
-        }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleImageChange = (e) => {
@@ -65,22 +45,8 @@ const TambahEvent = () => {
     e.preventDefault();
     
     // Validasi form
-    if (!formData.name || !formData.detail || !formData.price || !formData.startDate || !formData.endDate || !formData.capacity) {
-      setError("Semua field wajib diisi");
-      return;
-    }
-
-    // Validasi price dan capacity
-    const price = Number(formData.price);
-    const capacity = Number(formData.capacity);
-    
-    if (isNaN(price) || price <= 0) {
-      setError("Harga harus berupa angka positif");
-      return;
-    }
-
-    if (isNaN(capacity) || capacity <= 0 || !Number.isInteger(capacity)) {
-      setError("Kapasitas harus berupa angka bulat positif");
+    if (!formData.name || !formData.description) {
+      setError("Nama dan deskripsi wajib diisi");
       return;
     }
 
@@ -92,17 +58,8 @@ const TambahEvent = () => {
       
       // Basic fields
       formDataToSend.append('name', formData.name);
-      formDataToSend.append('detail', formData.detail);
-      formDataToSend.append('price', formData.price);
-      formDataToSend.append('startDate', formData.startDate);
-      formDataToSend.append('endDate', formData.endDate);
-      formDataToSend.append('capacity', formData.capacity);
+      formDataToSend.append('description', formData.description);
       formDataToSend.append('status', formData.status);
-
-      // Location fields as separate fields
-      formDataToSend.append('location.address', formData.location.address);
-      formDataToSend.append('location.city', formData.location.city);
-      formDataToSend.append('location.province', formData.location.province);
 
       // Images
       if (formData.images) {
@@ -161,94 +118,41 @@ const TambahEvent = () => {
               )}
 
               <form className="space-y-6" onSubmit={handleSubmit}>
-                {/* Informasi Umum */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  <InputField
-                    label="Nama Event"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Masukkan nama event"
-                    required
-                  />
-                  <InputField
-                    label="Harga Tiket"
-                    name="price"
-                    type="number"
-                    value={formData.price}
-                    onChange={handleChange}
-                    placeholder="Harga tiket"
-                    required
-                  />
-                  <InputField
-                    label="Tanggal Mulai"
-                    name="startDate"
-                    type="datetime-local"
-                    value={formData.startDate}
-                    onChange={handleChange}
-                    required
-                  />
-                  <InputField
-                    label="Tanggal Selesai"
-                    name="endDate"
-                    type="datetime-local"
-                    value={formData.endDate}
-                    onChange={handleChange}
-                    required
-                  />
-                  <InputField
-                    label="Kapasitas"
-                    name="capacity"
-                    type="number"
-                    value={formData.capacity}
-                    onChange={handleChange}
-                    placeholder="Jumlah kapasitas"
-                    required
-                  />
-                </div>
+                <InputField
+                  label="Nama Event"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Masukkan nama event"
+                  required
+                />
 
                 <TextareaField
                   label="Deskripsi Event"
-                  name="detail"
-                  value={formData.detail}
+                  name="description"
+                  value={formData.description}
                   onChange={handleChange}
                   placeholder="Masukkan deskripsi event"
                   required
                 />
 
-                {/* Lokasi */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  <InputField 
-                    label="Alamat Lengkap" 
-                    name="location.address"
-                    value={formData.location.address}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">Status</label>
+                  <select
+                    name="status"
+                    value={formData.status}
                     onChange={handleChange}
-                    placeholder="Alamat lengkap event" 
-                    required
-                  />
-                  <InputField 
-                    label="Kota" 
-                    name="location.city"
-                    value={formData.location.city}
-                    onChange={handleChange}
-                    placeholder="Kota" 
-                    required
-                  />
-                  <InputField 
-                    label="Provinsi" 
-                    name="location.province"
-                    value={formData.location.province}
-                    onChange={handleChange}
-                    placeholder="Provinsi" 
-                    required
-                  />
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
                 </div>
 
                 {/* Gambar Event */}
                 <ImageUpload 
                   label="Foto Event" 
                   onChange={handleImageChange}
-                  required
                 />
 
                 {/* Tombol Submit */}

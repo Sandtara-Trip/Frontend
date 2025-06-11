@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
 const useDestinationData = () => {
   const [destinations, setDestinations] = useState([]);
@@ -9,7 +10,7 @@ const useDestinationData = () => {
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/wisata');
+        const response = await axios.get(`${API_BASE_URL}/api/wisata`);
         
         if (response.data.success) {
           const transformedDestinations = await Promise.all(
@@ -19,7 +20,7 @@ const useDestinationData = () => {
               let reviewCount = 0;
               
               try {
-                const reviewResponse = await axios.get(`http://localhost:3000/reviews/destination/${destination._id}`);
+                const reviewResponse = await axios.get(`${API_BASE_URL}/reviews/destination/${destination._id}`);
                 if (reviewResponse.data.success) {
                   rating = reviewResponse.data.data.averageRating || 0;
                   reviewCount = reviewResponse.data.data.totalReviews || 0;
@@ -28,13 +29,27 @@ const useDestinationData = () => {
                 console.error('Error fetching destination reviews:', err);
               }
 
+              // Handle Cloudinary image URL
+              let imageUrl = `${API_BASE_URL}/uploads/default-destination.jpg`;
+              if (destination.gambar && destination.gambar.length > 0) {
+                const imagePath = destination.gambar[0];
+                if (imagePath.includes('cloudinary.com')) {
+                  // If it's already a Cloudinary URL, use it as is
+                  imageUrl = imagePath;
+                } else if (imagePath.startsWith('http')) {
+                  // If it's another full URL, use it as is
+                  imageUrl = imagePath;
+                } else {
+                  // If it's a relative path, construct the full URL
+                  imageUrl = `${API_BASE_URL}${imagePath}`;
+                }
+              }
+
               return {
                 id: destination._id,
                 name: destination.name || destination.nama,
                 region: `${destination.location?.city || 'Denpasar'}, ${destination.location?.province || 'Bali'}`,
-                image: destination.gambar && destination.gambar.length > 0
-                  ? `http://localhost:3000${destination.gambar[0]}`
-                  : 'http://localhost:3000/uploads/default-destination.jpg',
+                image: imageUrl,
                 rating: rating,
                 reviewCount: reviewCount,
                 kategori: destination.kategori || 'Alam',

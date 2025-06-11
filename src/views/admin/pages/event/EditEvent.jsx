@@ -16,19 +16,10 @@ function EditEvent() {
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    detail: "",
-    price: "",
-    startDate: "",
-    endDate: "",
-    capacity: "",
-    location: {
-      address: "",
-      city: "",
-      province: ""
-    },
+    description: "",
+    status: "active",
     images: [],
     imagesUrl: [],
-    status: "active",
     deletedImages: []
   });
 
@@ -37,10 +28,7 @@ function EditEvent() {
     const fetchEvent = async () => {
       try {
         setLoading(true);
-        console.log('Fetching event with ID:', id);
-        
         const response = await axiosInstance.get(`/admin/event/${id}`);
-        console.log('Response:', response.data);
         
         if (!response.data.success) {
           throw new Error(response.data.message || 'Gagal mengambil data event');
@@ -51,13 +39,6 @@ function EditEvent() {
           throw new Error('Data event tidak ditemukan');
         }
 
-        // Format dates for datetime-local input
-        const formatDateForInput = (dateString) => {
-          if (!dateString) return '';
-          const date = new Date(dateString);
-          return date.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
-        };
-
         // Transform image URLs to include the full backend URL
         const fullImageUrls = eventData.images?.map(img => 
           img.startsWith('http') ? img : `${API_BASE_URL}${img}`
@@ -65,19 +46,10 @@ function EditEvent() {
         
         setFormData({
           name: eventData.name || "",
-          detail: eventData.detail || "",
-          price: eventData.price?.toString() || "",
-          startDate: formatDateForInput(eventData.startDate),
-          endDate: formatDateForInput(eventData.endDate),
-          capacity: eventData.capacity?.toString() || "",
-          location: {
-            address: eventData.location?.address || "",
-            city: eventData.location?.city || "",
-            province: eventData.location?.province || ""
-          },
+          description: eventData.description || "",
+          status: eventData.status || "active",
           images: [],
           imagesUrl: fullImageUrls,
-          status: eventData.status || "active",
           deletedImages: []
         });
         
@@ -102,21 +74,10 @@ function EditEvent() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name.startsWith('location.')) {
-      const locationField = name.split('.')[1];
-      setFormData(prev => ({
-        ...prev,
-        location: {
-          ...prev.location,
-          [locationField]: value
-        }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleImageChange = (e) => {
@@ -139,8 +100,8 @@ function EditEvent() {
     e.preventDefault();
     
     // Validasi form
-    if (!formData.name || !formData.detail || !formData.price || !formData.startDate || !formData.endDate || !formData.capacity) {
-      setError("Semua field wajib diisi");
+    if (!formData.name || !formData.description) {
+      setError("Nama dan deskripsi wajib diisi");
       return;
     }
 
@@ -148,22 +109,12 @@ function EditEvent() {
       setLoading(true);
       setError(null);
 
-      // Convert to FormData
       const formDataToSend = new FormData();
       
-      // Append non-nested fields
+      // Basic fields
       formDataToSend.append('name', formData.name.trim());
-      formDataToSend.append('detail', formData.detail.trim());
-      formDataToSend.append('price', Number(formData.price));
-      formDataToSend.append('startDate', new Date(formData.startDate).toISOString());
-      formDataToSend.append('endDate', new Date(formData.endDate).toISOString());
-      formDataToSend.append('capacity', Number(formData.capacity));
+      formDataToSend.append('description', formData.description.trim());
       formDataToSend.append('status', formData.status);
-
-      // Append location fields using dot notation
-      formDataToSend.append('location.address', formData.location.address.trim());
-      formDataToSend.append('location.city', formData.location.city.trim());
-      formDataToSend.append('location.province', formData.location.province.trim());
 
       // Handle images
       if (formData.images && formData.images.length > 0) {
@@ -234,138 +185,66 @@ function EditEvent() {
                 </div>
               ) : (
                 <form className="space-y-6" onSubmit={handleSubmit}>
-                  {/* Informasi Umum */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <InputField
-                      label="Nama Event"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Masukkan nama event"
-                      required
-                    />
-                    <InputField
-                      label="Harga Tiket"
-                      name="price"
-                      type="number"
-                      value={formData.price}
-                      onChange={handleChange}
-                      placeholder="Harga tiket"
-                      required
-                    />
-                    <InputField
-                      label="Tanggal Mulai"
-                      name="startDate"
-                      type="datetime-local"
-                      value={formData.startDate}
-                      onChange={handleChange}
-                      required
-                    />
-                    <InputField
-                      label="Tanggal Selesai"
-                      name="endDate"
-                      type="datetime-local"
-                      value={formData.endDate}
-                      onChange={handleChange}
-                      required
-                    />
-                    <InputField
-                      label="Kapasitas"
-                      name="capacity"
-                      type="number"
-                      value={formData.capacity}
-                      onChange={handleChange}
-                      placeholder="Jumlah kapasitas"
-                      required
-                    />
-                  </div>
+                  <InputField
+                    label="Nama Event"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Masukkan nama event"
+                    required
+                  />
 
                   <TextareaField
                     label="Deskripsi Event"
-                    name="detail"
-                    value={formData.detail}
+                    name="description"
+                    value={formData.description}
                     onChange={handleChange}
                     placeholder="Masukkan deskripsi event"
                     required
                   />
 
-                  {/* Lokasi */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <InputField 
-                      label="Alamat Lengkap" 
-                      name="location.address"
-                      value={formData.location.address}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">Status</label>
+                    <select
+                      name="status"
+                      value={formData.status}
                       onChange={handleChange}
-                      placeholder="Alamat lengkap event" 
-                      required
-                    />
-                    <InputField 
-                      label="Kota" 
-                      name="location.city"
-                      value={formData.location.city}
-                      onChange={handleChange}
-                      placeholder="Kota" 
-                      required
-                    />
-                    <InputField 
-                      label="Provinsi" 
-                      name="location.province"
-                      value={formData.location.province}
-                      onChange={handleChange}
-                      placeholder="Provinsi" 
-                      required
-                    />
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    >
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
                   </div>
 
-                  {/* Gambar Event */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Foto Event
-                    </label>
-                    
-                    {/* Preview gambar yang sudah ada */}
-                    {formData.imagesUrl.length > 0 && (
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-                        {formData.imagesUrl.map((url, index) => (
-                          <div key={index} className="relative">
-                            <img
-                              src={url}
-                              alt={`Event preview ${index + 1}`}
-                              className="w-full h-48 object-cover rounded-lg"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleImageDelete(index)}
-                              className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Input file untuk gambar baru */}
-                    <div className="mt-2">
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="block w-full text-sm text-gray-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-full file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-blue-50 file:text-blue-700
-                          hover:file:bg-blue-100"
-                      />
-                      <p className="mt-1 text-sm text-gray-500">
-                        Pilih satu atau lebih gambar (maksimal 5 gambar)
-                      </p>
+                  {/* Preview gambar yang sudah ada */}
+                  {formData.imagesUrl.length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                      {formData.imagesUrl.map((url, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={url}
+                            alt={`Event preview ${index + 1}`}
+                            className="w-full h-48 object-cover rounded-lg"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleImageDelete(index)}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
                     </div>
-                  </div>
+                  )}
+
+                  {/* Input untuk gambar baru */}
+                  <ImageUpload 
+                    label="Foto Event" 
+                    onChange={handleImageChange}
+                  />
 
                   {/* Tombol Submit */}
                   <div className="flex justify-end space-x-4 pt-4">

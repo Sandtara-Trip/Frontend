@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'https://be-sandtara-production.up.railway.app';
+
+// const API_BASE_URL = 'http://localhost:3000';
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -36,4 +38,7 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export { API_BASE_URL, axiosInstance }; 
+export { API_BASE_URL, axiosInstance };
+
+// You can add more API-related configurations here if needed
+export const API_TIMEOUT = 30000; // 30 seconds timeout example 

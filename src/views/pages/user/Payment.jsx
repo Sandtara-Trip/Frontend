@@ -38,7 +38,7 @@ const Payment = () => {
       
       // Send payment request
       const response = await axios.post(
-        'http://localhost:3000/payment/midtrans-notify',
+        `${API_BASE_URL}/payment/midtrans-notify`,
         paymentData,
         {
           headers: {

@@ -19,6 +19,7 @@ const menuItems = [
   { id: "hotels", path: "/admin/hotels", icon: <FaHotel />, label: "Hotels" },
   { id: "rooms", path: "/admin/rooms", icon: <FaBed />, label: "Rooms" },
   { id: "wisata", path: "/admin/wisata", icon: <FaMapMarkedAlt />, label: "Wisata" },
+  { id: "events", path: "/admin/event", icon: <FaCalendarAlt />, label: "Events" },
 ];
 
 const Sidebar = () => {

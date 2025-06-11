@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import NavbarAfter from "../../../components/user/NavbarAfter";
+import { API_BASE_URL } from '../../../config/api';
 
 const ChooseRoom = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const ChooseRoom = () => {
     const fetchRooms = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3000/admin/hotel/${hotelId}/rooms`, {
+        const response = await axios.get(`${API_BASE_URL}/admin/hotel/${hotelId}/rooms`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -28,7 +29,7 @@ const ChooseRoom = () => {
             name: room.name,
             price: room.price,
             images: room.images.map(img => 
-              img.startsWith('http') ? img : `http://localhost:3000${img}`
+              img.startsWith('http') ? img : `${API_BASE_URL}${img}`
             ),
             facilities: room.amenities || [],
             available: room.status === 'available' && room.quantity.available > 0,

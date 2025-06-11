@@ -15,7 +15,7 @@ export const itemWisata = [
     description: "Temukan keindahan dan kedamaian di Pura Jagatnatha, pura terbesar di Denpasar.",
     rating: 4,
     kategori: "Budaya",
-    cuaca: "Hujan",
+    cuaca: "Dingin",
   },
   {
     image: "https://plus.unsplash.com/premium_photo-1661923335239-29a8eb325f86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -25,7 +25,7 @@ export const itemWisata = [
     onButtonClick: () => alert("Detail Museum Bali"),
     rating: 3,
     kategori: "Keluarga",
-    cuaca: "Hujan",
+    cuaca: "Dingin",
   },
   {
     image: "https://plus.unsplash.com/premium_photo-1661923335239-29a8eb325f86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -65,7 +65,7 @@ export const itemWisata = [
     onButtonClick: () => alert("Detail Pura Jagatnatha"),
     rating: 4,
     kategori: "Budaya",
-    cuaca: "Hujan",
+    cuaca: "Dingin",
   },
   {
     image: "https://plus.unsplash.com/premium_photo-1661923335239-29a8eb325f86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -75,7 +75,7 @@ export const itemWisata = [
     onButtonClick: () => alert("Detail Museum Bali"),
     rating: 3,
     kategori: "Keluarga",
-    cuaca: "Hujan",
+    cuaca: "Dingin",
   },
   {
     image: "https://plus.unsplash.com/premium_photo-1661923335239-29a8eb325f86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -116,7 +116,7 @@ export const itemWisata = [
     onButtonClick: () => alert("Detail Pura Jagatnatha"),
     rating: 4,
     kategori: "Budaya",
-    cuaca: "Hujan",
+    cuaca: "Dingin",
   },
   {
     image: "https://plus.unsplash.com/premium_photo-1661923335239-29a8eb325f86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -126,7 +126,7 @@ export const itemWisata = [
     onButtonClick: () => alert("Detail Museum Bali"),
     rating: 3,
     kategori: "Keluarga",
-    cuaca: "Hujan",
+    cuaca: "Dingin",
   },
   {
     image: "https://plus.unsplash.com/premium_photo-1661923335239-29a8eb325f86?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",

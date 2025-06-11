@@ -40,21 +40,33 @@ const WeatherSidebar = ({ weatherData }) => {
   useEffect(() => {
     const fetchHourlyWeather = async () => {
       try {
-        const response = await fetch('/api-hourly/predict/hourly');
-        const data = await response.json();
+        console.log('Fetching hourly weather data...');
+        const response = await fetch('/weather-hourly/predict/hourly');
         
-        if (data.hourly_predictions) {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('Received data:', data);
+        
+        if (data.status === "success" && data.hourly_predictions) {
           const activities = data.hourly_predictions.map(prediction => {
             const date = new Date(prediction.time);
             const hour = date.getHours();
             return {
               time: `${hour.toString().padStart(2, '0')}:00`,
-              weather_label: prediction.weather_label || 'Berawan', // fallback jika tidak ada label
+              weather_label: prediction.weather_label || 'Berawan',
               icon: getWeatherIcon(prediction.weather_label || 'Berawan'),
-              hidden: hour >= 4
+              temperature: Math.round(prediction.temperature_2m),
+              precipitation: Math.round(prediction.precipitation * 100),
+              windspeed: Math.round(prediction.windspeed_10m)
             };
           });
           setHourlyActivities(activities);
+        } else {
+          console.error('Invalid response format:', data);
+          throw new Error('Invalid response format from weather API');
         }
       } catch (error) {
         console.error('Error fetching hourly weather:', error);
@@ -63,7 +75,9 @@ const WeatherSidebar = ({ weatherData }) => {
           time: `${i.toString().padStart(2, '0')}:00`,
           weather_label: "Berawan",
           icon: getWeatherIcon("Berawan"),
-          hidden: i >= 4
+          temperature: 25,
+          precipitation: 0,
+          windspeed: 10
         }));
         setHourlyActivities(defaultActivities);
       }
@@ -101,18 +115,23 @@ const WeatherSidebar = ({ weatherData }) => {
         </h3>
 
         <ul className="space-y-3 text-sm max-h-[240px] overflow-y-auto">
-          {hourlyActivities
-            .filter((activity) => showMore || !activity.hidden)
-            .map((activity, index) => (
-              <li key={index} className="flex items-center gap-3">
+          {hourlyActivities.map((activity, index) => (
+            <li key={index} className="bg-white/5 rounded-lg p-3 flex items-center justify-between">
+              <div className="flex items-center gap-3">
                 <span className="bg-white/20 text-white text-xs px-3 py-1 rounded-full font-bold shadow">
                   {activity.time}
                 </span>
                 <span className="text-white font-medium drop-shadow-sm flex items-center gap-1">
                   {activity.icon} {activity.weather_label}
                 </span>
-              </li>
-            ))}
+              </div>
+              <div className="flex items-center gap-4 text-white/90 text-xs">
+                <span>{activity.temperature}°C</span>
+                <span>☔ {activity.precipitation}%</span>
+                <span>💨 {activity.windspeed} km/h</span>
+              </div>
+            </li>
+          ))}
         </ul>
 
         <div className="text-right mt-6">

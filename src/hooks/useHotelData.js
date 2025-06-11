@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/api';
 
 const useHotelData = () => {
   const [hotels, setHotels] = useState([]);
@@ -9,7 +10,7 @@ const useHotelData = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/hotels');
+        const response = await axios.get(`${API_BASE_URL}/hotels`);
         
         if (response.data.success) {
           const transformedHotels = await Promise.all(
@@ -19,7 +20,7 @@ const useHotelData = () => {
               let reviewCount = 0;
               
               try {
-                const reviewResponse = await axios.get(`http://localhost:3000/reviews/hotel/${hotel._id}`);
+                const reviewResponse = await axios.get(`${API_BASE_URL}/reviews/hotel/${hotel._id}`);
                 if (reviewResponse.data.success) {
                   rating = reviewResponse.data.data.averageRating || 0;
                   reviewCount = reviewResponse.data.data.totalReviews || 0;
@@ -28,13 +29,27 @@ const useHotelData = () => {
                 console.error('Error fetching hotel reviews:', err);
               }
 
+              // Handle Cloudinary image URL
+              let imageUrl = `${API_BASE_URL}/uploads/default-hotel.jpg`;
+              if (hotel.images && hotel.images.length > 0) {
+                const imagePath = hotel.images[0];
+                if (imagePath.includes('cloudinary.com')) {
+                  // If it's already a Cloudinary URL, use it as is
+                  imageUrl = imagePath;
+                } else if (imagePath.startsWith('http')) {
+                  // If it's another full URL, use it as is
+                  imageUrl = imagePath;
+                } else {
+                  // If it's a relative path, construct the full URL
+                  imageUrl = `${API_BASE_URL}${imagePath}`;
+                }
+              }
+
               return {
                 id: hotel._id,
                 name: hotel.name,
                 region: `${hotel.location.city}, ${hotel.location.province}`,
-                image: hotel.images && hotel.images.length > 0
-                  ? `http://localhost:3000${hotel.images[0]}`
-                  : 'http://localhost:3000/uploads/default-hotel.jpg',
+                image: imageUrl,
                 rating: rating,
                 reviewCount: reviewCount
               };

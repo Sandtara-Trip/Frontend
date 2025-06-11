@@ -6,9 +6,7 @@ import NavbarBefore from "../../../components/user/NavbarBefore";
 import { IoIosPin, IoMdPricetags } from "react-icons/io";
 import DetailImageSlider from "../../../components/user/detailImageSlider";
 import TabContent from "../../../components/user/TabContent";
-
-// API base URL
-const API_BASE_URL = "http://localhost:3000";
+import { API_BASE_URL } from '../../../config/api';
 
 const DetailKuliner = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -80,34 +78,8 @@ const DetailKuliner = () => {
   // Transform API data to match the expected format for TabContent
   const contentData = {
     name: event.name,
-    description: event.detail,
-    Kategori: event.category || "Kuliner",
-    Lokasi: event.location ? `${event.location.address}, ${event.location.city}, ${event.location.province}` : '',
-    LokasiCoords: { 
-      lat: event.location?.coordinates?.[1] || -8.707149, 
-      lng: event.location?.coordinates?.[0] || 115.258508 
-    },
-    Fasilitas: event.facilities || [],
-    Reviews: event.reviews || [],
-    averageRating: event.averageRating || 0,
-    totalReviews: event.totalReviews || 0,
-    Informasi: [
-      `Periode Event: ${new Date(event.startDate).toLocaleDateString('id-ID')} - ${new Date(event.endDate).toLocaleDateString('id-ID')}`,
-      `Kapasitas: ${event.capacity} orang`,
-      `Status: ${event.status === 'active' ? 'Tersedia' : 'Tidak Tersedia'}`
-    ],
-    nearby: event.nearby || {},
-    restrictions: event.restrictions || [],
-    eventTicket: {
-      id: event._id,
-      name: event.name,
-      price: event.price,
-      status: event.status,
-      startDate: event.startDate,
-      endDate: event.endDate,
-      capacity: event.capacity,
-      location: event.location
-    }
+    description: event.description,
+    status: event.status
   };
 
   // Transform images for the slider
@@ -126,13 +98,12 @@ const DetailKuliner = () => {
           <div>
             <h2 className="text-2xl font-semibold">{event.name}</h2>
             <div className="flex items-center text-sm text-gray-600 gap-4 mt-1">
-              <span className="flex items-center gap-2">
-                <IoIosPin className="text-xl text-warm-orange" />
-                {contentData.Lokasi}
-              </span>
-              <span className="flex items-center gap-2">
-                <IoMdPricetags className="text-xl text-warm-orange" />
-                {contentData.Kategori}
+              <span className={`px-2 py-1 rounded-full text-xs ${
+                event.status === "active"
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }`}>
+                {event.status}
               </span>
             </div>
           </div>
@@ -146,7 +117,7 @@ const DetailKuliner = () => {
           )}
 
           <div className="flex gap-4 border-b text-lg font-medium">
-            {["Deskripsi", "Fasilitas", "Lokasi", "Review", "Tiket"].map((tab) => (
+            {["Deskripsi"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -161,7 +132,11 @@ const DetailKuliner = () => {
             ))}
           </div>
 
-          <TabContent activeTab={activeTab} contentData={contentData} />
+          <div className="py-4">
+            <p className="text-gray-700 leading-relaxed">
+              {event.description}
+            </p>
+          </div>
         </div>
           
         {/* Sidebar content can be added here */}

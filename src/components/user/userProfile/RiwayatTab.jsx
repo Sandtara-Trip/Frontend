@@ -33,7 +33,7 @@ const RiwayatTab = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/order/user', {
+      const response = await axios.get(`${API_BASE_URL}/order/user`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -61,7 +61,7 @@ const RiwayatTab = () => {
       setRefreshingOrders(prev => ({ ...prev, [orderId]: true }));
       
       // Call the check status endpoint
-      const response = await axios.get(`http://localhost:3000/payment/status/${orderId}`, {
+      const response = await axios.get(`${API_BASE_URL}/payment/status/${orderId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -116,7 +116,7 @@ const RiwayatTab = () => {
       formData.append('comment', comment.trim());
 
       const response = await axios.post(
-        'http://localhost:3000/order/review',
+        `${API_BASE_URL}/order/review`,
         formData,
         {
           headers: {
@@ -150,7 +150,7 @@ const RiwayatTab = () => {
       console.log('Auth token:', localStorage.getItem('token'));
 
       // Get payment token
-      const response = await axios.get(`http://localhost:3000/payment/token/${orderId}`, {
+      const response = await axios.get(`${API_BASE_URL}/payment/token/${orderId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'

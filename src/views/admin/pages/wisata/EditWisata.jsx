@@ -58,8 +58,10 @@ const EditWisata = () => {
     { label: "Alam", value: "alam" },
     { label: "Budaya", value: "budaya" },
     { label: "Religi", value: "religi" },
-    { label: "Kuliner", value: "kuliner" },
     { label: "Hiburan", value: "hiburan" },
+    { label: "Monumen", value: "monumen" },
+    { label: "Museum", value: "museum" },
+    { label: "Tempat Hiburan", value: "tempat_hiburan" },
   ];
 
   // Fetch wisata data

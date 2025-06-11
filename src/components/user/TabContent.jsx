@@ -5,15 +5,20 @@ import {
   FaBusAlt,
   FaStar,
   FaMapMarkerAlt,
+  FaArrowRight
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import ReviewsComponent from "./Reviews";
 import Map from "../../utils/map";
 import { showInfo } from '../../utils/sweetalert';
+import { useTranslation } from 'react-i18next';
 
 const TabContent = ({ activeTab, contentData }) => {
   // All useState hooks must be at the top level
   const [readMore, setReadMore] = useState(false);
   const [activeNearby, setActiveNearby] = useState(null);
+  const [loadingNearby, setLoadingNearby] = useState(false);
+  const { t } = useTranslation();
 
   // Render stars rating
   const renderStars = (rating) =>
@@ -33,8 +38,8 @@ const TabContent = ({ activeTab, contentData }) => {
 
   useEffect(() => {
     if (activeTab === "Lokasi") {
-      const lat = contentData?.LokasiCoords?.lat ;
-      const lon = contentData?.LokasiCoords?.lng ;
+      const lat = contentData?.LokasiCoords?.lat;
+      const lon = contentData?.LokasiCoords?.lng;
 
       const timer = setTimeout(() => {
         Map(lat, lon, "lokasi-map");
@@ -43,6 +48,18 @@ const TabContent = ({ activeTab, contentData }) => {
       return () => clearTimeout(timer);
     }
   }, [activeTab, contentData]);
+
+  // Effect for loading state of nearby places
+  useEffect(() => {
+    if (activeNearby) {
+      setLoadingNearby(true);
+      // Simulate loading for smoother transition
+      const timer = setTimeout(() => {
+        setLoadingNearby(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [activeNearby]);
 
   // Render deskripsi
   if (activeTab === "Deskripsi") {
@@ -184,6 +201,14 @@ const TabContent = ({ activeTab, contentData }) => {
         default:
           return null;
       }
+
+      if (loadingNearby) {
+        return (
+          <div className="mt-4 flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-warm-orange"></div>
+          </div>
+        );
+      }
       
       if (places.length === 0) {
         return (
@@ -194,39 +219,68 @@ const TabContent = ({ activeTab, contentData }) => {
       }
       
       return (
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {places.map((place, idx) => (
-            <div key={idx} className="bg-white p-4 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
-              <h4 className="font-semibold text-warm-orange">{place.name}</h4>
-              <div className="text-sm text-gray-600 mt-1">
-                {activeNearby === 'food' && (
-                  <>
-                    <p>Tipe: {place.type}</p>
-                    <p>Masakan: {place.cuisine}</p>
-                    <p>Jarak: {place.distance} km</p>
-                    <p>Rating: {place.rating} ⭐</p>
-                    <p>Harga: {place.priceRange}</p>
-                    <p>Alamat: {place.address}</p>
-                  </>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {places.map((place) => (
+            <div
+              key={place.id}
+              className="bg-white rounded-lg shadow-md overflow-hidden"
+            >
+              <div className="relative h-48">
+                <img
+                  src={place.image || "/img/placeholder.jpg"}
+                  alt={place.name}
+                  className="w-full h-full object-cover"
+                />
+                {activeNearby === 'hotels' && (
+                  <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-full text-sm font-medium text-warm-orange">
+                    {place.rating} ⭐
+                  </div>
                 )}
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold mb-2">{place.name}</h3>
                 {activeNearby === 'hotels' && (
                   <>
-                    <p>Jarak: {place.distance} km</p>
-                    <p>Rating: {place.rating} ⭐</p>
-                    <p>Harga: Rp {place.price.toLocaleString()}</p>
-                    <p>Alamat: {place.address}</p>
+                    <div className="flex items-center mt-2">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar
+                          key={i}
+                          className={`w-4 h-4 ${
+                            i < Math.round(place.rating)
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                      <span className="ml-2 text-sm text-gray-600">
+                        {place.rating.toFixed(1)} ({place.reviewCount} {t('common.reviews')})
+                      </span>
+                    </div>
+                    <p className="font-medium text-warm-orange mt-2">
+                      {typeof place.price === 'number' 
+                        ? `Rp ${place.price.toLocaleString('id-ID')}`
+                        : place.price}
+                    </p>
+                    <p className="mb-2">{t('common.address')}: {place.address}</p>
+                    <Link
+                      to={`/detail-hotel/${place.id}`}
+                      className="inline-flex items-center text-warm-orange hover:text-hover-orange mt-2 transition-colors"
+                    >
+                      {t('common.viewDetail')}
+                      <FaArrowRight className="ml-1 text-sm" />
+                    </Link>
                   </>
                 )}
                 {activeNearby === 'transport' && (
                   <>
-                    <p>Tipe: {place.type}</p>
-                    <p>Jarak: {place.distance} km</p>
-                    <p>Alamat: {place.address}</p>
+                    <p>{t('common.type')}: {place.type}</p>
+                    <p>{t('common.distance')}: {place.distance} km</p>
+                    <p>{t('common.address')}: {place.address}</p>
                     {place.routes && (
-                      <p>Rute: {place.routes.join(', ')}</p>
+                      <p>{t('common.route')}: {place.routes.join(', ')}</p>
                     )}
                     {place.contact && (
-                      <p>Kontak: {place.contact}</p>
+                      <p>{t('common.contact')}: {place.contact}</p>
                     )}
                   </>
                 )}
@@ -254,7 +308,7 @@ const TabContent = ({ activeTab, contentData }) => {
         {(hasNearbyFood || hasNearbyHotels || hasNearbyTransport) && (
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="font-semibold mb-4">Tempat Terdekat</h3>
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-4">
               {hasNearbyFood && (
                 <button
                   onClick={() => setActiveNearby('food')}

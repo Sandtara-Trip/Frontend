@@ -8,9 +8,7 @@ import CatatanTextarea from "../../../components/user/payment/CatatanTextarea";
 import PembayaranDetail from "../../../components/user/payment/PembayaranDetail";
 import NavbarAfter from "../../../components/user/NavbarAfter";
 import NavbarBefore from "../../../components/user/NavbarBefore";
-
-// API base URL
-const API_BASE_URL = "http://localhost:3000";
+import { API_BASE_URL } from '../../../config/api';
 
 const OrderWisata = () => {
   const { id } = useParams();

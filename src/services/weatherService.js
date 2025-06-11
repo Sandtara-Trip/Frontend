@@ -1,29 +1,34 @@
 import axios from 'axios';
 
-const WEATHER_API_URL = 'http://localhost:8010/proxy/predict/daily';
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const WEATHER_API_URL = `${CORS_PROXY}${encodeURIComponent('https://cuaca-harian-production-816b.up.railway.app/predict/daily')}`;
+const HOURLY_WEATHER_API_URL = `${CORS_PROXY}${encodeURIComponent('https://cuaca-jam-production.up.railway.app/predict/hourly')}`;
 
 export const fetchWeatherData = async () => {
   try {
     console.log('Fetching weather data from:', WEATHER_API_URL);
     const response = await axios.get(WEATHER_API_URL);
-    console.log('Raw API response:', JSON.stringify(response.data, null, 2));
     
-    if (!response.data) {
+    // Response dari allorigins sudah dalam bentuk JSON
+    const data = response.data;
+    console.log('Raw API response:', JSON.stringify(data, null, 2));
+    
+    if (!data) {
       throw new Error('Empty response from weather API');
     }
 
     // Validate the response structure
-    if (!response.data.predictions || !Array.isArray(response.data.predictions)) {
-      console.error('Invalid predictions data:', response.data);
+    if (!data.predictions || !Array.isArray(data.predictions)) {
+      console.error('Invalid predictions data:', data);
       throw new Error('Invalid predictions data structure');
     }
 
     // Log the first prediction for debugging
-    if (response.data.predictions.length > 0) {
-      console.log('Sample prediction:', response.data.predictions[0]);
+    if (data.predictions.length > 0) {
+      console.log('Sample prediction:', data.predictions[0]);
     }
 
-    return response.data;
+    return data;
   } catch (error) {
     console.error('Error fetching weather data:', error);
     if (error.response) {
@@ -31,6 +36,38 @@ export const fetchWeatherData = async () => {
       console.error('Status code:', error.response.status);
     }
     throw new Error('Failed to fetch weather data: ' + (error.response?.data?.message || error.message));
+  }
+};
+
+export const fetchHourlyWeatherData = async () => {
+  try {
+    console.log('Fetching hourly weather data from:', HOURLY_WEATHER_API_URL);
+    const response = await axios.get(HOURLY_WEATHER_API_URL);
+    console.log('Raw hourly API response:', JSON.stringify(response.data, null, 2));
+    
+    if (!response.data) {
+      throw new Error('Empty response from hourly weather API');
+    }
+
+    // Validate the response structure
+    if (!response.data.predictions || !Array.isArray(response.data.predictions)) {
+      console.error('Invalid hourly predictions data:', response.data);
+      throw new Error('Invalid hourly predictions data structure');
+    }
+
+    // Log the first prediction for debugging
+    if (response.data.predictions.length > 0) {
+      console.log('Sample hourly prediction:', response.data.predictions[0]);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching hourly weather data:', error);
+    if (error.response) {
+      console.error('Error response:', error.response.data);
+      console.error('Status code:', error.response.status);
+    }
+    throw new Error('Failed to fetch hourly weather data: ' + (error.response?.data?.message || error.message));
   }
 };
 
@@ -111,6 +148,34 @@ export const transformPredictionsData = (apiData) => {
     return weatherMap;
   } catch (error) {
     console.error('Error transforming predictions data:', error);
+    return {};
+  }
+};
+
+// Transform hourly predictions data
+export const transformHourlyPredictionsData = (apiData) => {
+  if (!apiData || !apiData.predictions) {
+    console.error('Invalid hourly predictions data structure:', apiData);
+    return {};
+  }
+
+  try {
+    const hourlyWeatherMap = {};
+    apiData.predictions.forEach(prediction => {
+      if (!prediction.date || !prediction.hour) return;
+      
+      const dateTime = `${prediction.date} ${prediction.hour}:00`;
+      hourlyWeatherMap[dateTime] = {
+        temp: `${Math.round(prediction.temperature_2m || 0)}°`,
+        description: prediction.weather_description || 'Tidak tersedia',
+        windSpeed: `${Math.round(prediction.windspeed_10m || 0)} km/h`,
+        rainChance: `${Math.round(prediction.precipitation_probability || 0)}%`
+      };
+    });
+
+    return hourlyWeatherMap;
+  } catch (error) {
+    console.error('Error transforming hourly predictions data:', error);
     return {};
   }
 }; 

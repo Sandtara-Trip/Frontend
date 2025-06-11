@@ -28,8 +28,7 @@ const TambahWisata = () => {
     jamTutup: "",
     status: "active",
     latitude: "",
-    longitude: "",
-    cuaca: "", // New field for weather
+    longitude: ""
   });
 
   const fasilitasWisata = [
@@ -53,13 +52,10 @@ const TambahWisata = () => {
     { label: "Alam", value: "alam" },
     { label: "Budaya", value: "budaya" },
     { label: "Religi", value: "religi" },
-    { label: "Kuliner", value: "kuliner" },
     { label: "Hiburan", value: "hiburan" },
-  ];
-
-  const cuacaOptions = [
-    { label: "Panas", value: "panas" },
-    { label: "Hujan", value: "hujan" },
+    { label: "Monumen", value: "monumen" },
+    { label: "Museum", value: "museum" },
+    { label: "Tempat Hiburan", value: "tempat_hiburan" },
   ];
 
   const handleChange = (e) => {
@@ -81,8 +77,8 @@ const TambahWisata = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validasi form, termasuk cuaca
-    if (!formData.nama || !formData.kategori || !formData.harga || !formData.alamat || !formData.deskripsi || !formData.latitude || !formData.longitude || !formData.cuaca) {
+    // Validasi form
+    if (!formData.nama || !formData.kategori || !formData.harga || !formData.alamat || !formData.deskripsi || !formData.latitude || !formData.longitude) {
       setError("Semua field wajib diisi");
       return;
     }
@@ -105,7 +101,6 @@ const TambahWisata = () => {
       formDataToSend.append('status', formData.status || 'active');
       formDataToSend.append('hariOperasional', JSON.stringify(formData.hariOperasional));
       formDataToSend.append('fasilitas', JSON.stringify(formData.fasilitas));
-      formDataToSend.append('cuaca', formData.cuaca); // Add weather to form data
 
       // Kirim koordinat dalam format yang sesuai
       const coordinates = [parseFloat(formData.longitude), parseFloat(formData.latitude)];
@@ -187,14 +182,6 @@ const TambahWisata = () => {
                 options={kategoriWisata}
                 selected={formData.kategori}
                 onChange={(value) => setFormData(prev => ({ ...prev, kategori: value }))}
-                required
-              />
-               <Dropdown
-                label="Kondisi Cuaca"
-                name="cuaca"
-                options={cuacaOptions}
-                selected={formData.cuaca}
-                onChange={(value) => setFormData(prev => ({ ...prev, cuaca: value }))}
                 required
               />
               <InputField

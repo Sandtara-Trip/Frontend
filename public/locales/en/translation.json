@@ -12,6 +12,74 @@
   },
   "common": {
     "selectLanguage": "Select Language",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "viewDetail": "View Detail",
+    "address": "Address",
+    "price": "Price",
+    "reviews": "reviews",
+    "type": "Type",
+    "distance": "Distance",
+    "contact": "Contact",
+    "route": "Route"
+  },
+  "categories": {
+    "wisata": "Tourism",
+    "hotel": "Hotel",
+    "kuliner": "Culinary"
+  },
+  "faq": {
+    "account": {
+      "title": "Account and Security",
+      "q1": "Do I need to create an account to use this website?",
+      "a1": "It's not mandatory. However, by creating an account, you can access all tourist destinations, hotels, culinary spots, and current events in Denpasar. Additionally, you can use various features such as ticket booking and viewing recommendations. Other features include up-to-date weather information to help you plan your trip better, as well as access to daily and hourly weather conditions.",
+      "q2": "How do I create an account?",
+      "a2": "Click the 'Register' button in the top right corner, then fill out the registration form with your personal information.",
+      "q3": "What if I forget my password?",
+      "a3": "Use the 'Forgot Password' feature on the login page and follow the recovery steps via email.",
+      "q4": "Is my personal data secure?",
+      "a4": "Yes, we protect your data and do not share it with third parties without permission.",
+      "q5": "How can I delete my account?",
+      "a5": "Users can delete their account on the 'Profile' page then 'Delete Account'."
+    },
+    "website": {
+      "title": "About Website",
+      "q1": "What is Sandtara Trip?",
+      "a1": "Sandtara Trip is a digital platform that provides online tourism information, booking, and services.",
+      "q2": "Is this website official and trustworthy?",
+      "a2": "Yes, we work with official partners and provide secure and verified payment systems.",
+      "q3": "Can I access this website from mobile devices?",
+      "a3": "Yes, our website is designed to be responsive and can be accessed via computer, tablet, or smartphone.",
+      "q4": "Is there a mobile app for Sandtara Trip?",
+      "a4": "Currently we are only available in website version."
+    },
+    "payment": {
+      "title": "Booking and Payment",
+      "q1": "How do I book tickets for tourism, hotels, and events?",
+      "a1": "Choose your desired tourism destination, hotel, or event then fill in the booking details, and make payment according to the instructions.",
+      "q2": "What payment methods are available?",
+      "a2": "We accept payments through bank transfer, credit/debit cards, e-wallets, and virtual accounts.",
+      "q3": "Do the displayed prices include taxes and other fees?",
+      "a3": "Yes, the prices shown include all fees and are fixed prices.",
+      "q4": "How do I cancel or modify a booking?",
+      "a4": "If the order is not paid within 24 hours, it will be automatically cancelled and will not affect other orders.",
+      "q5": "Will I receive a payment proof or ticket?",
+      "a5": "Yes, after successful payment, e-ticket and transaction proof will be sent to your email."
+    },
+    "facilities": {
+      "title": "Services and Facilities",
+      "q1": "Is transportation available during tours?",
+      "a1": "We have a recommendation feature that helps you find nearby transportation rentals from your hotel or tourist destination.",
+      "q2": "Are there additional facilities like parking, public toilets, and prayer rooms?",
+      "a2": "Most destinations provide these basic facilities. Details can be found on each tourism page."
+    },
+    "location": {
+      "title": "Travel and Location",
+      "q1": "How do I get to the tourist locations?",
+      "a1": "Location directions and complete addresses will be available on the destination detail page.",
+      "q2": "Are tourist locations open every day?",
+      "a2": "Operating hours depend on each location. Information will be included in the tourism description.",
+      "q3": "What should I bring when visiting?",
+      "a3": "Bring your ID card, e-ticket, and personal equipment needed according to the type of tourism."
+    }
   }
 } 

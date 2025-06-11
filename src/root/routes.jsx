@@ -14,8 +14,10 @@ import About from "../views/pages/user/About";
 import FaqSection from "../views/pages/user/faq";
 import DetailWisata from "../views/pages/user/detailWisata";
 import DetailHotel from "../views/pages/user/detailHotel";
+import DetailKuliner from "../views/pages/user/detailKuliner";
 import OrderWisata from "../views/pages/user/orderWisata";
 import OrderHotel from "../views/pages/user/OrderHotel";
+import OrderKuliner from "../views/pages/user/orderKuliner";
 import ChooseRoom from "../views/pages/user/ChooseRoom";
 import UserProfile from "../views/pages/user/userProfile";
 import WeatherCalendar from "../views/pages/user/weatherCalender";
@@ -38,6 +40,9 @@ import TambahRoom from "../views/admin/pages/room/TambahRoom";
 import Wisata from "../views/admin/pages/wisata/Wisata";
 import EditWisata from "../views/admin/pages/wisata/EditWisata";
 import TambahWisata from "../views/admin/pages/wisata/TambahWisata";
+import Event from "../views/admin/pages/event/Event";
+import EditEvent from "../views/admin/pages/event/EditEvent";
+import TambahEvent from "../views/admin/pages/event/TambahEvent";
 import Order from "../views/admin/pages/order/Order";
 import OrderDetail from "../views/admin/pages/order/OrderDetail";
 import AdminLogin from "../views/admin/pages/login/AdminLogin";
@@ -156,6 +161,18 @@ export const routes = createBrowserRouter([
         element: <EditWisata />,
       },
       {
+        path: "event",
+        element: <Event />,
+      },
+      {
+        path: "event/add",
+        element: <TambahEvent />,
+      },
+      {
+        path: "event/edit/:id",
+        element: <EditEvent />,
+      },
+      {
         path: "orders/:id",
         element: <OrderDetail />,
       }
@@ -186,6 +203,14 @@ export const routes = createBrowserRouter([
         element: <DetailHotel />,
       },
       {
+            path: "detail-kuliner/:id",
+        element: <DetailKuliner />,
+      },
+      {
+            path: "order-kuliner/:id",
+        element: <OrderKuliner />,
+      },
+      {
             path: "order-wisata/:id",
         element: <OrderWisata />,
       },
@@ -198,8 +223,12 @@ export const routes = createBrowserRouter([
         element: <ChooseRoom />,
       },
       {
-            path: "user-profile/:id",
-        element: <UserProfile />,
+        path: "user-profile/:id",
+        element: (
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
       },
       {
             path: "weather-calender",

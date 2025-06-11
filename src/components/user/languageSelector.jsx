@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { FiGlobe } from "react-icons/fi";
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../../config/api';
 
 const LanguageSelector = () => {
   const { i18n } = useTranslation();
@@ -18,7 +19,7 @@ const LanguageSelector = () => {
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/lang");
+        const response = await axios.get(`${API_BASE_URL}/lang`);
         if (Array.isArray(response.data)) {
           setLanguages(response.data);
           // Set default language if available

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { itemHotel } from "../../templates/hotel";
+import { itemKuliner } from "../../templates/kuliner";
 import axios from "axios";
 import HeroWeather from "../../../components/user/heroWeather";
 import FilterBar from "../../../components/user/FilterBar";
@@ -7,11 +8,14 @@ import { filterOptionsPerCategory } from "../../templates/filter";
 import Section from "../../../components/user/Section";
 import CategoryTabs from "../../../components/user/CategoryTabs";
 import ArticleChat from "./ArticleChat";
+import { useTranslation } from "react-i18next";
+import { API_BASE_URL } from '../../../config/api';
 
 const ITEMS_DEFAULT = 4;
 const ITEMS_PER_PAGE = 8;
 
 const HomePage = () => {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [destinations, setDestinations] = useState([]);
   const [events, setEvents] = useState([]);
@@ -21,31 +25,35 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState({
     Wisata: "",
     Hotel: "",
+    Kuliner: "",
     Semua: "",
   });
 
   const [selectedFilters, setSelectedFilters] = useState({
     Wisata: {},
     Hotel: {},
+    Kuliner: {},
     Semua: {},
   });
 
   const [showAll, setShowAll] = useState({
     Wisata: false,
     Hotel: false,
+    Kuliner: false,
   });
 
   const [currentPage, setCurrentPage] = useState({
     Wisata: 1,
     Hotel: 1,
+    Kuliner: 1,
   });
   
   useEffect(() => {
     const fetchDestinations = async () => {
       setLoading(true);
       try {
-        console.log('Fetching destinations from:', 'http://localhost:3000/api/wisata');
-        const response = await axios.get('http://localhost:3000/api/wisata');
+        console.log('Fetching destinations from:', `${API_BASE_URL}/api/wisata`);
+        const response = await axios.get(`${API_BASE_URL}/api/wisata`);
         console.log('Full API Response:', response);
         
         if (response.data.success) {
@@ -69,7 +77,7 @@ const HomePage = () => {
             let reviewCount = 0;
             
             try {
-              const reviewUrl = `http://localhost:3000/reviews/destination/${destination._id}`;
+              const reviewUrl = `${API_BASE_URL}/reviews/destination/${destination._id}`;
               console.log('Fetching reviews from:', reviewUrl);
               const reviewResponse = await axios.get(reviewUrl);
               console.log('Review response:', reviewResponse.data);
@@ -87,13 +95,16 @@ const HomePage = () => {
             // Construct image URL
             let imageUrl;
             if (destination.gambar && destination.gambar.length > 0) {
-              imageUrl = `http://localhost:3000${destination.gambar[0]}`;
+              // Check if the image URL is already a full URL (e.g. Cloudinary)
+              imageUrl = destination.gambar[0].startsWith('http') 
+                ? destination.gambar[0] 
+                : `${API_BASE_URL}${destination.gambar[0]}`;
               console.log('Using destination image:', {
                 originalPath: destination.gambar[0],
                 fullUrl: imageUrl
               });
             } else {
-              imageUrl = `http://localhost:3000/uploads/default-destination.jpg`;
+              imageUrl = `${API_BASE_URL}/uploads/default-destination.jpg`;
               console.log('Using default image:', imageUrl);
             }
             
@@ -141,19 +152,16 @@ const HomePage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/event');
+        const response = await axios.get(`${API_BASE_URL}/api/event`);
 
         if (response.data.success) {
           const eventsData = response.data.data.map(event => ({
             id: event._id,
             title: event.name,
-            description: event.detail,
+            description: event.description,
             image: event.images && event.images.length > 0 
-              ? `http://localhost:3000${event.images[0]}`
-              : 'http://localhost:3000/uploads/default-event.jpg',
-            price: `Rp ${event.price.toLocaleString()}`,
-            location: `${event.location.address}, ${event.location.city}`,
-            rating: 4.5, // Default rating since events don't have ratings yet
+              ? event.images[0] // Cloudinary URL langsung digunakan
+              : `${API_BASE_URL}/uploads/default-event.jpg`,
             status: event.status
           }));
           setEvents(eventsData);
@@ -169,7 +177,7 @@ const HomePage = () => {
 
   const handleSearchChange = (category, value) => {
     setSearchQuery((prev) => ({ ...prev, [category]: value }));
-    setCurrentPage({ Wisata: 1, Hotel: 1 });
+    setCurrentPage({ Wisata: 1, Hotel: 1, Kuliner: 1 });
   };
 
   const handleFilterChange = (filterName, value) => {
@@ -180,7 +188,7 @@ const HomePage = () => {
         [filterName]: value
       }
     }));
-    setCurrentPage({ Wisata: 1, Hotel: 1 });
+    setCurrentPage({ Wisata: 1, Hotel: 1, Kuliner: 1 });
   };
 
   // Filter search and apply filters
@@ -224,6 +232,9 @@ const HomePage = () => {
                   case 'hotel':
                     matchesFilters = matchesFilters && type === "hotel";
                     break;
+                  case 'kuliner':
+                    matchesFilters = matchesFilters && type === "kuliner";
+                    break;
                   default:
                     break;
                 }
@@ -237,7 +248,8 @@ const HomePage = () => {
               matchesFilters = matchesFilters && itemKategori === filterValue.toLowerCase();
               break;
             case 'cuaca':
-              matchesFilters = matchesFilters && item.cuaca === filterValue;
+              const itemCuaca = (item.cuaca || '').toLowerCase();
+              matchesFilters = matchesFilters && itemCuaca === filterValue.toLowerCase();
               break;
             default:
               break;
@@ -267,7 +279,7 @@ const HomePage = () => {
 
   const categoriesToRender =
     activeCategory === "Semua"
-      ? ["Wisata", "Hotel"]
+      ? ["Wisata", "Hotel", "Kuliner"]
       : [activeCategory];
 
   const handleHeroNavigate = (category) => {
@@ -288,8 +300,7 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-
+    <div className="min-h-screen bg-gray-50">
       <HeroWeather onCategoryNavigate={handleHeroNavigate} />
 
       <section className="relative z-10 -mt-20 px-4">
@@ -326,10 +337,13 @@ const HomePage = () => {
         let data;
         switch (category) {
           case "Wisata":
-            data = filterItems(destinations, "wisata", category);
+            data = filterItems(destinations, "wisata", t('categories.wisata'));
             break;
           case "Hotel":
-            data = filterItems(itemHotel, "hotel", category);
+            data = filterItems(itemHotel, "hotel", t('categories.hotel'));
+            break;
+          case "Kuliner":
+            data = filterItems(events.filter(event => event.status === 'active'), "kuliner", t('categories.kuliner'));
             break;
           default:
             data = [];
@@ -341,7 +355,7 @@ const HomePage = () => {
         return (
           <Section
             key={category}
-            title={category}
+            title={t(`categories.${category.toLowerCase()}`)}
             id={category.toLowerCase()}
             data={dataToShow}
             background="bg-white"

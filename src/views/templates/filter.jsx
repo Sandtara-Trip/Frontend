@@ -15,12 +15,12 @@ export const filterOptionsPerCategory = {
     {
       name: "kategori",
       label: "Kategori Wisata",
-      options: ["Alam", "Budaya", "Religi", "Kuliner", "Hiburan"],
+      options: ["Alam", "Budaya", "Religi", "Hiburan", "Monumen", "Museum", "Tempat Hiburan"],
     },
     { 
       name: "cuaca", 
       label: "Cuaca", 
-      options: ["Panas", "Hujan"] 
+      options: ["Panas", "Dingin"] 
     },
     { 
       name: "rating", 

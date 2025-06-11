@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../../config/api';
 
 // Create a mutable array that will be updated with the hotel data
 export let itemHotel = [];
@@ -7,7 +8,7 @@ export let itemHotel = [];
 // Function to fetch and update the hotel data
 const fetchHotels = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/hotels');
+    const response = await axios.get(`${API_BASE_URL}/hotels`);
     if (response.data.success) {
       const transformedHotels = [];
       
@@ -18,7 +19,7 @@ const fetchHotels = async () => {
         let reviewCount = 0;
         
         try {
-          const reviewResponse = await axios.get(`http://localhost:3000/reviews/hotel/${hotel._id}`);
+          const reviewResponse = await axios.get(`${API_BASE_URL}/reviews/hotel/${hotel._id}`);
           if (reviewResponse.data.success) {
             rating = reviewResponse.data.data.averageRating || 0;
             reviewCount = reviewResponse.data.data.totalReviews || 0;
@@ -35,7 +36,7 @@ const fetchHotels = async () => {
         let rooms = [];
         
         try {
-          const roomResponse = await axios.get(`http://localhost:3000/admin/hotel/${hotel._id}/rooms`);
+          const roomResponse = await axios.get(`${API_BASE_URL}/admin/hotel/${hotel._id}/rooms`);
           if (roomResponse.data.success && roomResponse.data.data.length > 0) {
             rooms = roomResponse.data.data;
             rooms.forEach(room => {
@@ -52,8 +53,10 @@ const fetchHotels = async () => {
           title: hotel.name || hotel.nama,
           description: hotel.description || hotel.detail || hotel.deskripsi,
           image: hotel.images && hotel.images.length > 0
-            ? `http://localhost:3000${hotel.images[0]}`
-            : `http://localhost:3000/uploads/default-hotel.jpg`,
+            ? hotel.images[0].startsWith('http')
+              ? hotel.images[0]
+              : `${API_BASE_URL}${hotel.images[0]}`
+            : `${API_BASE_URL}/uploads/default-hotel.jpg`,
           rating: rating,
           reviewCount: reviewCount,
           lokasi: hotel.location 

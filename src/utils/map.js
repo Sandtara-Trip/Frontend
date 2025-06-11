@@ -2,8 +2,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
-const API_BASE_URL = "http://localhost:3000";
+import { API_BASE_URL } from '../config/api';
 
 /**
  * Fungsi untuk melakukan reverse geocoding

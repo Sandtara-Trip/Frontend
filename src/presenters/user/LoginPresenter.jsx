@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '../../config/api';
+
 class LoginPresenter {
   constructor({ navigate }) {
     this.navigate = navigate;
@@ -22,6 +24,7 @@ class LoginPresenter {
     event.preventDefault();
     
     try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
       const response = await fetch('http://localhost:3000/auth/login', {
         method: 'POST',
         headers: {

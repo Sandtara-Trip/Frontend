@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
-import { IoIosPin } from "react-icons/io";
 
 const CardKuliner = ({ item }) => {
   const validRating = Math.max(0, Math.min(5, Number(item.rating) || 0));
@@ -43,12 +42,6 @@ const CardKuliner = ({ item }) => {
 
       <div className="p-4 flex flex-col h-full">
         <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
-        
-        {/* Location */}
-        <div className="flex items-center gap-1 text-gray-600 text-sm mt-1">
-          <IoIosPin className="text-warm-orange" />
-          <span className="line-clamp-1">{item.location}</span>
-        </div>
 
         <p className="text-sm text-gray-500 line-clamp-2 mt-2">
           {item.description}

@@ -4,6 +4,7 @@ import { IoGlobeOutline } from "react-icons/io5";
 import { GiSuitcase } from "react-icons/gi";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useTranslation } from 'react-i18next';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -15,132 +16,112 @@ const fadeUp = {
 };
 
 const FaqSection = () => {
+  const { t } = useTranslation();
+
   const faqData = [
     {
       icon: <MdOutlineManageAccounts className="text-4xl" />,
-      group: "Akun dan Keamanan",
+      group: t('faq.account.title'),
       items: [
         {
-          question:
-            "Apakah saya harus membuat akun untuk menggunakan website ini?",
-          answer:
-            "Tidak wajib. Namun, dengan membuat akun, Anda dapat mengakses seluruh destinasi wisata, hotel, kuliner, dan acara terkini di Denpasar. Selain itu, Anda juga dapat menggunakan berbagai fitur seperti pemesanan tiket dan melihat rekomendasi. Fitur lainnya termasuk informasi cuaca terkini yang membantu Anda merencanakan perjalanan dengan lebih baik, serta akses ke kondisi cuaca harian dan per-jam.",
+          question: t('faq.account.q1'),
+          answer: t('faq.account.a1'),
         },
         {
-          question: "Bagaimana cara membuat akun?",
-          answer:
-            "Klik tombol 'Register' di pojok kanan atas, lalu isi formulir pendaftaran dengan data diri Anda.",
+          question: t('faq.account.q2'),
+          answer: t('faq.account.a2'),
         },
         {
-          question: "Bagaimana jika saya lupa kata sandi?",
-          answer:
-            "Gunakan fitur 'Lupa Kata Sandi' pada halaman login dan ikuti langkah-langkah pemulihan melalui email.",
+          question: t('faq.account.q3'),
+          answer: t('faq.account.a3'),
         },
         {
-          question: "Apakah data pribadi saya aman?",
-          answer:
-            "Ya, kami melindungi data Anda dan tidak membagikannya kepada pihak ketiga tanpa izin.",
+          question: t('faq.account.q4'),
+          answer: t('faq.account.a4'),
         },
         {
-          question: "Bagaimana saya bisa menghapus akun saya?",
-          answer:
-            "Pengguna bisa menghapus akunnya sendiri di halaman 'Profile' lalu 'Hapus Akun'.",
+          question: t('faq.account.q5'),
+          answer: t('faq.account.a5'),
         },
       ],
     },
     {
       icon: <IoGlobeOutline className="text-4xl" />,
-      group: "Tentang Website",
+      group: t('faq.website.title'),
       items: [
         {
-          question: "Apa itu Sandtara Trip?",
-          answer:
-            "Sandtara Trip adalah platform digital yang menyediakan informasi, pemesanan, dan layanan wisata secara online.",
+          question: t('faq.website.q1'),
+          answer: t('faq.website.a1'),
         },
         {
-          question: "Apakah website ini resmi dan terpercaya?",
-          answer:
-            "Ya, kami bekerja sama dengan mitra resmi dan menyediakan sistem pembayaran yang aman dan terverifikasi.",
+          question: t('faq.website.q2'),
+          answer: t('faq.website.a2'),
         },
         {
-          question:
-            "Apakah saya bisa mengakses website ini dari perangkat mobile?",
-          answer:
-            "Tentu, website kami dirancang responsif dan bisa diakses melalui komputer, tablet, maupun smartphone.",
+          question: t('faq.website.q3'),
+          answer: t('faq.website.a3'),
         },
         {
-          question: "Apakah ada aplikasi mobile dari Sandtara Trip?",
-          answer: "Saat ini kami hanya tersedia dalam versi website.",
+          question: t('faq.website.q4'),
+          answer: t('faq.website.a4'),
         },
       ],
     },
     {
       icon: <MdPayment className="text-4xl" />,
-      group: "Pemesanan dan Pembayaran",
+      group: t('faq.payment.title'),
       items: [
         {
-          question: "Bagaimana cara memesan tiket wisata, hotel, dan acara?",
-          answer:
-            "Pilih destinasi wisata, hotel, maupun acara lalu isi data pemesan, lalu lakukan pembayaran sesuai instruksi.",
+          question: t('faq.payment.q1'),
+          answer: t('faq.payment.a1'),
         },
         {
-          question: "Metode pembayaran apa saja yang tersedia?",
-          answer:
-            "Kami menerima pembayaran melalui transfer bank, kartu kredit/debit, e-wallet, dan virtual account.",
+          question: t('faq.payment.q2'),
+          answer: t('faq.payment.a2'),
         },
         {
-          question:
-            "Apakah harga yang ditampilkan sudah termasuk pajak dan biaya lainnya?",
-          answer:
-            "Ya, harga yang tertera sudah termasuk semua biaya dan merupakan harga tetap.",
+          question: t('faq.payment.q3'),
+          answer: t('faq.payment.a3'),
         },
         {
-          question: "Bagaimana cara membatalkan atau mengubah pemesanan?",
-          answer:
-            "Jika pesanan tidak dibayar dalam waktu 24 Jam, maka pesanan akan batal otomatis dan tidak akan menganggu orderan yang lain.",
+          question: t('faq.payment.q4'),
+          answer: t('faq.payment.a4'),
         },
         {
-          question: "Apakah saya akan mendapatkan bukti pembayaran atau tiket?",
-          answer:
-            "Ya, setelah pembayaran berhasil, e-ticket dan bukti transaksi akan dikirim ke email Anda.",
+          question: t('faq.payment.q5'),
+          answer: t('faq.payment.a5'),
         },
       ],
     },
     {
       icon: <GiSuitcase className="text-4xl" />,
-      group: " Layanan dan Fasilitas",
+      group: t('faq.facilities.title'),
       items: [
         {
-          question: "Apakah tersedia transportasi selama wisata?",
-          answer:
-            "Kami memiliki fitur rekomendasi yang membantu Anda menemukan penyewaan transportasi terdekat dari hotel atau destinasi wisata yang Anda kunjungi.",
+          question: t('faq.facilities.q1'),
+          answer: t('faq.facilities.a1'),
         },
         {
-          question:
-            "Apakah ada fasilitas tambahan seperti tempat parkir, toilet umum, dan mushola?",
-          answer:
-            "Kebanyakan destinasi menyediakan fasilitas dasar tersebut. Detail bisa dilihat di halaman wisata masing-masing.",
+          question: t('faq.facilities.q2'),
+          answer: t('faq.facilities.a2'),
         },
       ],
     },
     {
       icon: <FaMapMarkedAlt className="text-4xl" />,
-      group: " Perjalanan dan Lokasi",
+      group: t('faq.location.title'),
       items: [
         {
-          question: "Bagaimana cara menuju ke lokasi wisata?",
-          answer:
-            "Petunjuk lokasi dan alamat lengkap akan tersedia di halaman detail destinasi.",
+          question: t('faq.location.q1'),
+          answer: t('faq.location.a1'),
         },
         {
-          question: "Apakah lokasi wisata buka setiap hari?",
-          answer:
-            "Jam operasional tergantung masing-masing tempat. Informasi akan dicantumkan di deskripsi wisata.",
+          question: t('faq.location.q2'),
+          answer: t('faq.location.a2'),
         },
         {
-          question: "Apa yang harus saya bawa saat berkunjung?",
-          answer:
-            "Bawa kartu identitas, e-ticket, dan perlengkapan pribadi yang dibutuhkan sesuai jenis wisata.",
+          question: t('faq.location.q3'),
+          answer: t('faq.location.a3'),
         },
       ],
     },
@@ -148,52 +129,48 @@ const FaqSection = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-16">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="text-center px-4 sm:px-6 max-w-xl mx-auto mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">
-            Pertanyaan Umum
-          </h2>
-          <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-            Kami telah merangkum beberapa pertanyaan untuk membantu Anda
-            memahami layanan Sandtara Trip.
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">FAQ</h1>
+          <p className="text-lg text-gray-600">
+            {t('faq.description')}
           </p>
-        </div>
+        </motion.div>
 
-        {faqData.map((section, index) => (
-          <motion.div
-            key={index}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={fadeUp}
-            custom={index}
-            className="mb-10"
-          >
-            <h3 className="text-2xl font-semibold text-teal mb-4 flex items-center gap-2">
-              {section.icon && <span className="text-xl">{section.icon}</span>}
-              {section.group}
-            </h3>
-            <div className="space-y-4">
-              {section.items.map((item, idx) => (
-                <motion.div
-                  key={idx}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.3 }}
-                  variants={fadeUp}
-                  custom={idx}
-                  className="collapse collapse-arrow bg-base-100 border border-base-300 rounded-lg"
-                >
-                  <input type="radio" name={`faq-group-${index}`} />
-                  <div className="collapse-title font-semibold text-md cursor-pointer">
-                    {item.question}
-                  </div>
-                  <div className="collapse-content text-sm">{item.answer}</div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {faqData.map((section, sectionIndex) => (
+            <motion.div
+              key={section.group}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              custom={sectionIndex}
+              className="bg-white rounded-lg shadow-lg overflow-hidden"
+            >
+              <div className="p-6">
+                <div className="flex items-center mb-4">
+                  {section.icon}
+                  <h2 className="text-xl font-semibold ml-3">{section.group}</h2>
+                </div>
+                <div className="space-y-4">
+                  {section.items.map((item, index) => (
+                    <div key={index} className="border-b border-gray-200 pb-4">
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        {item.question}
+                      </h3>
+                      <p className="text-gray-600">{item.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
