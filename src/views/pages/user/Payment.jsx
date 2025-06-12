@@ -4,6 +4,7 @@ import NavbarAfter from '../../../components/user/NavbarAfter';
 import Footer from '../../../components/user/footer';
 import axios from 'axios';
 import { showSuccess, showError } from '../../../utils/sweetalert';
+import { API_BASE_URL } from '../../../config/api';
 
 const Payment = () => {
   const { invoiceNumber } = useParams();

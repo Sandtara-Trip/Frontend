@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
-import { FaStar } from "react-icons/fa";
 
 const CardKuliner = ({ item }) => {
-  const validRating = Math.max(0, Math.min(5, Number(item.rating) || 0));
-
   return (
     <div className="card bg-white shadow-md rounded-lg overflow-hidden max-w-sm mx-auto">
       <div className="relative group">
@@ -20,23 +17,8 @@ const CardKuliner = ({ item }) => {
 
           {/* Teks di atas overlay */}
           <div className="absolute bottom-0 left-0 w-full p-4 text-white opacity-0 group-hover:opacity-100 transition duration-500">
-            <p className="text-sm font-semibold">Event Kuliner Denpasar</p>
+            <p className="text-sm font-semibold">Kuliner Khas Denpasar</p>
           </div>
-        </div>
-
-        {/* Rating */}
-        {item.rating && (
-          <div className="absolute top-2 right-2 bg-white text-sm font-semibold px-2 py-1 rounded-full shadow-md flex items-center gap-1">
-            <span className="text-warm-orange">
-              <FaStar />
-            </span>
-            <span>{validRating.toFixed(1)}</span>
-          </div>
-        )}
-
-        {/* Price tag */}
-        <div className="absolute top-2 left-2 bg-warm-orange text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md">
-          {item.price}
         </div>
       </div>
 

@@ -28,6 +28,9 @@
     "kuliner": "Kuliner"
   },
   "faq": {
+    "title": "Pertanyaan Umum (FAQ)",
+    "description": "Temukan jawaban atas pertanyaan yang sering diajukan tentang penggunaan website Sandtara Trip.",
+
     "account": {
       "title": "Akun dan Keamanan",
       "q1": "Apakah saya harus membuat akun untuk menggunakan website ini?",
@@ -82,4 +85,4 @@
       "a3": "Bawa kartu identitas, e-ticket, dan perlengkapan pribadi yang dibutuhkan sesuai jenis wisata."
     }
   }
-} 
+}

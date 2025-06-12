@@ -4,6 +4,7 @@ import Sidebar from "../../../components/user/userProfile/Sidebar";
 import ProfileTab from "../../../components/user/userProfile/ProfileTab";
 import RiwayatTab from "../../../components/user/userProfile/RiwayatTab";
 import { axiosInstance } from "../../../config/api";
+import ScrollToTop from "../../../components/user/ScrollToTop";
 
 const UserProfile = () => {
   const location = useLocation(); 
@@ -61,12 +62,14 @@ const UserProfile = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
       </div>
     );
   }
 
   return (
+    <>
+    <ScrollToTop />
     <div className="min-h-screen bg-gray-50">
       <div className="flex h-screen mt-16">
         <Sidebar
@@ -97,6 +100,7 @@ const UserProfile = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

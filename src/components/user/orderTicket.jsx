@@ -1,7 +1,16 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 
-const OrderTicket = ({ name, price, badge, rating, reviewCount, onOrder, orderLabel = "Pesan Sekarang" }) => {
+const OrderTicket = ({
+  name,
+  price,
+  badge,
+  rating,
+  reviewCount,
+  onOrder,
+  orderLabel,
+  showPrice = "Pesan Sekarang",
+}) => {
   // Fungsi render bintang
   const renderStars = (rating) =>
     [...Array(5)].map((_, i) => (
@@ -29,12 +38,16 @@ const OrderTicket = ({ name, price, badge, rating, reviewCount, onOrder, orderLa
         <p className="font-semibold text-xl">{name}</p>
       </div>
 
-      <div>
-        <p className="text-gray-500 text-sm">Harga</p>
-        <p className="text-2xl font-bold text-warm-orange">
-          {typeof price === 'number' ? `Rp ${price.toLocaleString("id-ID")}` : price}
-        </p>
-      </div>
+      {showPrice && (
+        <div>
+          <p className="text-gray-500 text-sm">Harga</p>
+          <p className="text-2xl font-bold text-warm-orange">
+            {typeof price === "number"
+              ? `Rp ${price.toLocaleString("id-ID")}`
+              : price}
+          </p>
+        </div>
+      )}
 
       <button
         onClick={onOrder}
@@ -51,6 +64,5 @@ const OrderTicket = ({ name, price, badge, rating, reviewCount, onOrder, orderLa
     </div>
   );
 };
-
 
 export default OrderTicket;

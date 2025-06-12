@@ -36,6 +36,12 @@ const toLocalDateStr = (date) => {
   return localDate.toISOString().split("T")[0];
 };
 
+const formatDateToIndo = (dateStr) => {
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${day}/${month}/${year}`;
+};
+
 const getTravelTips = (desc = "") => {
   const d = desc.toLowerCase();
 
@@ -134,9 +140,10 @@ const WeatherCalendarMain = ({
   const dialogRef = useRef();
 
   const handleIconClick = (dateStr) => {
+    const formatted = formatDateToIndo(dateStr); // DD/MM/YYYY
     setSelectedWeather({
       date: dateStr,
-      desc: weatherDescriptions[dateStr],
+      desc: weatherDescriptions[formatted], // pakai key yang cocok
     });
     dialogRef.current?.showModal();
   };
@@ -167,6 +174,8 @@ const WeatherCalendarMain = ({
         )}
         dayCellContent={(arg) => {
           const dateStr = toLocalDateStr(arg.date);
+          const dateFormatted = formatDateToIndo(dateStr);
+
           const isSunday = arg.date.getDay() === 0;
           const isHoliday = holidayDates[dateStr];
           const isToday = toLocalDateStr(new Date()) === dateStr;
@@ -181,7 +190,7 @@ const WeatherCalendarMain = ({
             .filter(Boolean)
             .join(" & ");
 
-          const weatherData = weatherDescriptions[dateStr];
+          const weatherData = weatherDescriptions[dateFormatted];
 
           return (
             <div
@@ -223,7 +232,6 @@ const WeatherCalendarMain = ({
               <h3 className="font-bold text-lg mb-2">
                 Cuaca: {selectedWeather.desc.description}
               </h3>
-
               <p className="mb-1">
                 <span className="font-semibold">Suhu:</span>{" "}
                 {selectedWeather.desc.temp}

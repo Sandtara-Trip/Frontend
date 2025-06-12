@@ -81,7 +81,6 @@ export default async function Map(lat, lon, mapDivId) {
 
   marker.bindPopup(`
     <b>${alamat}</b><br/>
-    <small>Lat: ${lat}, Lng: ${lon}</small><br/>
     <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lon}" target="_blank" rel="noopener noreferrer">
       Lihat di Google Maps
     </a>

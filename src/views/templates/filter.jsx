@@ -7,7 +7,7 @@ export const filterOptionsPerCategory = {
     },
     { 
       name: "rating", 
-      label: "Rating Minimal", 
+      label: "Rating", 
       options: ["1", "2", "3", "4", "5"] 
     },
   ],
@@ -24,26 +24,14 @@ export const filterOptionsPerCategory = {
     },
     { 
       name: "rating", 
-      label: "Rating Minimal", 
+      label: "Rating", 
       options: ["1", "2", "3", "4", "5"] 
     },
   ],
   Hotel: [
     { 
       name: "rating", 
-      label: "Rating Minimal", 
-      options: ["1", "2", "3", "4", "5"] 
-    },
-  ],
-  Kuliner: [
-    {
-      name: "jenis",
-      label: "Jenis Kuliner",
-      options: ["Tradisional", "Modern", "Kafe"],
-    },
-    { 
-      name: "rating", 
-      label: "Rating Minimal", 
+      label: "Rating", 
       options: ["1", "2", "3", "4", "5"] 
     },
   ],

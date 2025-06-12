@@ -13,6 +13,7 @@ import {} from "react-icons/fa";
 import { FiCpu, FiLock, FiUserCheck } from "react-icons/fi";
 import { TbBeach } from "react-icons/tb";
 import { IoTicket } from "react-icons/io5";
+import ScrollToTop from "../../../components/user/ScrollToTop";
 
 const About = () => {
   const carouselRef = useRef(null);
@@ -42,6 +43,8 @@ const About = () => {
   }, []);
 
   return (
+    <>
+     <ScrollToTop />
     <div>
       {/* Hero Section */}
       <div className="hero bg-white min-h-screen px-4 py-0">
@@ -55,7 +58,7 @@ const About = () => {
             className="hidden lg:grid grid-cols-2 grid-rows-2 gap-4 w-full max-w-md"
           >
             <motion.img
-              src="https://www.eatsandretreats.com/travel/wp-content/uploads/2018/08/shutterstock_398836177.jpg"
+              src="About/about1.webp"
               alt="Nature"
               initial={{ rotate: 6 }}
               whileHover={{
@@ -66,7 +69,7 @@ const About = () => {
               className="rounded-lg shadow-lg object-cover h-full w-full"
             />
             <motion.img
-              src="https://cdn.thecrazytourist.com/wp-content/uploads/2017/07/Sanur-Beach.jpg"
+              src="About/Sanur-Beach.webp"
               alt="City"
               initial={{ rotate: -6 }}
               whileHover={{
@@ -77,7 +80,7 @@ const About = () => {
               className="rounded-lg shadow-lg object-cover h-full w-full"
             />
             <motion.img
-              src="https://denpasarkota.go.id/public/uploads/berita/berita_203011081152_PantaiSindhu,SalahSatuSpotTerbaikMenikmatiMatahariTerbit.jpeg"
+              src="About/about4.webp"
               alt="Nature"
               initial={{ rotate: -6 }}
               whileHover={{
@@ -88,7 +91,7 @@ const About = () => {
               className="rounded-lg shadow-lg object-cover h-full w-full"
             />
             <motion.img
-              src="https://tse3.mm.bing.net/th?id=OIP.ZtmHaV27CVO4iHRltKOTJgHaE1&pid=Api&P=0&h=220"
+              src="About/th.webp"
               alt="City"
               initial={{ rotate: 6 }}
               whileHover={{
@@ -110,7 +113,7 @@ const About = () => {
           >
             <div className="flex flex-col items-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 pt-20">
               <motion.img
-                src="https://www.eatsandretreats.com/travel/wp-content/uploads/2018/08/shutterstock_398836177.jpg"
+                src="About/about1.webp"
                 alt="Nature"
                 initial={{ rotate: 6 }}
                 whileHover={{
@@ -121,7 +124,7 @@ const About = () => {
                 className="rounded-lg shadow-lg object-cover w-[90%] sm:w-1/2"
               />
               <motion.img
-                src="https://tse3.mm.bing.net/th?id=OIP.ZtmHaV27CVO4iHRltKOTJgHaE1&pid=Api&P=0&h=220"
+                src="About/th.webp"
                 alt="City"
                 initial={{ rotate: -6 }}
                 whileHover={{
@@ -436,7 +439,7 @@ const About = () => {
                 <img
                   src={member.img}
                   alt={member.name}
-                  className="w-24 h-24 rounded-full object-cover mb-4 shadow"
+                   className="w-24 h-24 rounded-full object-cover mb-4 shadow border-2 border-teal"
                 />
                 <h4 className="text-lg font-semibold text-teal">
                   {member.name}
@@ -448,6 +451,7 @@ const About = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

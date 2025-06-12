@@ -7,6 +7,7 @@ import { IoIosPin, IoMdPricetags } from "react-icons/io";
 import DetailImageSlider from "../../../components/user/detailImageSlider";
 import TabContent from "../../../components/user/TabContent";
 import { API_BASE_URL } from '../../../config/api';
+import ScrollToTop from "../../../components/user/ScrollToTop";
 
 const DetailKuliner = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,6 +61,7 @@ const DetailKuliner = () => {
   if (error || !event) {
     return (
       <>
+       <ScrollToTop />
         {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4 mx-auto max-w-2xl mt-20">
           <strong className="font-bold">Error:</strong>

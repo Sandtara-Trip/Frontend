@@ -27,7 +27,7 @@ const CardWisata = ({ item }) => {
 
         {/* Rating bintang di pojok kanan atas */}
         <div className="absolute top-2 right-2 bg-white text-sm font-semibold px-2 py-1 rounded-full shadow-md flex items-center gap-1">
-          <span className="text-warm-orange">
+          <span className="text-light-orange">
             <FaStar />
           </span>
           <span>{validRating.toFixed(1)}</span>

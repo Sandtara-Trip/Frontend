@@ -47,6 +47,7 @@ import Order from "../views/admin/pages/order/Order";
 import OrderDetail from "../views/admin/pages/order/OrderDetail";
 import AdminLogin from "../views/admin/pages/login/AdminLogin";
 import Dashboard from "../views/admin/pages/dashboard/Dashboard";
+import ScrollToTop from "../components/user/ScrollToTop";
 
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 
@@ -60,9 +61,9 @@ const WithMainLayout = () => (
 // Payment status wrapper to handle Midtrans callbacks
 const PaymentStatusWrapper = ({ children }) => {
   const searchParams = new URLSearchParams(window.location.search);
-  const orderId = searchParams.get('order_id');
-  const statusCode = searchParams.get('status_code');
-  const transactionStatus = searchParams.get('transaction_status');
+  const orderId = searchParams.get("order_id");
+  const statusCode = searchParams.get("status_code");
+  const transactionStatus = searchParams.get("transaction_status");
 
   if (!orderId || !statusCode || !transactionStatus) {
     return <Navigate to="/not-found" />;
@@ -72,8 +73,8 @@ const PaymentStatusWrapper = ({ children }) => {
     queryParams: {
       orderId,
       statusCode,
-      transactionStatus
-    }
+      transactionStatus,
+    },
   });
 };
 
@@ -87,183 +88,195 @@ export const routes = createBrowserRouter([
         children: [
           {
             path: "success",
-            element: <PaymentStatusWrapper><PaymentSuccess /></PaymentStatusWrapper>,
+            element: (
+              <PaymentStatusWrapper>
+                <PaymentSuccess />
+              </PaymentStatusWrapper>
+            ),
           },
           {
             path: "pending",
-            element: <PaymentStatusWrapper><PaymentPending /></PaymentStatusWrapper>,
+            element: (
+              <PaymentStatusWrapper>
+                <PaymentPending />
+              </PaymentStatusWrapper>
+            ),
           },
           {
             path: "error",
-            element: <PaymentStatusWrapper><PaymentError /></PaymentStatusWrapper>,
+            element: (
+              <PaymentStatusWrapper>
+                <PaymentError />
+              </PaymentStatusWrapper>
+            ),
           },
         ],
       },
-  // Admin routes
-  {
+      // Admin routes
+      {
         path: "admin",
-    element: (
-      <ProtectedRoute requireAdmin={true}>
-        <AdminLayout />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: "",
-        element: <Dashboard />,
-      },
-      {
-        path: "users",
-        element: <User />,
-      },
-      {
-        path: "users/add",
-        element: <TambahUser />,
-      },
-      {
-        path: "users/edit/:id",
-        element: <EditUser />,
-      },
-      {
-        path: "hotels",
-        element: <Hotel />,
-      },
-      {
-        path: "hotels/add",
-        element: <TambahHotel />,
-      },
-      {
-        path: "hotels/edit/:id",
-        element: <EditHotel />,
-      },
-      {
-        path: "rooms",
-        element: <Room />,
-      },
-      {
-        path: "rooms/add",
-        element: <TambahRoom />,
-      },
-      {
-        path: "rooms/edit/:id",
-        element: <EditRoom />,
-      },
-      {
-        path: "wisata",
-        element: <Wisata />,
-      },
-      {
-        path: "wisata/add",
-        element: <TambahWisata />,
-      },
-      {
-        path: "wisata/edit/:id",
-        element: <EditWisata />,
-      },
-      {
-        path: "event",
-        element: <Event />,
-      },
-      {
-        path: "event/add",
-        element: <TambahEvent />,
-      },
-      {
-        path: "event/edit/:id",
-        element: <EditEvent />,
-      },
-      {
-        path: "orders/:id",
-        element: <OrderDetail />,
-      }
-    ],
-  },
-      // Main routes with layout
-  {
-    element: <WithMainLayout />,
-    children: [
-      {
-            path: "",
-        element: <HomePage />,
-      },
-      {
-            path: "about",
-        element: <About />,
-      },
-      {
-            path: "faq",
-        element: <FaqSection />,
-      },
-      {
-            path: "detail-wisata/:id",
-        element: <DetailWisata />,
-      },
-      {
-            path: "detail-hotel/:id",
-        element: <DetailHotel />,
-      },
-      {
-            path: "detail-kuliner/:id",
-        element: <DetailKuliner />,
-      },
-      {
-            path: "order-kuliner/:id",
-        element: <OrderKuliner />,
-      },
-      {
-            path: "order-wisata/:id",
-        element: <OrderWisata />,
-      },
-      {
-            path: "order-hotel/:id",
-        element: <OrderHotel />,
-      },
-      {
-            path: "choose-room/:id",
-        element: <ChooseRoom />,
-      },
-      {
-        path: "user-profile/:id",
         element: (
-          <ProtectedRoute>
-            <UserProfile />
+          <ProtectedRoute requireAdmin={true}>
+            <AdminLayout />
           </ProtectedRoute>
         ),
+        children: [
+          {
+            path: "",
+            element: <Dashboard />,
+          },
+          {
+            path: "users",
+            element: <User />,
+          },
+          {
+            path: "users/add",
+            element: <TambahUser />,
+          },
+          {
+            path: "users/edit/:id",
+            element: <EditUser />,
+          },
+          {
+            path: "hotels",
+            element: <Hotel />,
+          },
+          {
+            path: "hotels/add",
+            element: <TambahHotel />,
+          },
+          {
+            path: "hotels/edit/:id",
+            element: <EditHotel />,
+          },
+          {
+            path: "rooms",
+            element: <Room />,
+          },
+          {
+            path: "rooms/add",
+            element: <TambahRoom />,
+          },
+          {
+            path: "rooms/edit/:id",
+            element: <EditRoom />,
+          },
+          {
+            path: "wisata",
+            element: <Wisata />,
+          },
+          {
+            path: "wisata/add",
+            element: <TambahWisata />,
+          },
+          {
+            path: "wisata/edit/:id",
+            element: <EditWisata />,
+          },
+          {
+            path: "event",
+            element: <Event />,
+          },
+          {
+            path: "event/add",
+            element: <TambahEvent />,
+          },
+          {
+            path: "event/edit/:id",
+            element: <EditEvent />,
+          },
+          {
+            path: "orders/:id",
+            element: <OrderDetail />,
+          },
+        ],
       },
+      // Main routes with layout
       {
+        element: <WithMainLayout />,
+        children: [
+          {
+            path: "",
+            element: <HomePage />,
+          },
+          {
+            path: "about",
+            element: <About />,
+          },
+          {
+            path: "faq",
+            element: <FaqSection />,
+          },
+          {
+            path: "detail-wisata/:id",
+            element: <DetailWisata />,
+          },
+          {
+            path: "detail-hotel/:id",
+            element: <DetailHotel />,
+          },
+          {
+            path: "detail-kuliner/:id",
+            element: <DetailKuliner />,
+          },
+          {
+            path: "order-kuliner/:id",
+            element: <OrderKuliner />,
+          },
+          {
+            path: "order-wisata/:id",
+            element: <OrderWisata />,
+          },
+          {
+            path: "order-hotel/:id",
+            element: <OrderHotel />,
+          },
+          {
+            path: "choose-room/:id",
+            element: <ChooseRoom />,
+          },
+          {
+            path: "user-profile/:id",
+            element: (
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            ),
+          },
+          {
             path: "weather-calender",
-        element: <WeatherCalendar />,
+            element: <WeatherCalendar />,
+          },
+          {
+            path: "payment/:invoiceNumber",
+            element: <Payment />,
+          },
+        ],
+      },
+      // Auth routes
+      {
+        path: "login",
+        element: <LoginPage />,
       },
       {
-            path: "payment/:invoiceNumber",
-        element: <Payment />,
-      },
-    ],
-  },
-  // Auth routes
-  {
-        path: "login",
-    element: <LoginPage />,
-  },
-  {
         path: "register",
-    element: <Register />,
-  },
-  {
+        element: <Register />,
+      },
+      {
         path: "forgot-password",
-    element: <ForgotPassword />,
-  },
-  {
+        element: <ForgotPassword />,
+      },
+      {
         path: "reset-password",
-    element: <ResetPassword />,
-  },
-  {
+        element: <ResetPassword />,
+      },
+      {
         path: "validation-code",
-    element: <AuthenticationForm />,
-  },
-  {
+        element: <AuthenticationForm />,
+      },
+      {
         path: "resend",
-    element: <VerificationFailed />,
+        element: <VerificationFailed />,
       },
     ],
   },
@@ -271,6 +284,5 @@ export const routes = createBrowserRouter([
   {
     path: "*",
     element: <NotFoundPage />,
-  }
+  },
 ]);
-

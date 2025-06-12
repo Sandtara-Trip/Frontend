@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_BASE_URL } from '../../../config/api';
+import { API_BASE_URL } from "../../../config/api";
 import PaymentCard from "../../../components/user/payment/paymentCard";
 import InputTanggal from "../../../components/user/payment/InputTanggal";
 import MetodePembayaranSelect from "../../../components/user/payment/MetodePembayaranSelect";
 import CatatanTextarea from "../../../components/user/payment/CatatanTextarea";
 import PembayaranDetail from "../../../components/user/payment/PembayaranDetail";
 import NavbarAfter from "../../../components/user/NavbarAfter";
+import NavbarBefore from "../../../components/user/NavbarBefore";
+import ScrollToTop from "../../../components/user/ScrollToTop";
 
 const OrderHotel = () => {
   const { id: roomId } = useParams();
   const navigate = useNavigate();
-  
+
   const [hotelData, setHotelData] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [jumlahOrder, setJumlahOrder] = useState(1);
   const [tanggalCheckIn, setTanggalCheckIn] = useState("");
@@ -23,25 +25,30 @@ const OrderHotel = () => {
   const [catatan, setCatatan] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
-        // First get the hotel ID from the URL
         const hotelResponse = await axios.get(`${API_BASE_URL}/hotels`);
         if (!hotelResponse.data.success) {
           throw new Error("Failed to fetch hotel data");
         }
 
-        // Find the hotel that has this room
         let foundHotel = null;
         let foundRoom = null;
 
         for (const hotel of hotelResponse.data.data) {
-          // Get rooms for this hotel
-          const roomsResponse = await axios.get(`${API_BASE_URL}/admin/hotel/${hotel._id}/rooms`);
+          const roomsResponse = await axios.get(
+            `${API_BASE_URL}/admin/hotel/${hotel._id}/rooms`
+          );
           if (roomsResponse.data.success) {
-            const room = roomsResponse.data.data.find(r => r._id === roomId);
+            const room = roomsResponse.data.data.find((r) => r._id === roomId);
             if (room) {
               foundHotel = hotel;
               foundRoom = room;
@@ -57,15 +64,15 @@ const OrderHotel = () => {
         setHotelData({
           name: foundRoom.type,
           price: foundRoom.price,
-          image: foundRoom.images[0] ? 
-            (foundRoom.images[0].startsWith('http') 
-              ? foundRoom.images[0] 
-              : `${API_BASE_URL}${foundRoom.images[0]}`) : 
-            'https://placehold.co/600x400?text=No+Image',
+          image: foundRoom.images[0]
+            ? foundRoom.images[0].startsWith("http")
+              ? foundRoom.images[0]
+              : `${API_BASE_URL}${foundRoom.images[0]}`
+            : "https://placehold.co/600x400?text=No+Image",
           description: foundRoom.description || "No description available",
           roomType: foundRoom.type,
           hotelId: foundHotel._id,
-          hotelName: foundHotel.name
+          hotelName: foundHotel.name,
         });
       } catch (err) {
         console.error("Error fetching room details:", err);
@@ -88,9 +95,9 @@ const OrderHotel = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.group('Order Hotel Process');
-    console.log('Starting order process...');
-    
+    console.group("Order Hotel Process");
+    console.log("Starting order process...");
+
     const newErrors = {};
 
     if (!tanggalCheckIn)
@@ -109,15 +116,18 @@ const OrderHotel = () => {
     if (!metodeBayar) newErrors.metodeBayar = "Metode pembayaran wajib dipilih";
 
     setErrors(newErrors);
-    console.log('Form validation errors:', newErrors);
+    console.log("Form validation errors:", newErrors);
 
     if (Object.keys(newErrors).length === 0) {
       try {
-        console.log('Form validation passed, preparing order data...');
-        
-        // Format dates to YYYY-MM-DD
-        const formattedStartDate = new Date(tanggalCheckIn).toISOString().split('T')[0];
-        const formattedEndDate = new Date(tanggalCheckOut).toISOString().split('T')[0];
+        console.log("Form validation passed, preparing order data...");
+
+        const formattedStartDate = new Date(tanggalCheckIn)
+          .toISOString()
+          .split("T")[0];
+        const formattedEndDate = new Date(tanggalCheckOut)
+          .toISOString()
+          .split("T")[0];
 
         const orderData = {
           hotelId: hotelData.hotelId,
@@ -126,65 +136,64 @@ const OrderHotel = () => {
           endDate: formattedEndDate,
           quantity: parseInt(jumlahOrder),
           paymentMethod: metodeBayar,
-          notes: catatan || undefined
+          notes: catatan || undefined,
         };
 
-        console.log('Sending order data:', orderData);
+        console.log("Sending order data:", orderData);
 
         const response = await axios.post(
           `${API_BASE_URL}/order/hotel`,
           orderData,
           {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`,
-              'Content-Type': 'application/json'
-            }
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
           }
         );
 
-        console.group('API Response');
-        console.log('Status:', response.status);
-        console.log('Data:', response.data);
+        console.group("API Response");
+        console.log("Status:", response.status);
+        console.log("Data:", response.data);
         console.groupEnd();
 
         if (response.data.success) {
-          console.log('Order created successfully!');
-          console.group('Order Details');
-          console.log('Order ID:', response.data.data._id);
-          console.log('Invoice Number:', response.data.invoiceNumber);
-          console.log('Payment Token:', response.data.paymentToken);
+          console.log("Order created successfully!");
+          console.group("Order Details");
+          console.log("Order ID:", response.data.data._id);
+          console.log("Invoice Number:", response.data.invoiceNumber);
+          console.log("Payment Token:", response.data.paymentToken);
           console.groupEnd();
-          
+
           setFormSubmitted(true);
 
-          // Construct Midtrans redirect URL
           const midtransRedirectUrl = `https://app.sandbox.midtrans.com/snap/v4/redirection/${response.data.paymentToken}`;
-          console.log('Redirecting to:', midtransRedirectUrl);
-          
-          // Redirect to Midtrans payment page
+          console.log("Redirecting to:", midtransRedirectUrl);
+
           window.location.href = midtransRedirectUrl;
         } else {
           setError(response.data.message || "Failed to create order");
         }
       } catch (err) {
-        console.group('Error Details');
-        console.error('Error creating order:', err.message);
-        
+        console.group("Error Details");
+        console.error("Error creating order:", err.message);
+
         if (err.response) {
-          console.error('Response Status:', err.response.status);
-          console.error('Response Data:', err.response.data);
+          console.error("Response Status:", err.response.status);
+          console.error("Response Data:", err.response.data);
         }
-        
+
         console.groupEnd();
-        
-        const errorMessage = err.response?.data?.message || err.message || "Error creating order";
+
+        const errorMessage =
+          err.response?.data?.message || err.message || "Error creating order";
         setError(errorMessage);
       }
     } else {
-      console.log('Form validation failed. Please check the errors.');
+      console.log("Form validation failed. Please check the errors.");
       setFormSubmitted(false);
     }
-    
+
     console.groupEnd();
   };
 
@@ -209,7 +218,8 @@ const OrderHotel = () => {
 
   return (
     <>
-      <NavbarAfter />
+     <ScrollToTop />
+      {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
 
       <div className="min-h-screen bg-gray-50 p-4 lg:p-8">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8">
@@ -218,14 +228,16 @@ const OrderHotel = () => {
             onSubmit={handleSubmit}
             className="w-full lg:w-2/3 space-y-4 pt-16"
           >
-            <h1 className="text-2xl font-bold mb-4">Pemesanan Ticket Hotel</h1>
-            
-            {hotelData && (
-              <div className="mb-4">
-                <h2 className="text-lg text-gray-600">{hotelData.hotelName}</h2>
-                <p className="text-sm text-gray-500">Tipe Kamar: {hotelData.roomType}</p>
-              </div>
-            )}
+            <div className="mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+                Pemesanan Ticket Hotel
+              </h1>
+              {hotelData && (
+                <h2 className="text-lg sm:text-xl text-gray-800">
+                  {hotelData.hotelName}
+                </h2>
+              )}
+            </div>
 
             <PaymentCard
               item={hotelData}
@@ -281,10 +293,26 @@ const OrderHotel = () => {
 
             <button
               type="submit"
-              className="btn btn-primary w-full bg-orange-500 hover:bg-orange-600 border-none text-white"
+              className={`w-full px-6 py-3 bg-warm-orange hover:bg-hover-orange text-white rounded-lg transition-colors ${
+                !isLoggedIn ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={!isLoggedIn}
             >
-              Lanjutkan Pembayaran
+              {isLoggedIn
+                ? "Lanjutkan Pembayaran"
+                : "Silahkan Login Terlebih Dahulu"}
             </button>
+
+            {!isLoggedIn && (
+              <div className="text-center mt-2">
+                <button
+                  onClick={() => navigate("/login")}
+                  className="text-warm-orange hover:underline"
+                >
+                  Klik di sini untuk login
+                </button>
+              </div>
+            )}
           </form>
 
           {/* Kolom kanan */}

@@ -6,8 +6,11 @@ import {
   WiRain,
   WiThunderstorm,
 } from "react-icons/wi";
+import { FaWind } from "react-icons/fa";
+import { FaTemperatureHalf } from "react-icons/fa6";
+import { IoMdUmbrella } from "react-icons/io";
 
-const TodayWeather = ({ data, formattedDate }) => {
+const TodayWeather = ({ data, formattedDate, hideTempIcon }) => {
   const dialogRef = useRef(null);
 
   const openModal = () => {
@@ -18,11 +21,16 @@ const TodayWeather = ({ data, formattedDate }) => {
 
   // Get weather icon based on description
   const getWeatherIcon = () => {
-    if (!data?.description) return <WiDayCloudy className="text-6xl md:text-8xl" />;
-    
+    if (!data?.description)
+      return <WiDayCloudy className="text-6xl md:text-8xl" />;
+
     const desc = data.description.toLowerCase();
 
-    if (desc.includes("badai") || desc.includes("petir") || desc.includes("hujan petir")) {
+    if (
+      desc.includes("badai") ||
+      desc.includes("petir") ||
+      desc.includes("hujan petir")
+    ) {
       return <WiThunderstorm className="text-6xl md:text-8xl" />;
     }
     if (desc.includes("hujan deras")) {
@@ -41,7 +49,7 @@ const TodayWeather = ({ data, formattedDate }) => {
       return <WiDayCloudy className="text-6xl md:text-8xl" />;
     }
 
-    return <WiDayCloudy className="text-6xl md:text-8xl" />; // default
+    return <WiDayCloudy className="text-6xl md:text-8xl" />;
   };
 
   // Get travel tips based on weather
@@ -51,29 +59,55 @@ const TodayWeather = ({ data, formattedDate }) => {
     const desc = data.description.toLowerCase();
     const tips = [];
 
-    if (desc.includes("hujan") || desc.includes("badai") || desc.includes("petir")) {
+    if (
+      desc.includes("hujan") ||
+      desc.includes("badai") ||
+      desc.includes("petir")
+    ) {
       tips.push(
-        "Bawalah payung atau jas hujan",
-        "Hindari aktivitas outdoor",
-        "Pilih destinasi indoor seperti museum atau galeri",
-        "Perhatikan peringatan cuaca",
-        "Hindari area rawan banjir"
+        <>
+          <p className="mb-2 font-semibold text-blue-600">
+            Hujan? Tetap nyaman jika dipersiapkan dengan baik.
+          </p>
+          <ul className="list-disc list-inside ml-5 text-sm">
+            <li>Gunakan jas hujan tebal dan sepatu atau sandal tahan air</li>
+            <li>Pilih pakaian tebal dan jaket untuk menjaga kehangatan</li>
+            <li>Bawa payung dan pelindung tas</li>
+            <li>
+              Selalu pantau prakiraan cuaca terbaru yang ada di website kami
+            </li>
+          </ul>
+        </>
       );
     } else if (desc.includes("berawan")) {
       tips.push(
-        "Suhu relatif nyaman untuk outdoor",
-        "Tetap bawa payung untuk jaga-jaga",
-        "Cocok untuk aktivitas santai di luar",
-        "Ideal untuk fotografi",
-        "Baik untuk hiking atau tracking"
+        <>
+          <p className="mb-2 font-semibold text-warm-orange">
+            Cuaca berawan, nyaman untuk beraktivitas!
+          </p>
+          <ul className="list-disc list-inside ml-5 text-sm">
+            <li>Pilih pakaian yang nyaman dan tidak terlalu tebal</li>
+            <li>Siapkan jaket tipis jika angin bertiup</li>
+            <li>Payung lipat bisa jadi penyelamat jika tiba-tiba hujan</li>
+            <li>Gunakan sunblock atau sunscreen untuk melindungi kulit</li>
+            <li>Waktu yang tepat untuk berfoto tanpa silau matahari</li>
+          </ul>
+        </>
       );
     } else if (desc.includes("cerah")) {
       tips.push(
-        "Gunakan sunscreen SPF minimal 30",
-        "Bawalah air minum yang cukup",
-        "Kenakan pakaian yang nyaman dan breathable",
-        "Pilih waktu pagi atau sore untuk aktivitas outdoor",
-        "Hindari terlalu lama di bawah sinar matahari langsung"
+        <>
+          <p className="mb-2 font-semibold text-warm-orange">
+            Cuaca cerah, waktu yang pas untuk menjelajah!
+          </p>
+          <ul className="list-disc list-inside ml-5 text-sm">
+            <li>Gunakan pakaian ringan dan berwarna terang</li>
+            <li>Topi atau payung untuk melindungi dari sinar matahari</li>
+            <li>Sunblock dan Sunscreen untuk melindungi kulit</li>
+            <li>Bawa air minum yang cukup</li>
+            <li>Kacamata hitam untuk kenyamanan mata</li>
+          </ul>
+        </>
       );
     }
 
@@ -105,28 +139,36 @@ const TodayWeather = ({ data, formattedDate }) => {
         <div className="text-[10px] md:text-xs text-white mb-4">
           {formattedDate}
         </div>
-        <div className="text-4xl md:text-5xl font-extrabold leading-none">
-          {data.temp}
-        </div>
-        {data.temperature_range && (
-          <div className="text-sm mt-2 opacity-80">
-            {data.temperature_range}
+        <div className="flex flex-col items-center justify-center text-white">
+          <div className="text-4xl md:text-5xl font-extrabold leading-none">
+            {data.temp}
           </div>
-        )}
-        <div className="flex flex-col items-center mt-6">
-          {getWeatherIcon()}
-          <div className="text-lg md:text-xl font-medium mt-2">
-            {data.description}
+
+          <div className="flex flex-col items-center mt-4">
+            <div className="text-5xl">{getWeatherIcon()}</div>
+            <div className="text-lg md:text-xl font-medium mt-2 text-center">
+              {data.description}
+            </div>
           </div>
         </div>
+
         <div className="flex gap-4 mt-4 text-sm opacity-80">
-          <div>
-            <span>Curah Hujan: </span>
-            <span>{data.rainChance}</span>
-          </div>
-          <div>
-            <span>Angin: </span>
-            <span>{data.windSpeed}</span>
+          <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-1">
+              <IoMdUmbrella />
+              <span>{data.rainChance}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <FaWind />
+              <span>{data.windSpeed}</span>
+            </div>
+            {data?.temperature_range && (
+              <div className="flex items-center gap-1 text-white text-sm">
+                {!hideTempIcon && <FaTemperatureHalf />}{" "}
+                {/* hanya tampil kalau false */}
+                <span>{data.temperature_range}</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -144,7 +186,7 @@ const TodayWeather = ({ data, formattedDate }) => {
           className="modal-box max-w-md bg-white text-black rounded-xl"
         >
           <div>
-            <h4 className="font-semibold mb-2">Tips Perjalanan:</h4>
+            <h4 className="text-lg font-semibold mb-2">Tips Perjalanan:</h4>
             {getTravelTips()}
           </div>
 
@@ -161,10 +203,3 @@ const TodayWeather = ({ data, formattedDate }) => {
 };
 
 export default TodayWeather;
-
-{
-  /* <h3 className="text-lg font-bold mb-4">Detail Cuaca di {data.city}</h3>
-          <p><strong>Temperatur:</strong> {data.temp}</p>
-          <p><strong>Deskripsi:</strong> {data.description}</p>
-          <p><strong>Tanggal:</strong> {formattedDate}</p> */
-}

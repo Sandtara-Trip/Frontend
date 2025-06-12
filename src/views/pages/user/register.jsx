@@ -22,15 +22,16 @@ const Register = () => {
 
   return (
     <div className="flex min-h-screen w-full bg-white relative">
-      <button className="absolute top-4 right-4 text-warm-orange md:text-white hover:text-gray-700 z-10"
-       onClick={handleExit}
+      <button
+        className="absolute top-4 right-4 text-warm-orange md:text-white hover:text-gray-700 z-10"
+        onClick={handleExit}
       >
         <FiX size={30} />
       </button>
 
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-5">
         <div className="w-full max-w-md">
-          {/* <img src="/logo.svg" alt="Logo" className="h-14 mb-6 mx-auto" /> */}
+      <img src="/img/logo.png" alt="Logo" className="h-36 w-36 mx-auto" />
           <h2 className="text-3xl font-bold text-teal text-center mb-2">
             Registrasi <span className="text-warm-orange">Disini!</span>
           </h2>
@@ -39,7 +40,6 @@ const Register = () => {
           </p>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
-
             <InputField
               label="Nama Pengguna"
               type="text"
@@ -72,17 +72,17 @@ const Register = () => {
               <p className="text-red-500 text-sm text-center">{error}</p>
             )}
             <Button type="submit" disabled={loading}>
-              {loading ? 'Mendaftar...' : 'Daftar'}
+              {loading ? "Mendaftar..." : "Daftar"}
             </Button>
           </form>
 
           <p className="text-center text-sm text-text-gray mt-4">
-            Sudah punya akun? {" "}
+            Sudah punya akun?{" "}
             <Link
               to="/login"
               className="text-warm-orange font-semibold hover:underline"
             >
-               Masuk
+              Masuk
             </Link>
           </p>
         </div>
@@ -95,7 +95,7 @@ const Register = () => {
         <p className="text-white text-center max-w-md">
           Bersama Sandtara Trip, setiap petualangan jadi lebih bermakna.
         </p>
-        <img src="/logo.svg" alt="Maskot" className="w-48 mt-6" />
+        <img src="/img/maskot.png" alt="Maskot" className="w-96 mt-6" />
       </div>
     </div>
   );

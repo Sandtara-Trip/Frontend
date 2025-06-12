@@ -12,7 +12,7 @@ const CardSlider = ({ destinations = [], title = "" }) => {
       if (sliderRef.current.scrollLeft >= sliderRef.current.scrollWidth - sliderRef.current.clientWidth) {
         sliderRef.current.scrollLeft = 0;
       } else {
-        sliderRef.current.scrollLeft += 1; // scroll geser otomatis
+        sliderRef.current.scrollLeft += 1; 
       }
     }, 20);
 

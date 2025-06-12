@@ -99,7 +99,7 @@ const LoginPage = () => {
           Temukan destinasi tersembunyi, tempat santai, dan pengalaman menginap
           yang tak terlupakan bersama kami!
         </p>
-        <img src="/img/maskot.png" alt="Maskot" className="w-48 mt-6" />
+        <img src="/img/maskot.png" alt="Maskot" className="w-96 mt-6" />
       </div>
 
       {/* Kanan - Formulir */}

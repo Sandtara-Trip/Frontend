@@ -8,7 +8,7 @@ const CardHotel = ({ item }) => {
     <div className="card bg-white shadow-md rounded-lg overflow-hidden max-w-sm mx-auto">
       <div className="relative group">
         <div className="rounded-t-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-500">
-          {/* Gambar dengan efek zoom */}
+          {/* Gambar dsengan efek zoom */}
           <img
             src={item.image}
             alt={item.title}
@@ -17,7 +17,7 @@ const CardHotel = ({ item }) => {
 
           {/* Rating bintang di pojok kanan atas */}
           <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm text-sm font-semibold px-2 py-1 rounded-full shadow-md flex items-center gap-1">
-            <span className="text-yellow-400">
+            <span className="text-light-orange">
               <FaStar />
             </span>
             <span>{validRating.toFixed(1)}</span>

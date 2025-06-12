@@ -6,7 +6,10 @@ import TodayWeather from "./TodayWeather";
 import CardSlider from "./CardSlider";
 import useHotelData from "../../hooks/useHotelData";
 import useDestinationData from "../../hooks/useDestinationData";
-import { fetchWeatherData, transformWeatherData } from "../../services/weatherService";
+import {
+  fetchWeatherData,
+  transformWeatherData,
+} from "../../services/weatherService";
 
 const formatDateToIndonesian = (dateString) => {
   if (!dateString) return "";
@@ -16,7 +19,7 @@ const formatDateToIndonesian = (dateString) => {
     weekday: "long",
     day: "numeric",
     month: "long",
-    year: "numeric"
+    year: "numeric",
   });
 };
 
@@ -37,20 +40,20 @@ const HeroWeather = ({ onCategoryNavigate }) => {
       try {
         setLoading(true);
         setError(null);
-        console.log('Fetching weather data...');
+        console.log("Fetching weather data...");
         const data = await fetchWeatherData();
-        console.log('Raw weather data:', data);
-        
+        console.log("Raw weather data:", data);
+
         const transformedData = transformWeatherData(data);
-        console.log('Transformed weather data:', transformedData);
-        
+        console.log("Transformed weather data:", transformedData);
+
         if (!transformedData) {
-          throw new Error('Failed to transform weather data');
+          throw new Error("Failed to transform weather data");
         }
-        
+
         setWeatherData(transformedData);
       } catch (error) {
-        console.error('Error loading weather data:', error);
+        console.error("Error loading weather data:", error);
         setError(error.message);
       } finally {
         setLoading(false);
@@ -72,7 +75,7 @@ const HeroWeather = ({ onCategoryNavigate }) => {
         semua: "Semua",
         wisata: "Wisata",
         hotel: "Hotel",
-        kuliner: "Kuliner"
+        kuliner: "Kuliner",
       };
       const category = categoryMap[hash.toLowerCase()];
       if (category) {
@@ -89,7 +92,7 @@ const HeroWeather = ({ onCategoryNavigate }) => {
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 8000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [isPaused]);
@@ -117,9 +120,10 @@ const HeroWeather = ({ onCategoryNavigate }) => {
         );
       }
       return weatherData ? (
-        <TodayWeather 
-          data={weatherData} 
-          formattedDate={formatDateToIndonesian(weatherData.date)} 
+        <TodayWeather
+          data={weatherData}
+          formattedDate={formatDateToIndonesian(weatherData.date)}
+          hideTempIcon={true} 
         />
       ) : (
         <div className="text-white">
@@ -134,7 +138,10 @@ const HeroWeather = ({ onCategoryNavigate }) => {
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
         </div>
       ) : (
-        <CardSlider destinations={destinations} title="Rekomendasi Wisata Hari Ini" />
+        <CardSlider
+          destinations={destinations}
+          title="Rekomendasi Wisata Terbaik"
+        />
       );
     }
     return hotelsLoading ? (
@@ -174,7 +181,9 @@ const HeroWeather = ({ onCategoryNavigate }) => {
           )}
         </div>
 
-        <div className="w-full max-w-sm hidden md:block">{renderRightContent()}</div>
+        <div className="w-full max-w-sm hidden md:block">
+          {renderRightContent()}
+        </div>
       </div>
     </section>
   );

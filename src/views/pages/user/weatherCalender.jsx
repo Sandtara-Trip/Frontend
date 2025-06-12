@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { SlArrowLeftCircle } from "react-icons/sl";
 import { fetchWeatherData, formatDateForDisplay } from "../../../services/weatherService";
+import ScrollToTop from "../../../components/user/ScrollToTop";
 
 const WeatherCalendar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -111,6 +112,7 @@ const WeatherCalendar = () => {
   if (loading) {
     return (
       <>
+       <ScrollToTop />
         {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
         <div className="min-h-screen bg-gray-50 pt-16 md:pt-24 px-4 md:px-10 font-sans">
           <div className="flex justify-center items-center h-[calc(100vh-8rem)]">

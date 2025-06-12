@@ -2,32 +2,32 @@ export const teamMembers = [
   {
     name: "M. Riki Hidayat",
     role: "PM & Backend Developer",
-    img: "https://randomuser.me/api/portraits/men/1.jpg",
+    img: "team/riki.png",
   },
   {
     name: "Nabila Naurotul U.",
     role: "UI/UX Designer & Frontend Developer",
-    img: "https://randomuser.me/api/portraits/men/2.jpg",
+    img: "team/nabila.png",
   },
   {
     name: "Wahyu Rizqi A.",
-    role: "UX/UI Designer & Frontend Developer",
-    img: "https://randomuser.me/api/portraits/women/3.jpg",
+    role: "UI/UX Designer & Frontend Developer",
+    img: "team/wahyu.jpg",
   },
   {
     name: "Rifqi Fadhlurrohman",
     role: "Machine Learning Engineer",
-    img: "https://randomuser.me/api/portraits/men/4.jpg",
+    img: "team/rifqi.png",
   },
   {
     name: "Ryanza Aufa Yansa",
     role: "Machine Learning Engineer",
-    img: "https://randomuser.me/api/portraits/men/3.jpg",
+    img: "team/yanza.png",
   },
   {
     name: "Maulana Ridhwan R.",
     role: "Machine Learning Engineer",
-    img: "https://randomuser.me/api/portraits/women/4.jpg",
+    img: "team/maul.jpg",
   },
   
 ];

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import NavbarAfter from "../../../components/user/NavbarAfter";
-import { API_BASE_URL } from '../../../config/api';
+import NavbarBefore from "../../../components/user/NavbarBefore";
+import { API_BASE_URL } from "../../../config/api";
+import ScrollToTop from "../../../components/user/ScrollToTop";
 
 const ChooseRoom = () => {
   const navigate = useNavigate();
@@ -11,31 +13,38 @@ const ChooseRoom = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+
     const fetchRooms = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(`${API_BASE_URL}/admin/hotel/${hotelId}/rooms`, {
-          headers: {
-            Authorization: `Bearer ${token}`
+        const response = await axios.get(
+          `${API_BASE_URL}/admin/hotel/${hotelId}/rooms`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
-        console.log('Room response:', response.data);
+        );
+        console.log("Room response:", response.data);
         if (response.data.success) {
-          const transformedRooms = response.data.data.map(room => ({
+          const transformedRooms = response.data.data.map((room) => ({
             _id: room._id,
             type: room.type,
             name: room.name,
             price: room.price,
-            images: room.images.map(img => 
-              img.startsWith('http') ? img : `${API_BASE_URL}${img}`
+            images: room.images.map((img) =>
+              img.startsWith("http") ? img : `${API_BASE_URL}${img}`
             ),
             facilities: room.amenities || [],
-            available: room.status === 'available' && room.quantity.available > 0,
+            available:
+              room.status === "available" && room.quantity.available > 0,
             capacity: room.capacity.adults + (room.capacity.children || 0),
             restrictions: [],
-            description: room.description
+            description: room.description,
           }));
           setRooms(transformedRooms);
         } else {
@@ -44,7 +53,10 @@ const ChooseRoom = () => {
         setLoading(false);
       } catch (err) {
         console.error("Error fetching rooms:", err.response?.data || err.message);
-        setError(err.response?.data?.message || "Failed to load rooms. Please try again later.");
+        setError(
+          err.response?.data?.message ||
+            "Failed to load rooms. Please try again later."
+        );
         setLoading(false);
       }
     };
@@ -85,7 +97,8 @@ const ChooseRoom = () => {
 
   return (
     <>
-      <NavbarAfter />
+     <ScrollToTop />
+      {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
       <div className="pt-16">
         <div className="min-h-screen px-4 py-6 lg:p-8 max-w-6xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold mb-8 text-center text-warm-orange">
@@ -97,18 +110,20 @@ const ChooseRoom = () => {
               rooms.map((room) => (
                 <div
                   key={room._id}
-                  className="flex flex-col md:flex-row bg-white rounded-xl shadow-md overflow-hidden border border-gray-200"
+                  className="flex flex-col md:flex-row bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 hover:shadow-lg hover:scale-[1.01] transition-all duration-300"
                 >
                   <div className="md:w-1/3 relative">
-                    <img
-                      src={room.images[0]}
-                      alt={`${room.name || room.type}`}
-                      className="w-full h-64 md:h-full object-cover"
-                      onError={(e) => {
-                        e.target.onerror = null; // Prevent infinite loop
-                        e.target.src = 'https://placehold.co/600x400?text=No+Image';
-                      }}
-                    />
+                    <div className="w-full aspect-[4/3] md:aspect-auto md:h-64 overflow-hidden rounded-lg">
+                      <img
+                        src={room.images[0]}
+                        alt={`${room.name || room.type}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "https://placehold.co/600x400?text=No+Image";
+                        }}
+                      />
+                    </div>
                   </div>
 
                   <div className="flex-1 p-6">
@@ -123,16 +138,21 @@ const ChooseRoom = () => {
                       </div>
                     </div>
 
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {room.facilities.map((facility, idx) => (
-                        <span
+                    <ul className="mt-4 text-gray-600 mb-3 flex flex-wrap gap-2 text-sm">
+                      {room.facilities.slice(0, 3).map((facility, idx) => (
+                        <li
                           key={idx}
-                          className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm"
+                          className="bg-gray-100 px-3 py-1 rounded-full border text-sm"
                         >
                           {facility}
-                        </span>
+                        </li>
                       ))}
-                    </div>
+                      {room.facilities.length > 3 && (
+                        <li className="text-xs text-gray-500 italic inline-flex items-center">
+                          + {room.facilities.length - 3} lainnya
+                        </li>
+                      )}
+                    </ul>
 
                     <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
                       <p>Status: {room.available ? "Tersedia" : "Penuh"}</p>
@@ -142,14 +162,14 @@ const ChooseRoom = () => {
                     <div className="mt-6 flex flex-wrap gap-4">
                       <button
                         onClick={() => handleLihatDetail(room)}
-                        className="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+                        className="text-semibold px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
                       >
                         Lihat Detail
                       </button>
                       {room.available && (
                         <button
                           onClick={() => handlePesanSekarang(room._id)}
-                          className="px-6 py-2 bg-warm-orange hover:bg-hover-orange text-white rounded-lg transition-colors"
+                          className="text-semibold px-6 py-2 bg-warm-orange hover:bg-hover-orange text-white rounded-lg transition-colors"
                         >
                           Pesan Sekarang
                         </button>
@@ -188,13 +208,14 @@ const ChooseRoom = () => {
               alt={`${selectedRoom.name || selectedRoom.type}`}
               className="w-full h-48 object-cover rounded-lg mb-4"
               onError={(e) => {
-                e.target.onerror = null; // Prevent infinite loop
-                e.target.src = 'https://placehold.co/600x400?text=No+Image';
+                e.target.onerror = null;
+                e.target.src = "https://placehold.co/600x400?text=No+Image";
               }}
             />
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">
               {selectedRoom.name} - {selectedRoom.type}
             </h2>
+            <p className="text-sm mb-3 text-gray-700">{selectedRoom.description}</p>
             <p className="text-warm-orange font-semibold mb-4">
               Rp {selectedRoom.price.toLocaleString("id-ID")}
             </p>

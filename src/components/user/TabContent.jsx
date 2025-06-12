@@ -2,16 +2,14 @@ import React, { useState, useEffect } from "react";
 import {
   FaUtensils,
   FaHotel,
-  FaBusAlt,
   FaStar,
   FaMapMarkerAlt,
-  FaArrowRight
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import ReviewsComponent from "./Reviews";
 import Map from "../../utils/map";
-import { showInfo } from '../../utils/sweetalert';
-import { useTranslation } from 'react-i18next';
+import { showInfo } from "../../utils/sweetalert";
+import { useTranslation } from "react-i18next";
 
 const TabContent = ({ activeTab, contentData }) => {
   // All useState hooks must be at the top level
@@ -20,22 +18,7 @@ const TabContent = ({ activeTab, contentData }) => {
   const [loadingNearby, setLoadingNearby] = useState(false);
   const { t } = useTranslation();
 
-  // Render stars rating
-  const renderStars = (rating) =>
-    [...Array(5)].map((_, i) => (
-      <span
-        key={i}
-        className={`inline-block w-4 h-4 mr-1 ${
-          i < rating ? "text-light-orange" : "text-gray-300"
-        }`}
-        aria-label={`${i + 1} star`}
-      >
-        <FaStar />
-      </span>
-    ));
-
-  // No local Reviews component needed, we're using the imported ReviewsComponent
-
+  // Effect for map initialization
   useEffect(() => {
     if (activeTab === "Lokasi") {
       const lat = contentData?.LokasiCoords?.lat;
@@ -71,6 +54,7 @@ const TabContent = ({ activeTab, contentData }) => {
 
     return (
       <div className="mt-2 space-y-6">
+        {/* Deskripsi */}
         <div className="text-sm">
           {displayed}
           {isLong && (
@@ -82,11 +66,13 @@ const TabContent = ({ activeTab, contentData }) => {
             </div>
           )}
         </div>
-        
+
         {/* Weather Information */}
         {weatherInfo && (
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-            <h3 className="font-semibold text-blue-700 mb-2">Informasi Cuaca</h3>
+            <h3 className="font-semibold text-blue-700 mb-2">
+              Informasi Cuaca
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-white p-3 rounded-md shadow-sm">
                 <h4 className="font-medium text-blue-600">Cuaca Saat Ini</h4>
@@ -97,15 +83,20 @@ const TabContent = ({ activeTab, contentData }) => {
                   <p>Kecepatan Angin: {weatherInfo?.current?.windSpeed} km/h</p>
                 </div>
               </div>
-              
+
               {weatherInfo?.forecast && weatherInfo.forecast.length > 0 && (
                 <div className="bg-white p-3 rounded-md shadow-sm">
                   <h4 className="font-medium text-blue-600">Prakiraan Cuaca</h4>
                   <div className="mt-2 text-sm">
                     {weatherInfo.forecast.map((day, idx) => (
-                      <div key={idx} className="mb-2 pb-2 border-b border-gray-100 last:border-0">
+                      <div
+                        key={idx}
+                        className="mb-2 pb-2 border-b border-gray-100 last:border-0"
+                      >
                         <p className="font-medium">{day.day}</p>
-                        <p>Suhu: {day.low}°C - {day.high}°C</p>
+                        <p>
+                          Suhu: {day.low}°C - {day.high}°C
+                        </p>
                         <p>Kondisi: {day.condition}</p>
                       </div>
                     ))}
@@ -115,14 +106,18 @@ const TabContent = ({ activeTab, contentData }) => {
             </div>
           </div>
         )}
-        
+
         {/* Restrictions */}
         {restrictions.length > 0 && (
           <div className="bg-red-50 p-4 rounded-lg border border-red-100">
-            <h3 className="font-semibold text-red-700 mb-2">Perhatian & Larangan</h3>
+            <h3 className="font-semibold text-red-700 mb-2">
+              Perhatian & Larangan
+            </h3>
             <ul className="list-disc pl-5 text-sm space-y-1">
               {restrictions.map((restriction, idx) => (
-                <li key={idx} className="text-red-600">{restriction}</li>
+                <li key={idx} className="text-red-600">
+                  {restriction}
+                </li>
               ))}
             </ul>
           </div>
@@ -131,20 +126,42 @@ const TabContent = ({ activeTab, contentData }) => {
     );
   }
 
-  // Informasi
+  // Render informasi
   if (activeTab === "Informasi") {
     return (
       <div className="space-y-4 text-gray-700 leading-relaxed">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {contentData.Informasi.map((info, index) => (
-            <div
-              key={index}
-              className="flex items-start gap-2 bg-gray-50 border border-gray-200 rounded-lg p-3 shadow-sm hover:shadow-md transition"
-            >
-              <span className="text-warm-orange text-lg"></span>
-              <p className="text-sm">{info}</p>
+        <div className="bg-yellow-50 p-5 rounded-xl border border-yellow-100 shadow-sm">
+          <h3 className="font-semibold text-lg text-yellow-700 mb-3">
+            Informasi Kunjungan
+          </h3>
+
+          {contentData.tipe === "hotel" ? (
+            <div className="space-y-2 text-sm">
+              <p>
+                <span className="font-medium text-yellow-700">Check-in:</span>{" "}
+                {contentData.Informasi?.match(/Check-in: (.+?) -/)?.[1] ||
+                  "14:00"}
+              </p>
+              <p>
+                <span className="font-medium text-yellow-700">Check-out:</span>{" "}
+                {contentData.Informasi?.match(/Check-out: (.+)/)?.[1] ||
+                  "12:00"}
+              </p>
             </div>
-          ))}
+          ) : (
+            <div className="space-y-2 text-sm">
+              <p>
+                <span className="font-medium text-yellow-700">Jam Buka:</span>{" "}
+                {contentData.jamOperasional || "05:00 - 21:00"}
+              </p>
+              <p>
+                <span className="font-medium text-yellow-700">
+                  Hari Operasional:
+                </span>{" "}
+                {contentData.hariOperasional || "Setiap Hari"}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -171,32 +188,33 @@ const TabContent = ({ activeTab, contentData }) => {
     );
   }
 
-  // State for nearby places already declared at the top level
-  
-  // Render lokasi dengan Leaflet Map
+  // Render lokasi
   if (activeTab === "Lokasi") {
     const lokasi = contentData.Lokasi || "";
-    
+
     // Check if nearby data exists in the contentData
-    const hasNearbyFood = contentData.nearby?.food && contentData.nearby.food.length > 0;
-    const hasNearbyHotels = contentData.nearby?.hotels && contentData.nearby.hotels.length > 0;
-    const hasNearbyTransport = contentData.nearby?.transport && contentData.nearby.transport.length > 0;
+    const hasNearbyFood =
+      contentData.nearby?.food && contentData.nearby.food.length > 0;
+    const hasNearbyHotels =
+      contentData.nearby?.hotels && contentData.nearby.hotels.length > 0;
+    const hasNearbyWisata =
+      contentData.nearby?.wisata && contentData.nearby.wisata.length > 0;
 
     // Render nearby places based on active category
     const renderNearbyPlaces = () => {
       if (!activeNearby) return null;
-      
+
       let places = [];
-      
+
       switch (activeNearby) {
-        case 'food':
+        case "food":
           places = contentData.nearby?.food || [];
           break;
-        case 'hotels':
+        case "hotels":
           places = contentData.nearby?.hotels || [];
           break;
-        case 'transport':
-          places = contentData.nearby?.transport || [];
+        case "wisata":
+          places = contentData.nearby?.wisata || [];
           break;
         default:
           return null;
@@ -209,15 +227,23 @@ const TabContent = ({ activeTab, contentData }) => {
           </div>
         );
       }
-      
+
       if (places.length === 0) {
         return (
           <div className="mt-4 text-center text-gray-500">
-            <p>Tidak ada data {activeNearby === 'food' ? 'restoran' : activeNearby === 'hotels' ? 'hotel' : 'transportasi'} terdekat</p>
+            <p>
+              Tidak ada data{" "}
+              {activeNearby === "food"
+                ? "restoran"
+                : activeNearby === "hotels"
+                ? "hotel"
+                : "wisata"}{" "}
+              terdekat
+            </p>
           </div>
         );
       }
-      
+
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {places.map((place) => (
@@ -231,56 +257,57 @@ const TabContent = ({ activeTab, contentData }) => {
                   alt={place.name}
                   className="w-full h-full object-cover"
                 />
-                {activeNearby === 'hotels' && (
-                  <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-full text-sm font-medium text-warm-orange">
-                    {place.rating} ⭐
+                {(activeNearby === "hotels" || activeNearby === "wisata") && (
+                  <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+                    <FaStar className="text-light-orange" />
+                    <span className="text-light-orange">{place.rating}</span>
+                    <span className="text-gray-600/80">
+                      ({place.reviewCount})
+                    </span>
                   </div>
                 )}
               </div>
               <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{place.name}</h3>
-                {activeNearby === 'hotels' && (
-                  <>
-                    <div className="flex items-center mt-2">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.round(place.rating)
-                              ? "text-yellow-400"
-                              : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                      <span className="ml-2 text-sm text-gray-600">
-                        {place.rating.toFixed(1)} ({place.reviewCount} {t('common.reviews')})
-                      </span>
-                    </div>
-                    <p className="font-medium text-warm-orange mt-2">
-                      {typeof place.price === 'number' 
-                        ? `Rp ${place.price.toLocaleString('id-ID')}`
-                        : place.price}
-                    </p>
-                    <p className="mb-2">{t('common.address')}: {place.address}</p>
+                <h3 className="text-md font-semibold mb-2">{place.name}</h3>
+                <p className="text-sm text-gray-500">
+                  {place.distance
+                    ? `${place.distance.toFixed(1)} km dari lokasi ini`
+                    : ""}
+                </p>
+
+                {(activeNearby === "hotels" || activeNearby === "wisata") && (
+                  <div className="mt-auto flex justify-start pt-4">
                     <Link
-                      to={`/detail-hotel/${place.id}`}
-                      className="inline-flex items-center text-warm-orange hover:text-hover-orange mt-2 transition-colors"
+                      to={`/${
+                        activeNearby === "hotels" ? "detail-hotel" : "detail-wisata"
+                      }/${place.id}`}
+                      className="text-teal text-sm font-medium flex items-center gap-1 group transition-colors"
                     >
-                      {t('common.viewDetail')}
-                      <FaArrowRight className="ml-1 text-sm" />
+                      Lihat Detail
+                      <span
+                        aria-hidden="true"
+                        className="transition-transform group-hover:translate-x-1"
+                      >
+                        →
+                      </span>
                     </Link>
-                  </>
+                  </div>
                 )}
-                {activeNearby === 'transport' && (
+                {activeNearby === "food" && (
                   <>
-                    <p>{t('common.type')}: {place.type}</p>
-                    <p>{t('common.distance')}: {place.distance} km</p>
-                    <p>{t('common.address')}: {place.address}</p>
-                    {place.routes && (
-                      <p>{t('common.route')}: {place.routes.join(', ')}</p>
-                    )}
+                    <p>
+                      {t("common.type")}: {place.type}
+                    </p>
+                    <p>
+                      {t("common.distance")}: {place.distance} km
+                    </p>
+                    <p>
+                      {t("common.address")}: {place.address}
+                    </p>
                     {place.contact && (
-                      <p>{t('common.contact')}: {place.contact}</p>
+                      <p>
+                        {t("common.contact")}: {place.contact}
+                      </p>
                     )}
                   </>
                 )}
@@ -299,23 +326,28 @@ const TabContent = ({ activeTab, contentData }) => {
             Lokasi
           </h3>
           <p className="text-gray-600 mb-4">{lokasi}</p>
-          
+
           {/* Map Container */}
-          <div id="lokasi-map" className="h-[400px] w-full rounded-lg border border-gray-200 relative z-0"></div>
+          <div
+            id="lokasi-map"
+            className="h-[400px] w-full rounded-lg border border-gray-200 relative z-0"
+          ></div>
         </div>
 
         {/* Nearby Places Section */}
-        {(hasNearbyFood || hasNearbyHotels || hasNearbyTransport) && (
+        {(hasNearbyFood || hasNearbyHotels || hasNearbyWisata) && (
           <div className="bg-white p-4 rounded-lg shadow">
             <h3 className="font-semibold mb-4">Tempat Terdekat</h3>
             <div className="flex flex-wrap gap-2 mb-4">
               {hasNearbyFood && (
                 <button
-                  onClick={() => setActiveNearby('food')}
+                  onClick={() =>
+                    setActiveNearby(activeNearby === "food" ? null : "food")
+                  }
                   className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-                    activeNearby === 'food'
-                      ? 'bg-warm-orange text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    activeNearby === "food"
+                      ? "bg-warm-orange text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
                   <FaUtensils />
@@ -324,28 +356,32 @@ const TabContent = ({ activeTab, contentData }) => {
               )}
               {hasNearbyHotels && (
                 <button
-                  onClick={() => setActiveNearby('hotels')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-                    activeNearby === 'hotels'
-                      ? 'bg-warm-orange text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  onClick={() =>
+                    setActiveNearby(activeNearby === "hotels" ? null : "hotels")
+                  }
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors duration-300 ease-in-out ${
+                    activeNearby === "hotels"
+                      ? "bg-warm-orange text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
                   <FaHotel />
                   Hotel
                 </button>
               )}
-              {hasNearbyTransport && (
+              {hasNearbyWisata && (
                 <button
-                  onClick={() => setActiveNearby('transport')}
+                  onClick={() =>
+                    setActiveNearby(activeNearby === "wisata" ? null : "wisata")
+                  }
                   className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-                    activeNearby === 'transport'
-                      ? 'bg-warm-orange text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    activeNearby === "wisata"
+                      ? "bg-warm-orange text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
-                  <FaBusAlt />
-                  Transportasi
+                  <FaMapMarkerAlt />
+                  Wisata
                 </button>
               )}
             </div>
@@ -359,10 +395,10 @@ const TabContent = ({ activeTab, contentData }) => {
   // Render review
   if (activeTab === "Review") {
     return (
-      <ReviewsComponent 
-        reviews={contentData.Reviews || []} 
-        averageRating={contentData.averageRating || 0} 
-        totalReviews={contentData.totalReviews || 0} 
+      <ReviewsComponent
+        reviews={contentData.Reviews || []}
+        averageRating={contentData.averageRating || 0}
+        totalReviews={contentData.totalReviews || 0}
       />
     );
   }
@@ -371,29 +407,38 @@ const TabContent = ({ activeTab, contentData }) => {
   if (activeTab === "Tiket") {
     const tickets = contentData.Ticket || [];
     const eventTicket = contentData.eventTicket;
-    
+
     if (eventTicket) {
       return (
         <div className="space-y-4">
           <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">{eventTicket.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {eventTicket.name}
+                </h3>
                 <p className="text-2xl font-bold text-warm-orange mt-2">
-                  Rp {eventTicket.price.toLocaleString('id-ID')}
+                  Rp {eventTicket.price.toLocaleString("id-ID")}
                 </p>
               </div>
-              {eventTicket.status === 'active' && (
+              {eventTicket.status === "active" && (
                 <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
                   Tersedia
                 </span>
               )}
             </div>
-            
+
             <div className="mt-4 space-y-2 text-sm text-gray-600">
-              <p>Periode Event: {new Date(eventTicket.startDate).toLocaleDateString('id-ID')} - {new Date(eventTicket.endDate).toLocaleDateString('id-ID')}</p>
+              <p>
+                Periode Event:{" "}
+                {new Date(eventTicket.startDate).toLocaleDateString("id-ID")} -{" "}
+                {new Date(eventTicket.endDate).toLocaleDateString("id-ID")}
+              </p>
               <p>Kapasitas: {eventTicket.capacity} orang</p>
-              <p>Lokasi: {eventTicket.location?.address}, {eventTicket.location?.city}</p>
+              <p>
+                Lokasi: {eventTicket.location?.address},{" "}
+                {eventTicket.location?.city}
+              </p>
             </div>
 
             <button
@@ -412,11 +457,18 @@ const TabContent = ({ activeTab, contentData }) => {
     return (
       <div className="space-y-4">
         {tickets.map((ticket, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+          <div
+            key={index}
+            className="bg-white p-6 rounded-lg shadow-md border border-gray-100"
+          >
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">{ticket.title}</h3>
-                <p className="text-2xl font-bold text-warm-orange mt-2">{ticket.price}</p>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {ticket.title}
+                </h3>
+                <p className="text-2xl font-bold text-warm-orange mt-2">
+                  {ticket.price}
+                </p>
               </div>
               {ticket.badge && (
                 <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
@@ -424,7 +476,7 @@ const TabContent = ({ activeTab, contentData }) => {
                 </span>
               )}
             </div>
-            
+
             <div className="mt-4 flex items-center gap-2">
               {[...Array(5)].map((_, i) => (
                 <FaStar
@@ -442,7 +494,6 @@ const TabContent = ({ activeTab, contentData }) => {
             <button
               className="mt-4 w-full bg-warm-orange hover:bg-hover-orange text-white font-medium py-2 px-4 rounded-lg transition duration-200"
               onClick={() => {
-                // Handle ticket purchase here
                 showInfo("Fitur pembelian tiket akan segera tersedia!");
               }}
             >
@@ -452,7 +503,7 @@ const TabContent = ({ activeTab, contentData }) => {
         ))}
 
         {tickets.length === 0 && !eventTicket && (
-          <div className="text-center text-gray-500 py-8">
+          <div className="text-center unkindly-gray-500 py-8">
             <p>Tidak ada tiket tersedia saat ini</p>
           </div>
         )}

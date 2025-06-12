@@ -1,7 +1,7 @@
 {
   "name": "Sandtara Trip",
   "short_name": "Sandtara",
-  "description": "Temukan destinasi wisata terbaik di Indonesia",
+  "description": "Jelajahi Denpasar lebih jauh dengan Sandtara Trip",
   "start_url": ".",
   "scope": "/",
   "display": "standalone",
@@ -71,26 +71,32 @@
       "short_name": "Cuaca",
       "description": "Cek info cuaca terkini",
       "url": "/cuaca",
-      "icons": [{ "src": "icons/icon-96x96.png", "sizes": "96x96" }]
+      "icons": [{ "src": "./icons/icon-96x96.png", "sizes": "96x96" }]
     },
     {
       "name": "Cari Hotel",
       "short_name": "Hotel",
       "description": "Temukan hotel terdekat",
       "url": "/hotel",
-      "icons": [{ "src": "icons/icon-96x96.png", "sizes": "96x96" }]
+      "icons": [{ "src": "./icons/icon-96x96.png", "sizes": "96x96" }]
     }
   ],
   "screenshots": [
     {
-      "src": "screenshots/desktop-home.png",
+      "src": "./screenshots/desktop-home.png",
+      "sizes": "1366x675",
       "type": "image/png",
-      "sizes": "1366x675"
+      "platform": "wide",
+      "form_factor": "wide",
+      "label": "Homepage"
     },
     {
-      "src": "screenshots/mobile-home.png",
+      "src": "./screenshots/mobile-home.png",
       "type": "image/png",
-      "sizes": "540x720"
+      "sizes": "540x720",
+      "platform": "wide",
+      "form_factor": "wide",
+      "label": "Homepage"
     }
   ]
 } 

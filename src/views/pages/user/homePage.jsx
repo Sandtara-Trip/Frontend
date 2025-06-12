@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { itemHotel } from "../../templates/hotel";
-import { itemKuliner } from "../../templates/kuliner";
+// import { itemKuliner } from "../../templates/kuliner";
 import axios from "axios";
 import HeroWeather from "../../../components/user/heroWeather";
 import FilterBar from "../../../components/user/FilterBar";
@@ -10,9 +10,10 @@ import CategoryTabs from "../../../components/user/CategoryTabs";
 import ArticleChat from "./ArticleChat";
 import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from '../../../config/api';
+import ScrollToTop from "../../../components/user/ScrollToTop";
 
 const ITEMS_DEFAULT = 4;
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 20;
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -221,7 +222,8 @@ const HomePage = () => {
             case 'rating':
               const itemRating = parseFloat(item.rating) || 0;
               const filterRatingValue = parseInt(filterValue);
-              matchesFilters = matchesFilters && itemRating >= filterRatingValue;
+              // matchesFilters = matchesFilters && itemRating >= filterRatingValue;
+              matchesFilters = matchesFilters && itemRating === filterRatingValue;
               break;
             case 'jenis':
               if (activeCategory === "Semua") {
@@ -300,6 +302,8 @@ const HomePage = () => {
   };
 
   return (
+    <>
+     <ScrollToTop />
     <div className="min-h-screen bg-gray-50">
       <HeroWeather onCategoryNavigate={handleHeroNavigate} />
 
@@ -370,6 +374,7 @@ const HomePage = () => {
 
       <ArticleChat />
     </div>
+    </>
   );
 };
 

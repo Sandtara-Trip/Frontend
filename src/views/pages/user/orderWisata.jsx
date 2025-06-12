@@ -9,6 +9,7 @@ import PembayaranDetail from "../../../components/user/payment/PembayaranDetail"
 import NavbarAfter from "../../../components/user/NavbarAfter";
 import NavbarBefore from "../../../components/user/NavbarBefore";
 import { API_BASE_URL } from '../../../config/api';
+import ScrollToTop from "../../../components/user/ScrollToTop";
 
 const OrderWisata = () => {
   const { id } = useParams();
@@ -40,7 +41,7 @@ const OrderWisata = () => {
       setLoading(true);
       try {
         const response = await axios.get(`${API_BASE_URL}/api/wisata/${id}`);
-        console.log('Destination API Response:', response.data); // Debug log
+        console.log('Destination API Response:', response.data); 
         
         if (response.data.success) {
           const destinationData = response.data.data;
@@ -147,6 +148,7 @@ const OrderWisata = () => {
   if (loading) {
     return (
       <>
+       <ScrollToTop />
         {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
         <div className="flex justify-center items-center h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal"></div>
