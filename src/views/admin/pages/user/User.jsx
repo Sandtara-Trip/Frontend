@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import {FaTrash } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { axiosInstance } from '../../../../config/api';
 
@@ -125,13 +125,6 @@ const User = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => navigate(`/admin/user/edit/${user._id}`)}
-                        className="text-green-500 hover:text-green-700"
-                        title="Edit"
-                      >
-                        <FaEdit />
-                      </button>
                       <button
                         onClick={() => handleDelete(user._id)}
                         className="text-red-500 hover:text-red-700"

@@ -62,12 +62,23 @@ const PaymentSuccess = () => {
             // Send request to backend to send email ticket
             try {
               console.log('Sending request to send email ticket...');
-              const emailResponse = await axios.post(
-                `${API_BASE_URL}/order/${orderId}/send-ticket`,
-                {},
+              // const emailResponse = await axios.post(
+              //   `${API_BASE_URL}/order/${orderId}/send-ticket`,
+              //   {},
+              //   {
+              //     headers: {
+              //       'Authorization': `Bearer ${token}`
+              //     }
+              //   }
+              // );
+              const emailResponse = await axios.get(
+                `${API_BASE_URL}/ticket/email`,
                 {
                   headers: {
                     'Authorization': `Bearer ${token}`
+                  },
+                  params: {
+                    orderId
                   }
                 }
               );
@@ -255,14 +266,14 @@ const PaymentSuccess = () => {
               <p>Order ID: {orderDetails._id}</p>
               <p>Total: Rp {orderDetails.totalPrice?.toLocaleString('id-ID')}</p>
               <p>Status: {orderDetails.paymentStatus === 'paid' ? 'Lunas' : 'Menunggu Pembayaran'}</p>
-              {orderDetails.orderType === 'hotel' ? (
+              {/* {orderDetails.orderType === 'hotel' ? (
                 <>
                   <p>Check-in: {new Date(orderDetails.startDate).toLocaleDateString('id-ID')}</p>
                   <p>Check-out: {new Date(orderDetails.endDate).toLocaleDateString('id-ID')}</p>
                 </>
               ) : (
                 <p>Tanggal Kunjungan: {new Date(orderDetails.startDate).toLocaleDateString('id-ID')}</p>
-              )}
+              )} */}
             </div>
           )}
           <button

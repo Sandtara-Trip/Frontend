@@ -58,7 +58,7 @@ const Event = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold text-gray-800">
-                  Data Event
+                  Data Kuliner
                 </h2>
                 <Link to="/admin/event/add">
                   <Button type="button">

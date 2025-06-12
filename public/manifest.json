@@ -82,21 +82,19 @@
     }
   ],
   "screenshots": [
-    {
-      "src": "./screenshots/desktop-home.png",
-      "sizes": "1366x675",
-      "type": "image/png",
-      "platform": "wide",
-      "form_factor": "wide",
-      "label": "Homepage"
-    },
-    {
-      "src": "./screenshots/mobile-home.png",
-      "type": "image/png",
-      "sizes": "540x720",
-      "platform": "wide",
-      "form_factor": "wide",
-      "label": "Homepage"
-    }
-  ]
+  {
+    "src": "./screenshots/desktop-home.png",
+    "sizes": "1920x1080",
+    "type": "image/png",
+    "form_factor": "wide",
+    "label": "Homepage Desktop"
+  },
+  {
+    "src": "./screenshots/mobile-home.png",
+    "sizes": "750x1334",
+    "type": "image/png",
+    "form_factor": "narrow",
+    "label": "Homepage Mobile"
+  }
+]
 } 

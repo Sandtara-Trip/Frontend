@@ -9,9 +9,9 @@ export default defineConfig({
     VitePWA({
   registerType: 'autoUpdate',
   manifest: {
-       "name": "Sandtara Trip",
+      "name": "Sandtara Trip",
       "short_name": "Sandtara",
-      "description": "Temukan destinasi wisata terbaik di Indonesia",
+      "description": "Jelajahi Denpasar lebih jauh dengan Sandtara Trip",
       "start_url": ".",
       "scope": "/",
       "display": "standalone",
@@ -92,17 +92,21 @@ export default defineConfig({
         }
       ],
       "screenshots": [
-        {
-          "src": "screenshots/desktop-home.png",
-          "type": "image/png",
-          "sizes": "1366x675"
-        },
-        {
-          "src": "screenshots/mobile-home.png",
-          "type": "image/png",
-          "sizes": "540x720"
-        }
-      ]
+      {
+        "src": "./screenshots/desktop-home.png",
+        "sizes": "1920x1080",
+        "type": "image/png",
+        "form_factor": "wide",
+        "label": "Homepage Desktop"
+      },
+      {
+        "src": "./screenshots/mobile-home.png",
+        "sizes": "750x1334",
+        "type": "image/png",
+        "form_factor": "narrow",
+        "label": "Homepage Mobile"
+      }
+    ]
       }
     })
   ],

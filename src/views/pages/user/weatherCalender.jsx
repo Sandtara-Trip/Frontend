@@ -77,7 +77,7 @@ const WeatherCalendar = () => {
     const fetchHolidays = async () => {
       try {
         const response = await fetch(
-          `https://calendarific.com/api/v2/holidays?api_key=YOUR_API_KEY&country=ID&year=2025`
+          `https://calendarific.com/api/v2/holidays?api_key=O6l70BFM3wRnTRDQII2OrIlcgTvyGCj4&country=ID&year=2025`
         );
         const data = await response.json();
 
