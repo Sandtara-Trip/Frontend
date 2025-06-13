@@ -61,7 +61,6 @@ const DetailKuliner = () => {
   if (error || !event) {
     return (
       <>
-       <ScrollToTop />
         {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4 mx-auto max-w-2xl mt-20">
           <strong className="font-bold">Error:</strong>
@@ -81,7 +80,7 @@ const DetailKuliner = () => {
   const contentData = {
     name: event.name,
     description: event.description,
-    status: event.status
+    category: event.category
   };
 
   // Transform images for the slider
@@ -93,6 +92,7 @@ const DetailKuliner = () => {
 
   return (
     <>
+      <ScrollToTop />
       {isLoggedIn ? <NavbarAfter /> : <NavbarBefore />}
 
       <div className="bg-base max-w-5xl mx-auto p-4 pt-20 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -100,13 +100,15 @@ const DetailKuliner = () => {
           <div>
             <h2 className="text-2xl font-semibold">{event.name}</h2>
             <div className="flex items-center text-sm text-gray-600 gap-4 mt-1">
-              <span className={`px-2 py-1 rounded-full text-xs ${
-                event.status === "active"
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}>
-                {event.status}
-              </span>
+              {event.category && (
+                <span className={`px-2 py-1 rounded-full text-xs ${
+                  event.category === "kuliner khas denpasar"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-blue-100 text-blue-800"
+                }`}>
+                  {event.category}
+                </span>
+              )}
             </div>
           </div>
 
@@ -141,7 +143,6 @@ const DetailKuliner = () => {
           </div>
         </div>
           
-        {/* Sidebar content can be added here */}
         <div className="lg:col-span-1">
           {/* Add sidebar content if needed */}
         </div>

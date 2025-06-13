@@ -17,7 +17,7 @@ function EditEvent() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    status: "active",
+    category: "",
     images: [],
     imagesUrl: [],
     deletedImages: []
@@ -47,7 +47,7 @@ function EditEvent() {
         setFormData({
           name: eventData.name || "",
           description: eventData.description || "",
-          status: eventData.status || "active",
+          category: eventData.category || "", // Category is optional
           images: [],
           imagesUrl: fullImageUrls,
           deletedImages: []
@@ -99,7 +99,7 @@ function EditEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validasi form
+    // Validate form
     if (!formData.name || !formData.description) {
       setError("Nama dan deskripsi wajib diisi");
       return;
@@ -114,7 +114,9 @@ function EditEvent() {
       // Basic fields
       formDataToSend.append('name', formData.name.trim());
       formDataToSend.append('description', formData.description.trim());
-      formDataToSend.append('status', formData.status);
+      if (formData.category) {
+        formDataToSend.append('category', formData.category); // Only append if category is provided
+      }
 
       // Handle images
       if (formData.images && formData.images.length > 0) {
@@ -168,7 +170,6 @@ function EditEvent() {
                   { label: "Edit Event" },
                 ]}
               />
-              {/* Judul Form */}
               <h2 className="text-2xl font-semibold mb-6 text-gray-800">
                 Edit Data Event
               </h2>
@@ -204,19 +205,19 @@ function EditEvent() {
                   />
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">Status</label>
+                    <label className="block text-sm font-medium text-gray-700">Kategori</label>
                     <select
-                      name="status"
-                      value={formData.status}
+                      name="category"
+                      value={formData.category}
                       onChange={handleChange}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     >
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
+                      <option value="">Pilih Kategori (opsional)</option>
+                      <option value="kuliner khas denpasar">Kuliner Khas Denpasar</option>
+                      <option value="toko oleh-oleh">Toko Oleh-oleh</option>
                     </select>
                   </div>
 
-                  {/* Preview gambar yang sudah ada */}
                   {formData.imagesUrl.length > 0 && (
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                       {formData.imagesUrl.map((url, index) => (
@@ -240,13 +241,11 @@ function EditEvent() {
                     </div>
                   )}
 
-                  {/* Input untuk gambar baru */}
                   <ImageUpload 
                     label="Foto Event" 
                     onChange={handleImageChange}
                   />
 
-                  {/* Tombol Submit */}
                   <div className="flex justify-end space-x-4 pt-4">
                     <Button
                       type="button"
@@ -272,4 +271,4 @@ function EditEvent() {
   );
 }
 
-export default EditEvent; 
+export default EditEvent;

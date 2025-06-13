@@ -16,7 +16,7 @@ const TambahEvent = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    status: "active",
+    category: "",
     images: null
   });
 
@@ -44,7 +44,7 @@ const TambahEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validasi form
+    // Validate form
     if (!formData.name || !formData.description) {
       setError("Nama dan deskripsi wajib diisi");
       return;
@@ -59,7 +59,9 @@ const TambahEvent = () => {
       // Basic fields
       formDataToSend.append('name', formData.name);
       formDataToSend.append('description', formData.description);
-      formDataToSend.append('status', formData.status);
+      if (formData.category) {
+        formDataToSend.append('category', formData.category); // Only append if category is provided
+      }
 
       // Images
       if (formData.images) {
@@ -106,7 +108,6 @@ const TambahEvent = () => {
                   { label: "Tambah Event" },
                 ]}
               />
-              {/* Judul Form */}
               <h2 className="text-2xl font-semibold mb-6 text-gray-800">
                 Tambah Data Event
               </h2>
@@ -137,25 +138,24 @@ const TambahEvent = () => {
                 />
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Status</label>
+                  <label className="block text-sm font-medium text-gray-700">Kategori</label>
                   <select
-                    name="status"
-                    value={formData.status}
+                    name="category"
+                    value={formData.category}
                     onChange={handleChange}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="">Pilih Kategori (opsional)</option>
+                    <option value="kuliner khas denpasar">Kuliner Khas Denpasar</option>
+                    <option value="toko oleh-oleh">Toko Oleh-oleh</option>
                   </select>
                 </div>
 
-                {/* Gambar Event */}
                 <ImageUpload 
                   label="Foto Event" 
                   onChange={handleImageChange}
                 />
 
-                {/* Tombol Submit */}
                 <div className="flex justify-end space-x-4 pt-4">
                   <Button
                     type="button"
@@ -180,4 +180,4 @@ const TambahEvent = () => {
   );
 };
 
-export default TambahEvent; 
+export default TambahEvent;

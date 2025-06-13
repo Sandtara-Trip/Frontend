@@ -35,4 +35,11 @@ export const filterOptionsPerCategory = {
       options: ["1", "2", "3", "4", "5"] 
     },
   ],
+  Kuliner: [
+    {
+      name: "kategori",
+      label: "Kategori",
+      options: ["Kuliner Khas Denpasar", "Toko Oleh-Oleh"],
+    },
+  ],
 };

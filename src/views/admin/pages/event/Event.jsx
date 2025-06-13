@@ -84,7 +84,7 @@ const Event = () => {
                       <tr className="bg-gray-100">
                         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Name</th>
                         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Description</th>
-                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Status</th>
+                        <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Kategori</th>
                         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Image</th>
                         <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600">Actions</th>
                       </tr>
@@ -101,12 +101,14 @@ const Event = () => {
                           <td className="px-6 py-4">
                             <span
                               className={`px-2 py-1 rounded-full text-xs ${
-                                event.status === "active"
+                                event.category === "kuliner khas denpasar"
                                   ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
+                                  : event.category === "toko oleh-oleh"
+                                  ? "bg-blue-100 text-blue-800"
+                                  : "bg-gray-100 text-gray-800"
                               }`}
                             >
-                              {event.status}
+                              {event.category || "Tidak ada kategori"}
                             </span>
                           </td>
                           <td className="px-6 py-4">
@@ -150,4 +152,4 @@ const Event = () => {
   );
 };
 
-export default Event; 
+export default Event;

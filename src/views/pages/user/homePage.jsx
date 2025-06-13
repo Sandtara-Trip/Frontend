@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { itemHotel } from "../../templates/hotel";
-// import { itemKuliner } from "../../templates/kuliner";
 import axios from "axios";
 import HeroWeather from "../../../components/user/heroWeather";
 import FilterBar from "../../../components/user/FilterBar";
@@ -97,7 +96,7 @@ const HomePage = () => {
                 fullUrl: imageUrl
               });
             } else {
-              imageUrl = `${API_BASE_URL}/uploads/default-destination.jpg`;
+              imageUrl = `${API_BASE_URL}/Uploads/default-destination.jpg`;
               console.log('Using default image:', imageUrl);
             }
             
@@ -152,9 +151,9 @@ const HomePage = () => {
             title: event.name,
             description: event.description,
             image: event.images && event.images.length > 0 
-              ? event.images[0]
-              : `${API_BASE_URL}/uploads/default-event.jpg`,
-            status: event.status
+              ? (event.images[0].startsWith('http') ? event.images[0] : `${API_BASE_URL}${event.images[0]}`)
+              : `${API_BASE_URL}/Uploads/default-event.jpg`,
+            category: event.category || ''
           }));
           setEvents(eventsData);
         }
@@ -194,7 +193,8 @@ const HomePage = () => {
         item.description?.toLowerCase() || '',
         item.lokasi?.toLowerCase() || '',
         item.location?.toLowerCase() || '',
-        item.kategori?.toLowerCase() || ''
+        item.kategori?.toLowerCase() || '',
+        item.category?.toLowerCase() || ''
       ];
       
       const matchesSearch = !query || searchFields.some(field => field.includes(query.toLowerCase()));
@@ -207,9 +207,11 @@ const HomePage = () => {
 
           switch (filterName) {
             case 'rating':
-              const itemRating = parseFloat(item.rating) || 0;
-              const filterRatingValue = parseInt(filterValue);
-              matchesFilters = matchesFilters && itemRating === filterRatingValue;
+              if (type !== 'kuliner') { // Skip rating filter for Kuliner
+                const itemRating = parseFloat(item.rating) || 0;
+                const filterRatingValue = parseInt(filterValue);
+                matchesFilters = matchesFilters && itemRating === filterRatingValue;
+              }
               break;
             case 'jenis':
               if (activeCategory === "Semua") {
@@ -332,7 +334,7 @@ const HomePage = () => {
               data = filterItems(itemHotel, "hotel", "Hotel");
               break;
             case "Kuliner":
-              data = filterItems(events.filter(event => event.status === 'active'), "kuliner", "Kuliner");
+              data = filterItems(events, "kuliner", "Kuliner");
               break;
             default:
               data = [];

@@ -47,7 +47,6 @@ import Order from "../views/admin/pages/order/Order";
 import OrderDetail from "../views/admin/pages/order/OrderDetail";
 import AdminLogin from "../views/admin/pages/login/AdminLogin";
 import Dashboard from "../views/admin/pages/dashboard/Dashboard";
-import ScrollToTop from "../components/user/ScrollToTop";
 
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 
